@@ -9,5 +9,6 @@ homepage = "http://www.croftsoft.com/"
 keywords = ["math"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/david-wallace-croft/com-croftsoft-core"
 
 [dependencies]
