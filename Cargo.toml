@@ -1,0 +1,13 @@
+[package]
+name = "com-croftsoft-core"
+version = "0.1.0"
+authors = ["David Wallace Croft <david@croftsoft.com>"]
+categories = ["mathematics"]
+description = "A core library of highly reusable code"
+edition = "2021"
+homepage = "http://www.croftsoft.com/"
+keywords = ["math"]
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
