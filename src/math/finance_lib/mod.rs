@@ -39,7 +39,7 @@ pub fn annual_savings_needed(
 ///     interest_rate: 0.01,          // At 1% interest compounded monthly
 ///     time_periods:  120.0,         // Investing each month for 120 months
 ///   }.calculate(),
-///   434_709.484_025_873_1); // Invest ~$435k cents per month (~$52k per year)
+///   434_709.484_025_873_1); // Invest ~435k cents per month (~$52k per year)
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Copy, Debug)]
