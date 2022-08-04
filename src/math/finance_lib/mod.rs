@@ -33,6 +33,8 @@ impl PeriodicSavingsNeeded {
     // TODO: Is this moving self into the method?
     periodic_savings_needed(*self)
   }
+
+  // TODO: Move the function into the implementation?
 }
 
 // -----------------------------------------------------------------------------
