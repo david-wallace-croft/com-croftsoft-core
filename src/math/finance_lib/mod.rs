@@ -53,15 +53,10 @@ pub struct PeriodicSavingsNeeded {
 }
 
 impl PeriodicSavingsNeeded {
-  fn calc(
-    f: f64,
-    r: f64,
-    t: f64,
-  ) -> f64 {
-    f * r / ((1.0 + r).powf(t) - 1.0)
-  }
-
   pub fn calculate(&self) -> f64 {
-    Self::calc(self.future_value, self.interest_rate, self.time_periods)
+    let f = self.future_value;
+    let r = self.interest_rate;
+    let t = self.time_periods;
+    f * r / ((1.0 + r).powf(t) - 1.0)
   }
 }
