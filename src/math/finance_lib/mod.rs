@@ -1,6 +1,6 @@
 // =============================================================================
 //! - Financial calculations
-//! - Rust version: 2022-08-03
+//! - Rust version: 2022-08-04
 //! - Rust since: 2022-07-30
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
 //! - <http://www.croftsoft.com/library/code/>
@@ -40,6 +40,20 @@ pub fn annual_savings_needed(
 ///     time_periods:  120.0,         // Investing each month for 120 months
 ///   }.calculate(),
 ///   434_709.484_025_873_1); // Invest ~435k cents per month (~$52k per year)
+/// let mut calculated_values = [0.0; 12];
+/// let mut periodic_savings_needed = PeriodicSavingsNeeded {
+///   future_value: 1_000_000.0,
+///   interest_rate: 0.00,
+///   time_periods: 10.0,
+/// };
+/// for index in 0..12 {
+///   periodic_savings_needed.interest_rate = (index + 1) as f64 / 100.0;
+///   calculated_values[index] = periodic_savings_needed.calculate();
+/// }
+/// assert_eq!(calculated_values[ 0], 95_582.076_551_171_35 ); // @ 1%
+/// assert_eq!(calculated_values[ 4], 79_504.574_965_456_62 ); // @ 5%
+/// assert_eq!(calculated_values[ 7], 69_029.488_697_075_34 ); // @ 8%
+/// assert_eq!(calculated_values[11], 56_984.164_159_844_026); // @ 12%
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Copy, Debug)]
