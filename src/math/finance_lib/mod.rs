@@ -25,7 +25,7 @@ pub fn annual_savings_needed(
 ///
 /// # Examples
 /// ```
-/// use com_croftsoft_core::math::finance_lib::*;
+/// use com_croftsoft_core::math::finance_lib::PeriodicSavingsNeeded;
 /// assert_eq!(
 ///   PeriodicSavingsNeeded {
 ///     future_value:  1_000_000.0,   // To have a million dollars in the future
@@ -42,17 +42,17 @@ pub fn annual_savings_needed(
 ///   434_709.484_025_873_1); // Invest ~435k cents per month (~$52k per year)
 /// let mut calculated_values = [0.0; 12];
 /// let mut periodic_savings_needed = PeriodicSavingsNeeded {
-///   future_value: 1_000_000.0,
+///   future_value:  1_000_000.0,
 ///   interest_rate: 0.00,
-///   time_periods: 10.0,
+///   time_periods:  10.0,
 /// };
 /// for index in 0..12 {
 ///   periodic_savings_needed.interest_rate = (index + 1) as f64 / 100.0;
 ///   calculated_values[index] = periodic_savings_needed.calculate();
 /// }
-/// assert_eq!(calculated_values[ 0], 95_582.076_551_171_35 ); // @ 1%
-/// assert_eq!(calculated_values[ 4], 79_504.574_965_456_62 ); // @ 5%
-/// assert_eq!(calculated_values[ 7], 69_029.488_697_075_34 ); // @ 8%
+/// assert_eq!(calculated_values[ 0], 95_582.076_551_171_35 ); // @  1%
+/// assert_eq!(calculated_values[ 4], 79_504.574_965_456_62 ); // @  5%
+/// assert_eq!(calculated_values[ 7], 69_029.488_697_075_34 ); // @  8%
 /// assert_eq!(calculated_values[11], 56_984.164_159_844_026); // @ 12%
 /// ```
 // -----------------------------------------------------------------------------
