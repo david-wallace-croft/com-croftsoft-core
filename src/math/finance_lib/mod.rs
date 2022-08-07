@@ -21,6 +21,40 @@ pub fn annual_savings_needed(
 }
 
 // -----------------------------------------------------------------------------
+/// Calculates the future value of a cash flow received today.
+///
+/// # Example
+/// ```
+/// use com_croftsoft_core::math::finance_lib::FutureValue;
+/// assert_eq!(
+///   FutureValue {
+///     cash_flow:     1.0,  // Investing $1 today
+///     interest_rate: 0.12, // At 12% per year
+///     time_periods:  6.0,  // For six years with interest compounded annually
+///   }.calculate(),
+///   1.973_822_685_184_001); // Will double your money (see the "Rule of 72")
+/// ```
+// -----------------------------------------------------------------------------
+#[derive(Clone, Copy, Debug)]
+pub struct FutureValue {
+  /// Cash flow invested or received today
+  pub cash_flow: f64,
+  /// Interest, discount, or inflation rate (use 0.01 for 1%)
+  pub interest_rate: f64,
+  /// Number of periods from today when the value is evaluated
+  pub time_periods: f64,
+}
+
+impl FutureValue {
+  pub fn calculate(&self) -> f64 {
+    let c = self.cash_flow;
+    let r = self.interest_rate;
+    let t = self.time_periods;
+    c * (1.0 + r).powf(t)
+  }
+}
+
+// -----------------------------------------------------------------------------
 /// Calculates the future value of a payment stream such as an annuity.
 ///
 /// # Example
@@ -39,7 +73,7 @@ pub fn annual_savings_needed(
 pub struct FutureValuePaymentStream {
   /// Periodic cash income payment starting one period from today
   pub cash_income: f64,
-  /// Periodic interest earned on income
+  /// Periodic interest earned on income (use 0.01 for 1%)
   pub interest_rate: f64,
   /// Number of periods of cash income
   pub time_periods: f64,
