@@ -1,6 +1,6 @@
 // =============================================================================
 //! - Financial calculations
-//! - Rust version: 2022-08-04
+//! - Rust version: 2022-08-07
 //! - Rust since: 2022-07-30
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
 //! - <http://www.croftsoft.com/library/code/>
@@ -21,7 +21,41 @@ pub fn annual_savings_needed(
 }
 
 // -----------------------------------------------------------------------------
-/// Calculates the periodic investments required to accumulate a future value
+/// Calculates the future value of a payment stream such as an annuity.
+///
+/// # Example
+/// ```
+/// use com_croftsoft_core::math::finance_lib::FutureValuePaymentStream;
+/// assert_eq!(
+///   FutureValuePaymentStream {
+///     cash_income:   10_000.0, // Future payments of $10k per year
+///     interest_rate: 0.10,     // With 10% interest annually on the payments
+///     time_periods:  10.0,     // Paying each year for ten years
+///   }.calculate(),
+///   159_374.246_010_000_2);    // Will be worth ~$159k in the future
+/// ```
+// -----------------------------------------------------------------------------
+#[derive(Clone, Copy, Debug)]
+pub struct FutureValuePaymentStream {
+  /// Periodic cash income payment starting one period from today
+  pub cash_income: f64,
+  /// Periodic interest earned on income
+  pub interest_rate: f64,
+  /// Number of periods of cash income
+  pub time_periods: f64,
+}
+
+impl FutureValuePaymentStream {
+  pub fn calculate(&self) -> f64 {
+    let c = self.cash_income;
+    let r = self.interest_rate;
+    let t = self.time_periods;
+    c * ((1.0 + r).powf(t) - 1.0) / r
+  }
+}
+
+// -----------------------------------------------------------------------------
+/// Calculates the periodic investments required to accumulate a future value.
 ///
 /// # Examples
 /// ```
