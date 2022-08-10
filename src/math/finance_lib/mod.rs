@@ -1,9 +1,9 @@
 // =============================================================================
 //! - Financial calculations
-//! - Rust version: 2022-08-07
+//! - Rust version: 2022-08-09
 //! - Rust since: 2022-07-30
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
-//! - <http://www.croftsoft.com/library/code/>
+//! - <https://www.croftsoft.com/library/code/>
 //! - Java version: 2001-10-10
 //! - Java since: 1999-08-15
 // =============================================================================

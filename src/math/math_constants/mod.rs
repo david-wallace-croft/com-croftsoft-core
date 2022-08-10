@@ -1,9 +1,9 @@
 // =============================================================================
 //! - A collection of math constants
-//! - Rust version: 2022-07-30
+//! - Rust version: 2022-08-09
 //! - Rust since: 2022-07-30
 //! - Adapted from the Java class com.croftsoft.core.math.MathConstants
-//! - <http://www.croftsoft.com/library/code/>
+//! - <https://www.croftsoft.com/library/code/>
 //! - Java version: 2002-01-27
 // =============================================================================
 
