@@ -89,6 +89,56 @@ impl FutureValuePaymentStream {
 }
 
 // -----------------------------------------------------------------------------
+/// The discounted value of multiple cash flows received in the future.
+///
+/// # Example
+/// ```
+/// use com_croftsoft_core::math::finance_lib::NetPresentValue;
+/// assert_eq!(
+///   NetPresentValue {
+///     cash_flows:    vec![1.0], // A dollar today
+///     discount_rate: 0.10,      // At a discount rate of 10% per time period
+///   }.calculate(),
+///   1.0);                       // Is worth a dollar today
+/// assert_eq!(
+///   NetPresentValue {
+///     cash_flows:    vec![0.0, 1.0], // A dollar next year
+///     discount_rate: 0.10,           // At a discount rate of 10% per year
+///   }.calculate(),
+///   0.9090909090909091);             // Is worth ~$0.91 today
+/// assert_eq!(
+///   NetPresentValue {
+///     cash_flows:    vec![0.0, 0.0, 1.0], // A dollar received in two years
+///     discount_rate: 0.10,                // Discounted at 10% per year
+///   }.calculate(),
+///   0.8264462809917354);                  // Is worth ~$0.83 today
+/// assert_eq!(
+///   NetPresentValue {
+///     cash_flows:    vec![1.0; 11], // $1 today plus $1 each year for 10 years
+///     discount_rate: 0.10,          // At a discount rate of 10% per year
+///   }.calculate(),
+///   7.144567105704681);              // Is worth ~$7.14 today
+/// ```
+// -----------------------------------------------------------------------------
+pub struct NetPresentValue {
+  // Cash flows received in the future indexed from time zero
+  pub cash_flows: Vec<f64>,
+  /// The discount rate or cost of capital (use 0.01 for 1%)
+  pub discount_rate: f64,
+}
+
+impl NetPresentValue {
+  pub fn calculate(&self) -> f64 {
+    let mut net_present_value = 0.0;
+    for (index, cash_flow) in self.cash_flows.iter().enumerate() {
+      net_present_value +=
+        cash_flow / (1.0 + self.discount_rate).powf(index as f64);
+    }
+    net_present_value
+  }
+}
+
+// -----------------------------------------------------------------------------
 /// Calculates the periodic investments required to accumulate a future value.
 ///
 /// # Examples
