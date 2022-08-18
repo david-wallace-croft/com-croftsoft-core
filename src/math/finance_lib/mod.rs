@@ -1,6 +1,6 @@
 // =============================================================================
 //! - Financial calculations
-//! - Rust version: 2022-08-09
+//! - Rust version: 2022-08-17
 //! - Rust since: 2022-07-30
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
 //! - <https://www.croftsoft.com/library/code/>
@@ -190,5 +190,45 @@ impl PeriodicSavingsNeeded {
     let r = self.interest_rate;
     let t = self.time_periods;
     f * r / ((1.0 + r).powf(t) - 1.0)
+  }
+}
+
+// -----------------------------------------------------------------------------
+/// The discounted value of a single cash flow received in the future.
+///
+/// # Example
+/// ```
+/// use com_croftsoft_core::math::finance_lib::PresentValue;
+/// assert_eq!(
+///   PresentValue {
+///     cash_flow:     1.0,  // A dollar in the future
+///     discount_rate: 0.10, // With inflation at 10% per year
+///     time_periods:  1.0,  // Received one year from now
+///   }.calculate(),
+///   0.9090909090909091);   // Will have the spending power of ~$0.91 today
+/// assert_eq!(
+///   PresentValue {
+///     cash_flow:     1.0,  // A dollar in the future
+///     discount_rate: 0.10, // If it could be invested today at 10% per year
+///     time_periods:  2.0,  // Received two years from now
+///   }.calculate(),
+///   0.8264462809917354);   // Would be worth the same as ~$0.83 invested today
+/// ```
+// -----------------------------------------------------------------------------
+pub struct PresentValue {
+  // Cash flow received in the future
+  pub cash_flow: f64,
+  /// The discount rate or inflation rate per time period (use 0.01 for 1%)
+  pub discount_rate: f64,
+  /// Number of time periods from today when the cash flow is received
+  pub time_periods: f64,
+}
+
+impl PresentValue {
+  pub fn calculate(&self) -> f64 {
+    let c = self.cash_flow;
+    let r = self.discount_rate;
+    let t = self.time_periods;
+    c / (1.0 + r).powf(t)
   }
 }
