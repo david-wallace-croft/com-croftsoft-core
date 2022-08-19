@@ -232,3 +232,56 @@ impl PresentValue {
     c / (1.0 + r).powf(t)
   }
 }
+
+// -----------------------------------------------------------------------------
+/// The discounted value of varying periodic cash flows.
+///
+/// # Example
+/// ```
+/// use com_croftsoft_core::math::finance_lib::PresentValueCashFlows;
+/// assert_eq!(
+///   PresentValueCashFlows {
+///     cash_flows:    vec![1.0],  // A dollar received one year in the future
+///     discount_rate: 0.10,       // With inflation at 10% per year
+///   }.calculate(),
+///   0.9090909090909091);   // Will have the spending power of ~$0.91 today
+/// assert_eq!(
+///   PresentValueCashFlows {
+///     cash_flows:    vec![0.0, 1.0],  // A dollar received in two years
+///     discount_rate: 0.10,            // With inflation at 10% per year
+///   }.calculate(),
+///   0.8264462809917354);   // Would be worth the same as ~$0.83 invested today
+/// assert_eq!(
+///   PresentValueCashFlows {
+///     cash_flows:    vec![1.0, 2.0, 3.0], // $1, $2, and $3 over 3 years
+///     discount_rate: 0.0,                 // With no inflation
+///   }.calculate(),
+///   6.0);                                 // Would be worth $6 today
+/// assert_eq!(
+///   PresentValueCashFlows {
+///     cash_flows:    vec![1.0, 2.0, 3.0], // $1, $2, and $3 over 3 years
+///     discount_rate: 0.10,                // With inflation at 10% per year
+///   }.calculate(),
+///   4.8159278737791125);                  // Would be worth ~$4.82 today
+/// ```
+// -----------------------------------------------------------------------------
+pub struct PresentValueCashFlows {
+  // Cash flows received in the future starting one time period from now
+  pub cash_flows: Vec<f64>,
+  /// The discount rate or inflation rate per time period (use 0.01 for 1%)
+  pub discount_rate: f64,
+}
+
+impl PresentValueCashFlows {
+  pub fn calculate(&self) -> f64 {
+    self.cash_flows.iter().enumerate().fold(0.0, |sum, (index, cash_flow)| {
+      sum
+        + PresentValue {
+          cash_flow: *cash_flow,
+          discount_rate: self.discount_rate,
+          time_periods: (index + 1) as f64,
+        }
+        .calculate()
+    })
+  }
+}
