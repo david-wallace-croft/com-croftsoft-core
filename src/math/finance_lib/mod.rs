@@ -135,6 +135,12 @@ impl FutureValuePaymentStream {
 ///   0.10000000000000009);
 /// assert_eq!(
 ///   InternalRateOfReturn {
+///     cash_flows: &[0.0, 0.0], // All zero cash flows
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap(),
+///   0.0); // Immediately returns zero percent
+/// assert_eq!(
+///   InternalRateOfReturn {
 ///     cash_flows: &[], // Zero length cash flows
 ///     irr_estimate: IRR_ESTIMATE,
 ///   }.calculate().unwrap_err(),
@@ -145,12 +151,6 @@ impl FutureValuePaymentStream {
 ///     irr_estimate: IRR_ESTIMATE,
 ///   }.calculate().unwrap_err(),
 ///   InternalRateOfReturnError::CashFlowsLengthLessThanTwo);
-/// assert_eq!(
-///   InternalRateOfReturn {
-///     cash_flows: &[0.0, 0.0], // All zero cash flows
-///     irr_estimate: IRR_ESTIMATE,
-///   }.calculate().unwrap(),
-///   0.0); // Immediately returns zero percent
 /// assert_eq!(
 ///   InternalRateOfReturn {
 ///     cash_flows: &[-1.0, 0.0],
