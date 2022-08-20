@@ -1,6 +1,6 @@
 // =============================================================================
 //! - Financial calculations
-//! - Rust version: 2022-08-19
+//! - Rust version: 2022-08-20
 //! - Rust since: 2022-07-30
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
 //! - <https://www.croftsoft.com/library/code/>
@@ -91,66 +91,174 @@ impl FutureValuePaymentStream {
 // -----------------------------------------------------------------------------
 /// The calculated discount rate where the net present value is zero.
 ///
-/// # Example
+/// # Examples
 /// ```
-/// use com_croftsoft_core::math::finance_lib::InternalRateOfReturn;
+/// use com_croftsoft_core::math::finance_lib::*;
+/// static POSITIVE_FUTURE_CASH_FLOWS: [f64; 3] = [
+///   -2.0,  // $2 paid out today
+///   1.10,  // $1.10 received a year from today
+///   1.21]; // and another $1.21 received two years from today
+/// static NEGATIVE_FUTURE_CASH_FLOWS: [f64; 3] = [
+///   2.0,    // $2 received today
+///   -1.10,  // $1.10 paid out a year from today
+///   -1.21]; // and another $1.21 paid out two years from today
+/// static IRR_ESTIMATE: f64 = 0.01; // Initial IRR estimate is 1% per year
 /// assert_eq!(
 ///   InternalRateOfReturn {
-///     cash_flows:   &vec![-2.0, 1.1, 1.2], // -$2 now, $1.1 in 1y, $1.2 in 2y
-///     irr_estimate: 0.10,                  // Estimated IRR of 10%
-///   }.calculate(),
-///   0.09696411113867977);                  // Calculated IRR ~9.7%
+///     cash_flows: &POSITIVE_FUTURE_CASH_FLOWS,
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap(),
+///   0.09999999999999998); // Calculated IRR ~10%
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &POSITIVE_FUTURE_CASH_FLOWS,
+///     irr_estimate: 0.0,  // Use zero when there is no initial estimate
+///   }.calculate().unwrap(),
+///   0.09999999999999998); // Calculated IRR ~10%
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &NEGATIVE_FUTURE_CASH_FLOWS,
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap(),
+///   0.09999999999999998); // Calculated IRR ~10%
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &[-1.0, 1.0], // A dollar paid today is returned in a year
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap(),
+///   -1.1053349683155043e-17); // Calculated IRR ~0%
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &[0.0, -1.0, 1.1], // The first cash flow is in the future
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap(),
+///   0.10000000000000009);
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &[], // Zero length cash flows
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap_err(),
+///   InternalRateOfReturnError::CashFlowsLengthLessThanTwo);
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &[-1.0], // Single length cash flows
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap_err(),
+///   InternalRateOfReturnError::CashFlowsLengthLessThanTwo);
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &[0.0, 0.0], // All zero cash flows
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap(),
+///   0.0); // Immediately returns zero percent
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &[-1.0, 0.0],
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap_err(),
+///   InternalRateOfReturnError::NegativeWithoutPositiveCashFlows);
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &[1.0, 0.0],
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap_err(),
+///   InternalRateOfReturnError::PositiveWithoutNegativeCashFlows);
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug)]
 pub struct InternalRateOfReturn<'a> {
   /// Array of cash flows received in the future, indexed from time zero
-  pub cash_flows: &'a Vec<f64>,
-  /// The initial estimated value for the IRR (use 0.10 for 10%)
+  pub cash_flows: &'a [f64],
+  /// Initial estimate for the IRR (use 0.10 for 10%; use 0.0 for no estimate)
   pub irr_estimate: f64,
 }
 
+#[derive(Debug, PartialEq)]
+pub enum InternalRateOfReturnError {
+  CashFlowsLengthLessThanTwo,
+  NegativeWithoutPositiveCashFlows,
+  PositiveWithoutNegativeCashFlows,
+}
+
 impl<'a> InternalRateOfReturn<'a> {
-  pub fn calculate(&self) -> f64 {
+  pub fn calculate(&self) -> Result<f64, InternalRateOfReturnError> {
+    if self.cash_flows.len() < 2 {
+      return Err(InternalRateOfReturnError::CashFlowsLengthLessThanTwo);
+    }
+    let mut has_a_negative_cash_flow = false;
+    let mut has_a_positive_cash_flow = false;
+    for cash_flow in self.cash_flows {
+      if *cash_flow < 0.0 {
+        has_a_negative_cash_flow = true;
+        if has_a_positive_cash_flow {
+          break;
+        }
+      } else if *cash_flow > 0.0 {
+        has_a_positive_cash_flow = true;
+        if has_a_negative_cash_flow {
+          break;
+        }
+      }
+    }
+    if has_a_negative_cash_flow {
+      if !has_a_positive_cash_flow {
+        return Err(
+          InternalRateOfReturnError::NegativeWithoutPositiveCashFlows,
+        );
+      }
+    } else if has_a_positive_cash_flow {
+      if !has_a_negative_cash_flow {
+        return Err(
+          InternalRateOfReturnError::PositiveWithoutNegativeCashFlows,
+        );
+      }
+    } else {
+      return Ok(0.0);
+    }
     let mut irr: f64 = self.irr_estimate;
-    let mut delta = -irr * 0.1;
-    let mut old_npv = 0.0;
-    loop {
+    let mut delta_irr: f64 = -0.1 * irr;
+    if delta_irr == 0.0 {
+      delta_irr = 0.001;
+    }
+    let mut old_npv: f64 = core::f64::NAN;
+    Ok(loop {
       let npv: f64 = NetPresentValue {
         cash_flows: self.cash_flows,
         discount_rate: irr,
       }
       .calculate();
       if npv == 0.0 {
-        return irr;
+        break irr;
       }
       if old_npv < 0.0 {
         if npv > 0.0 {
-          delta *= -0.9;
+          delta_irr *= -0.9;
         } else if npv > old_npv {
-          delta *= 1.1;
+          delta_irr *= 1.1;
         } else if npv < old_npv {
-          delta = -delta;
+          delta_irr = -delta_irr;
         } else {
-          delta = 0.0;
+          // where npv == old_npv
+          break irr;
         }
       } else if old_npv > 0.0 {
         if npv < 0.0 {
-          delta *= -0.9;
+          delta_irr *= -0.9;
         } else if npv < old_npv {
-          delta *= 1.1;
+          delta_irr *= 1.1;
         } else if npv > old_npv {
-          delta = -delta;
+          delta_irr = -delta_irr;
         } else {
-          delta = 0.0;
+          // where npv == old_npv
+          break irr;
         }
       }
-      if delta == 0.0 {
-        return irr;
+      if delta_irr == 0.0 {
+        break irr;
       }
-      irr += delta;
+      irr += delta_irr;
       old_npv = npv;
-    }
+    })
   }
 }
 
@@ -162,46 +270,43 @@ impl<'a> InternalRateOfReturn<'a> {
 /// use com_croftsoft_core::math::finance_lib::NetPresentValue;
 /// assert_eq!(
 ///   NetPresentValue {
-///     cash_flows:    &vec![1.0], // A dollar today
-///     discount_rate: 0.10,       // At a discount rate of 10% per time period
+///     cash_flows:    &[1.0], // A dollar today
+///     discount_rate: 0.10,   // At a discount rate of 10% per time period
 ///   }.calculate(),
-///   1.0);                        // Is worth a dollar today
+///   1.0);                    // Is worth a dollar today
 /// assert_eq!(
 ///   NetPresentValue {
-///     cash_flows:    &vec![0.0, 1.0], // A dollar next year
-///     discount_rate: 0.10,            // At a discount rate of 10% per year
+///     cash_flows:    &[0.0, 1.0], // A dollar next year
+///     discount_rate: 0.10,        // At a discount rate of 10% per year
 ///   }.calculate(),
-///   0.9090909090909091);              // Is worth ~$0.91 today
+///   0.9090909090909091);          // Is worth ~$0.91 today
 /// assert_eq!(
 ///   NetPresentValue {
-///     cash_flows:    &vec![0.0, 0.0, 1.0], // A dollar received in two years
-///     discount_rate: 0.10,                 // Discounted at 10% per year
+///     cash_flows:    &[0.0, 0.0, 1.0], // A dollar received in two years
+///     discount_rate: 0.10,             // Discounted at 10% per year
 ///   }.calculate(),
-///   0.8264462809917354);                   // Is worth ~$0.83 today
+///   0.8264462809917354);               // Is worth ~$0.83 today
 /// assert_eq!(
 ///   NetPresentValue {
-///     cash_flows:    &vec![1.0; 11], // $1 today plus $1 per year for 10 years
-///     discount_rate: 0.10,           // At a discount rate of 10% per year
+///     cash_flows:    &[1.0; 11], // $1 today plus $1 per year for 10 years
+///     discount_rate: 0.10,       // At a discount rate of 10% per year
 ///   }.calculate(),
-///   7.144567105704681);              // Is worth ~$7.14 today
+///   7.144567105704681);          // Is worth ~$7.14 today
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug)]
 pub struct NetPresentValue<'a> {
   // Cash flows received in the future indexed from time zero
-  pub cash_flows: &'a Vec<f64>,
+  pub cash_flows: &'a [f64],
   /// The discount rate or cost of capital (use 0.01 for 1%)
   pub discount_rate: f64,
 }
 
 impl<'a> NetPresentValue<'a> {
   pub fn calculate(&self) -> f64 {
-    let mut net_present_value = 0.0;
-    for (index, cash_flow) in self.cash_flows.iter().enumerate() {
-      net_present_value +=
-        cash_flow / (1.0 + self.discount_rate).powf(index as f64);
-    }
-    net_present_value
+    self.cash_flows.iter().enumerate().fold(0.0, |sum, (index, cash_flow)| {
+      sum + cash_flow / (1.0 + self.discount_rate).powf(index as f64)
+    })
   }
 }
 
@@ -309,34 +414,34 @@ impl PresentValue {
 /// use com_croftsoft_core::math::finance_lib::PresentValueCashFlows;
 /// assert_eq!(
 ///   PresentValueCashFlows {
-///     cash_flows:    &vec![1.0],  // A dollar received one year in the future
-///     discount_rate: 0.10,        // With inflation at 10% per year
+///     cash_flows:    &[1.0], // A dollar received one year in the future
+///     discount_rate: 0.10,   // With inflation at 10% per year
 ///   }.calculate(),
-///   0.9090909090909091);   // Will have the spending power of ~$0.91 today
+///   0.9090909090909091);     // Will have the spending power of ~$0.91 today
 /// assert_eq!(
 ///   PresentValueCashFlows {
-///     cash_flows:    &vec![0.0, 1.0],  // A dollar received in two years
-///     discount_rate: 0.10,             // With inflation at 10% per year
+///     cash_flows:    &[0.0, 1.0], // A dollar received in two years
+///     discount_rate: 0.10,        // With interest at 10% per year
 ///   }.calculate(),
 ///   0.8264462809917354);   // Would be worth the same as ~$0.83 invested today
 /// assert_eq!(
 ///   PresentValueCashFlows {
-///     cash_flows:    &vec![1.0, 2.0, 3.0], // $1, $2, and $3 over 3 years
-///     discount_rate: 0.0,                  // With no inflation
+///     cash_flows:    &[1.0, 2.0, 3.0], // $1, $2, and $3 over 3 years
+///     discount_rate: 0.0,              // With no inflation
 ///   }.calculate(),
-///   6.0);                                  // Would be worth $6 today
+///   6.0);                              // Would be worth $6 today
 /// assert_eq!(
 ///   PresentValueCashFlows {
-///     cash_flows:    &vec![1.0, 2.0, 3.0], // $1, $2, and $3 over 3 years
-///     discount_rate: 0.10,                 // With inflation at 10% per year
+///     cash_flows:    &[1.0, 2.0, 3.0], // $1, $2, and $3 over 3 years
+///     discount_rate: 0.10,             // With inflation at 10% per year
 ///   }.calculate(),
-///   4.8159278737791125);                   // Would be worth ~$4.82 today
+///   4.8159278737791125);               // Would be worth ~$4.82 today
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug)]
 pub struct PresentValueCashFlows<'a> {
   // Cash flows received in the future starting one time period from now
-  pub cash_flows: &'a Vec<f64>,
+  pub cash_flows: &'a [f64],
   /// The discount rate or inflation rate per time period (use 0.01 for 1%)
   pub discount_rate: f64,
 }
