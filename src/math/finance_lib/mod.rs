@@ -132,7 +132,7 @@ impl FutureValuePaymentStream {
 ///     cash_flows: &[0.0, -1.0, 1.1], // The first cash flow is in the future
 ///     irr_estimate: IRR_ESTIMATE,
 ///   }.calculate().unwrap(),
-///   0.10000000000000009);
+///   0.10000000000000009); // Calculated IRR ~10%
 /// assert_eq!(
 ///   InternalRateOfReturn {
 ///     cash_flows: &[0.0, 0.0], // All zero cash flows
