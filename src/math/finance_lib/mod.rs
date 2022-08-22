@@ -1,6 +1,6 @@
 // =============================================================================
 //! - Financial calculations
-//! - Rust version: 2022-08-20
+//! - Rust version: 2022-08-21
 //! - Rust since: 2022-07-30
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
 //! - <https://www.croftsoft.com/library/code/>
@@ -135,10 +135,22 @@ impl FutureValuePaymentStream {
 ///   0.10000000000000009); // Calculated IRR ~10%
 /// assert_eq!(
 ///   InternalRateOfReturn {
+///     cash_flows: &[1.0, 0.0],
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap_err(),
+///   InternalRateOfReturnError::CashFlowsAllNonNegative);
+/// assert_eq!(
+///   InternalRateOfReturn {
+///     cash_flows: &[-1.0, 0.0],
+///     irr_estimate: IRR_ESTIMATE,
+///   }.calculate().unwrap_err(),
+///   InternalRateOfReturnError::CashFlowsAllNonPositive);
+/// assert_eq!(
+///   InternalRateOfReturn {
 ///     cash_flows: &[0.0, 0.0], // All zero cash flows
 ///     irr_estimate: IRR_ESTIMATE,
-///   }.calculate().unwrap(),
-///   0.0); // Immediately returns zero percent
+///   }.calculate().unwrap_err(),
+///   InternalRateOfReturnError::CashFlowsAllZero);
 /// assert_eq!(
 ///   InternalRateOfReturn {
 ///     cash_flows: &[], // Zero length cash flows
@@ -151,18 +163,6 @@ impl FutureValuePaymentStream {
 ///     irr_estimate: IRR_ESTIMATE,
 ///   }.calculate().unwrap_err(),
 ///   InternalRateOfReturnError::CashFlowsLengthLessThanTwo);
-/// assert_eq!(
-///   InternalRateOfReturn {
-///     cash_flows: &[-1.0, 0.0],
-///     irr_estimate: IRR_ESTIMATE,
-///   }.calculate().unwrap_err(),
-///   InternalRateOfReturnError::NegativeWithoutPositiveCashFlows);
-/// assert_eq!(
-///   InternalRateOfReturn {
-///     cash_flows: &[1.0, 0.0],
-///     irr_estimate: IRR_ESTIMATE,
-///   }.calculate().unwrap_err(),
-///   InternalRateOfReturnError::PositiveWithoutNegativeCashFlows);
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug)]
@@ -175,9 +175,10 @@ pub struct InternalRateOfReturn<'a> {
 
 #[derive(Debug, PartialEq)]
 pub enum InternalRateOfReturnError {
+  CashFlowsAllNonNegative,
+  CashFlowsAllNonPositive,
+  CashFlowsAllZero,
   CashFlowsLengthLessThanTwo,
-  NegativeWithoutPositiveCashFlows,
-  PositiveWithoutNegativeCashFlows,
 }
 
 impl<'a> InternalRateOfReturn<'a> {
@@ -202,18 +203,14 @@ impl<'a> InternalRateOfReturn<'a> {
     }
     if has_a_negative_cash_flow {
       if !has_a_positive_cash_flow {
-        return Err(
-          InternalRateOfReturnError::NegativeWithoutPositiveCashFlows,
-        );
+        return Err(InternalRateOfReturnError::CashFlowsAllNonPositive);
       }
     } else if has_a_positive_cash_flow {
       if !has_a_negative_cash_flow {
-        return Err(
-          InternalRateOfReturnError::PositiveWithoutNegativeCashFlows,
-        );
+        return Err(InternalRateOfReturnError::CashFlowsAllNonNegative);
       }
     } else {
-      return Ok(0.0);
+      return Err(InternalRateOfReturnError::CashFlowsAllZero);
     }
     let mut irr: f64 = self.irr_estimate;
     let mut delta_irr: f64 = -0.1 * irr;
