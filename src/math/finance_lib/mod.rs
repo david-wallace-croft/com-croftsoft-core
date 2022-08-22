@@ -6,6 +6,7 @@
 //! - <https://www.croftsoft.com/library/code/>
 //! - Java version: 2001-10-10
 //! - Java since: 1999-08-15
+//! - Uses "payment stream" as a synonym for "annuity".
 // =============================================================================
 
 // -----------------------------------------------------------------------------
@@ -452,5 +453,39 @@ impl<'a> PresentValueCashFlows<'a> {
         }
         .calculate()
     })
+  }
+}
+
+// -----------------------------------------------------------------------------
+/// Calculates the present value of a payment stream such as an annuity.
+///
+/// # Example
+/// ```
+/// use com_croftsoft_core::math::finance_lib::PresentValuePaymentStream;
+/// assert_eq!(
+///   PresentValuePaymentStream {
+///     cash_flow :     1.0,  // A dollar every year starting a year from today
+///     inflation_rate: 0.10, // With inflation at 10% per year
+///     time_periods:   10.0, // For ten years
+///   }.calculate(),
+///   6.144567105704685);     // Is the same as receiving ~$6.14 today
+/// ```
+// -----------------------------------------------------------------------------
+#[derive(Clone, Copy, Debug)]
+pub struct PresentValuePaymentStream {
+  // Periodic cash income staring one time period from today
+  pub cash_flow: f64,
+  /// The inflation rate or interest rate per time period (use 0.01 for 1%)
+  pub inflation_rate: f64,
+  /// Number of time periods of cash income
+  pub time_periods: f64,
+}
+
+impl PresentValuePaymentStream {
+  pub fn calculate(&self) -> f64 {
+    let c = self.cash_flow;
+    let r = self.inflation_rate;
+    let t = self.time_periods;
+    c * (1.0 - 1.0 / (1.0 + r).powf(t)) / r
   }
 }
