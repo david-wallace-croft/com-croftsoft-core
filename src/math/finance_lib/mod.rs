@@ -206,9 +206,7 @@ impl<'a> InternalRateOfReturn<'a> {
         return Err(InternalRateOfReturnError::CashFlowsAllNonPositive);
       }
     } else if has_a_positive_cash_flow {
-      if !has_a_negative_cash_flow {
-        return Err(InternalRateOfReturnError::CashFlowsAllNonNegative);
-      }
+      return Err(InternalRateOfReturnError::CashFlowsAllNonNegative);
     } else {
       return Err(InternalRateOfReturnError::CashFlowsAllZero);
     }
