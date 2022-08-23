@@ -1,12 +1,20 @@
 // =============================================================================
 //! - Financial calculations
-//! - Rust version: 2022-08-21
+//!
+//! - Since any time period can be used, "payment stream" equals "annuity"
+//!
+//! # Metadata
+//! - Author: [`David Wallace Croft`]
+//! - Copyright: &copy; 1999 - 2022 [`CroftSoft Inc`]
+//! - Rust version: 2022-08-23
 //! - Rust since: 2022-07-30
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
 //! - <https://www.croftsoft.com/library/code/>
 //! - Java version: 2001-10-10
 //! - Java since: 1999-08-15
-//! - Uses "payment stream" as a synonym for "annuity".
+//!
+//! [`CroftSoft Inc`]: https://www.croftsoft.com/
+//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
 // -----------------------------------------------------------------------------
