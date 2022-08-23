@@ -186,7 +186,7 @@ pub struct InternalRateOfReturn<'a> {
   pub irr_estimate: f64,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, Eq, PartialEq)]
 pub enum InternalRateOfReturnError {
   CashFlowsAllNonNegative,
   CashFlowsAllNonPositive,
