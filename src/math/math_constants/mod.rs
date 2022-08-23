@@ -1,10 +1,20 @@
 // =============================================================================
 //! - A collection of math constants
+//!
+//! # Metadata
+//! - Copyright: &copy; 1999 - 2022 [`CroftSoft Inc`]
+//! - Author: [`David Wallace Croft`]
 //! - Rust version: 2022-08-09
 //! - Rust since: 2022-07-30
-//! - Adapted from the Java class com.croftsoft.core.math.MathConstants
-//! - <https://www.croftsoft.com/library/code/>
 //! - Java version: 2002-01-27
+//!
+//! # History
+//! - Adapted from the Java class com.croftsoft.core.math.MathConstants
+//!   - In the Java-based [`CroftSoft Core Library`]
+//!
+//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.croftsoft.com/
+//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
 use core::f64::consts::TAU;

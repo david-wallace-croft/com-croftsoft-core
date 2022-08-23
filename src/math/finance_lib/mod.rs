@@ -1,18 +1,22 @@
 // =============================================================================
 //! - Financial calculations
 //!
+//! # Usage
 //! - Since any time period can be used, "payment stream" equals "annuity"
 //!
 //! # Metadata
-//! - Author: [`David Wallace Croft`]
 //! - Copyright: &copy; 1999 - 2022 [`CroftSoft Inc`]
+//! - Author: [`David Wallace Croft`]
 //! - Rust version: 2022-08-23
 //! - Rust since: 2022-07-30
-//! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
-//! - <https://www.croftsoft.com/library/code/>
 //! - Java version: 2001-10-10
 //! - Java since: 1999-08-15
 //!
+//! # History
+//! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
+//!   - In the Java-based [`CroftSoft Core Library`]
+//!
+//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
@@ -30,7 +34,7 @@ pub fn annual_savings_needed(
 }
 
 // -----------------------------------------------------------------------------
-/// Calculates the future value of a cash flow received today.
+/// Calculates the future value of a cash flow received today
 ///
 /// # Example
 /// ```
@@ -64,7 +68,7 @@ impl FutureValue {
 }
 
 // -----------------------------------------------------------------------------
-/// Calculates the future value of a payment stream such as an annuity.
+/// Calculates the future value of a payment stream such as an annuity
 ///
 /// # Example
 /// ```
@@ -98,7 +102,7 @@ impl FutureValuePaymentStream {
 }
 
 // -----------------------------------------------------------------------------
-/// The calculated discount rate where the net present value is zero.
+/// The calculated discount rate where the net present value is zero
 ///
 /// # Examples
 /// ```
@@ -267,7 +271,7 @@ impl<'a> InternalRateOfReturn<'a> {
 }
 
 // -----------------------------------------------------------------------------
-/// The discounted value of multiple cash flows received in the future.
+/// The discounted value of multiple cash flows received in the future
 ///
 /// # Example
 /// ```
@@ -315,7 +319,7 @@ impl<'a> NetPresentValue<'a> {
 }
 
 // -----------------------------------------------------------------------------
-/// Calculates the periodic investments required to accumulate a future value.
+/// Calculates the periodic investments required to accumulate a future value
 ///
 /// # Examples
 /// ```
@@ -370,7 +374,7 @@ impl PeriodicSavingsNeeded {
 }
 
 // -----------------------------------------------------------------------------
-/// The discounted value of a single cash flow received in the future.
+/// The discounted value of a single cash flow received in the future
 ///
 /// # Example
 /// ```
@@ -411,7 +415,7 @@ impl PresentValue {
 }
 
 // -----------------------------------------------------------------------------
-/// The discounted value of varying periodic cash flows.
+/// The discounted value of varying periodic cash flows
 ///
 /// # Example
 /// ```
@@ -465,7 +469,7 @@ impl<'a> PresentValueCashFlows<'a> {
 }
 
 // -----------------------------------------------------------------------------
-/// Calculates the present value of a payment stream such as an annuity.
+/// Calculates the present value of a payment stream such as an annuity
 ///
 /// # Example
 /// ```

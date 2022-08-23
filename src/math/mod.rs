@@ -1,9 +1,19 @@
 // =============================================================================
 //! - Mathematics and constants
+//!
+//! # Metadata
+//! - Copyright: &copy; 1999 - 2022 [`CroftSoft Inc`]
+//! - Author: [`David Wallace Croft`]
 //! - Rust version: 2022-08-09
 //! - Rust since: 2022-07-30
+//!
+//! # History
 //! - Adapted from the Java package com.croftsoft.core.math
-//! - <https://www.croftsoft.com/library/code/>
+//!   - In the Java-based [`CroftSoft Core Library`]
+//!
+//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.croftsoft.com/
+//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
 pub mod finance_lib;
