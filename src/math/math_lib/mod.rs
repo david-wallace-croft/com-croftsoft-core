@@ -52,6 +52,27 @@
 ///     value:    0.0,
 ///   }.calculate().unwrap_err(),
 ///   ClipError::MinimumGreaterThanMaximum);
+/// assert_eq!(
+///   Clip {
+///     maximum:  f64::NAN,
+///     minimum: -1.0,
+///     value:    0.0,
+///   }.calculate().unwrap_err(),
+///   ClipError::MaximumIsNotANumber);
+/// assert_eq!(
+///   Clip {
+///     maximum:  1.0,
+///     minimum:  f64::NAN,
+///     value:    0.0,
+///   }.calculate().unwrap_err(),
+///   ClipError::MinimumIsNotANumber);
+/// assert_eq!(
+///   Clip {
+///     maximum:  1.0,
+///     minimum: -1.0,
+///     value:    f64::NAN,
+///   }.calculate().unwrap_err(),
+///   ClipError::ValueIsNotANumber);
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug)]
@@ -63,7 +84,10 @@ pub struct Clip {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum ClipError {
+  MaximumIsNotANumber,
   MinimumGreaterThanMaximum,
+  MinimumIsNotANumber,
+  ValueIsNotANumber,
 }
 
 impl Clip {
@@ -71,6 +95,15 @@ impl Clip {
     let max = self.maximum;
     let min = self.minimum;
     let val = self.value;
+    if max.is_nan() {
+      return Err(ClipError::MaximumIsNotANumber);
+    }
+    if min.is_nan() {
+      return Err(ClipError::MinimumIsNotANumber);
+    }
+    if val.is_nan() {
+      return Err(ClipError::ValueIsNotANumber);
+    }
     if min > max {
       return Err(ClipError::MinimumGreaterThanMaximum);
     }
