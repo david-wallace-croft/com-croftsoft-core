@@ -116,3 +116,89 @@ impl Clip {
     })
   }
 }
+
+// -----------------------------------------------------------------------------
+/// Cumulative Distribution Function (CDF)
+///
+/// # Links
+/// [https://en.wikipedia.org/wiki/Cumulative_distribution_function]
+// -----------------------------------------------------------------------------
+#[derive(Clone, Debug)]
+pub struct CumulativeDistributionFunction {
+  pub x: f64,
+  pub lambda: f64,
+}
+
+impl CumulativeDistributionFunction {
+  pub fn calculate(&self) -> f64 {
+    if self.x <= 0.0 {
+      return 0.0;
+    }
+    1.0 - (-self.lambda * self.x).exp()
+  }
+}
+
+// -----------------------------------------------------------------------------
+/// Wraps the value to [minimum, minimum + range)
+/// # Examples
+/// ```
+/// use com_croftsoft_core::math::math_lib::*;
+/// assert_eq!(
+///   Wrap {
+///     minimum: -180.0,
+///     range:    360.0,
+///     value:   -190.0,
+///   }.calculate().unwrap(),
+///   170.0);
+/// assert_eq!(
+///   Wrap {
+///     minimum: -180.0,
+///     range:    360.0,
+///     value:    190.0,
+///   }.calculate().unwrap(),
+///   -170.0);
+/// assert_eq!(
+///   Wrap {
+///     minimum: -180.0,
+///     range:    360.0,
+///     value:   -180.0,
+///   }.calculate().unwrap(),
+///   -180.0);
+/// assert_eq!(
+///   Wrap {
+///     minimum: -180.0,
+///     range:   -360.0,
+///     value:    180.0,
+///   }.calculate().unwrap_err(),
+///   WrapError::RangeIsNonPositive);
+/// ```
+// -----------------------------------------------------------------------------
+pub struct Wrap {
+  pub minimum: f64,
+  pub range: f64,
+  pub value: f64,
+}
+
+#[derive(Debug, Eq, PartialEq)]
+pub enum WrapError {
+  RangeIsNonPositive,
+}
+
+impl Wrap {
+  pub fn calculate(&self) -> Result<f64, WrapError> {
+    let min = self.minimum;
+    let rng = self.range;
+    let val = self.value;
+    if rng <= 0.0 {
+      return Err(WrapError::RangeIsNonPositive);
+    }
+    let max = min + rng;
+    if val < min {
+      Ok(val + ((min - val) / rng).ceil() * rng)
+    } else if val < max {
+      Ok(val)
+    } else {
+      Ok(val - (1.0 + ((val - max) / rng).floor()) * rng)
+    }
+  }
+}
