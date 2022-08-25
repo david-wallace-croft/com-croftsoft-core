@@ -121,7 +121,7 @@ impl Clip {
 /// Cumulative Distribution Function (CDF)
 ///
 /// # Links
-/// [https://en.wikipedia.org/wiki/Cumulative_distribution_function]
+/// <https://en.wikipedia.org/wiki/Cumulative_distribution_function>
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug)]
 pub struct CumulativeDistributionFunction {
