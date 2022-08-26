@@ -166,11 +166,32 @@ impl CumulativeDistributionFunction {
 ///   -180.0);
 /// assert_eq!(
 ///   Wrap {
+///     minimum:  std::f64::NAN,
+///     range:    360.0,
+///     value:    190.0,
+///   }.calculate().unwrap_err(),
+///   WrapError::MinimumIsNotANumber);
+/// assert_eq!(
+///   Wrap {
 ///     minimum: -180.0,
 ///     range:   -360.0,
 ///     value:    180.0,
 ///   }.calculate().unwrap_err(),
 ///   WrapError::RangeIsNonPositive);
+/// assert_eq!(
+///   Wrap {
+///     minimum: -180.0,
+///     range:    std::f64::NAN,
+///     value:    190.0,
+///   }.calculate().unwrap_err(),
+///   WrapError::RangeIsNotANumber);
+/// assert_eq!(
+///   Wrap {
+///     minimum: -180.0,
+///     range:    360.0,
+///     value:    std::f64::NAN,
+///   }.calculate().unwrap_err(),
+///   WrapError::ValueIsNotANumber);
 /// ```
 // -----------------------------------------------------------------------------
 pub struct Wrap {
@@ -181,7 +202,10 @@ pub struct Wrap {
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum WrapError {
+  MinimumIsNotANumber,
   RangeIsNonPositive,
+  RangeIsNotANumber,
+  ValueIsNotANumber,
 }
 
 impl Wrap {
@@ -189,8 +213,17 @@ impl Wrap {
     let min = self.minimum;
     let rng = self.range;
     let val = self.value;
+    if min.is_nan() {
+      return Err(WrapError::MinimumIsNotANumber);
+    }
+    if rng.is_nan() {
+      return Err(WrapError::RangeIsNotANumber);
+    }
     if rng <= 0.0 {
       return Err(WrapError::RangeIsNonPositive);
+    }
+    if val.is_nan() {
+      return Err(WrapError::ValueIsNotANumber);
     }
     let max = min + rng;
     if val < min {
