@@ -224,76 +224,103 @@ impl CumulativeDistributionFunction {
 ///   -180.0);
 /// assert_eq!(
 ///   Wrap {
+///     minimum:  f64::MAX,
+///     range:    360.0,
+///     value:    190.0,
+///   }.calculate().unwrap_err(),
+///   WrapError::FloatResolution(
+///     WrapErrorFloatResolution::DeltaIsNegativeMinimum));
+/// assert_eq!(
+///   Wrap {
+///     minimum: -180.0,
+///     range:    360.0,
+///     value:    f64::MAX,
+///   }.calculate().unwrap_err(),
+///   WrapError::FloatResolution(
+///     WrapErrorFloatResolution::DeltaIsValue));
+/// assert_eq!(
+///   Wrap {
 ///     minimum:  f64::INFINITY,
 ///     range:    360.0,
 ///     value:    190.0,
 ///   }.calculate().unwrap_err(),
-///   WrapError::MinimumIsInfinite(f64::INFINITY));
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::MinimumIsInfinite(f64::INFINITY)));
 /// assert_eq!(
 ///   Wrap {
 ///     minimum:  f64::NEG_INFINITY,
 ///     range:    360.0,
 ///     value:    190.0,
 ///   }.calculate().unwrap_err(),
-///   WrapError::MinimumIsInfinite(f64::NEG_INFINITY));
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::MinimumIsInfinite(f64::NEG_INFINITY)));
 /// assert_eq!(
 ///   Wrap {
 ///     minimum:  f64::NAN,
 ///     range:    360.0,
 ///     value:    190.0,
 ///   }.calculate().unwrap_err(),
-///   WrapError::MinimumIsNotANumber);
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::MinimumIsNotANumber));
 /// assert_eq!(
 ///   Wrap {
 ///     minimum: -180.0,
 ///     range:    f64::INFINITY,
 ///     value:    190.0,
 ///   }.calculate().unwrap_err(),
-///   WrapError::RangeIsInfinite(f64::INFINITY));
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::RangeIsInfinite(f64::INFINITY)));
 /// assert_eq!(
 ///   Wrap {
 ///     minimum: -180.0,
 ///     range:    f64::NEG_INFINITY,
 ///     value:    190.0,
 ///   }.calculate().unwrap_err(),
-///   WrapError::RangeIsInfinite(f64::NEG_INFINITY));
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::RangeIsInfinite(f64::NEG_INFINITY)));
 /// assert_eq!(
 ///   Wrap {
 ///     minimum: -180.0,
 ///     range:   -360.0,
 ///     value:    180.0,
 ///   }.calculate().unwrap_err(),
-///   WrapError::RangeIsNonPositive(-360.0));
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::RangeIsNonPositive(-360.0)));
 /// assert_eq!(
 ///   Wrap {
 ///     minimum: -180.0,
 ///     range:    f64::NAN,
 ///     value:    190.0,
 ///   }.calculate().unwrap_err(),
-///   WrapError::RangeIsNotANumber);
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::RangeIsNotANumber));
 /// assert_eq!(
 ///   Wrap {
 ///     minimum: -180.0,
 ///     range:    360.0,
 ///     value:    f64::INFINITY,
 ///   }.calculate().unwrap_err(),
-///   WrapError::ValueIsInfinite(f64::INFINITY));
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::ValueIsInfinite(f64::INFINITY)));
 /// assert_eq!(
 ///   Wrap {
 ///     minimum: -180.0,
 ///     range:    360.0,
 ///     value:    f64::NEG_INFINITY,
 ///   }.calculate().unwrap_err(),
-///   WrapError::ValueIsInfinite(f64::NEG_INFINITY));
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::ValueIsInfinite(f64::NEG_INFINITY)));
 /// assert_eq!(
 ///   Wrap {
 ///     minimum: -180.0,
 ///     range:    360.0,
 ///     value:    f64::NAN,
 ///   }.calculate().unwrap_err(),
-///   WrapError::ValueIsNotANumber);
+///   WrapError::InvalidArgument(
+///     WrapErrorInvalidArgument::ValueIsNotANumber));
 /// ```
 // -----------------------------------------------------------------------------
+#[derive(Clone, Debug)]
 pub struct Wrap {
   pub minimum: f64,
   pub range: f64,
@@ -302,6 +329,22 @@ pub struct Wrap {
 
 #[derive(Debug, PartialEq)]
 pub enum WrapError {
+  FloatResolution(WrapErrorFloatResolution),
+  InvalidArgument(WrapErrorInvalidArgument),
+}
+
+#[derive(Debug, PartialEq)]
+pub enum WrapErrorFloatResolution {
+  CalculatedIsLessThanMinimum(f64),
+  CalculatedIsNotLessThanMinimumPlusRange(f64),
+  CyclesIsZero,
+  DeltaIsNegativeMinimum,
+  DeltaIsValue,
+  OffsetIsZero,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum WrapErrorInvalidArgument {
   MinimumIsInfinite(f64),
   MinimumIsNotANumber,
   RangeIsInfinite(f64),
@@ -317,33 +360,80 @@ impl Wrap {
     let rng = self.range;
     let val = self.value;
     if min.is_infinite() {
-      return Err(WrapError::MinimumIsInfinite(min));
+      return Err(WrapError::InvalidArgument(
+        WrapErrorInvalidArgument::MinimumIsInfinite(min),
+      ));
     }
     if rng.is_infinite() {
-      return Err(WrapError::RangeIsInfinite(rng));
+      return Err(WrapError::InvalidArgument(
+        WrapErrorInvalidArgument::RangeIsInfinite(rng),
+      ));
     }
     if val.is_infinite() {
-      return Err(WrapError::ValueIsInfinite(val));
+      return Err(WrapError::InvalidArgument(
+        WrapErrorInvalidArgument::ValueIsInfinite(val),
+      ));
     }
     if min.is_nan() {
-      return Err(WrapError::MinimumIsNotANumber);
+      return Err(WrapError::InvalidArgument(
+        WrapErrorInvalidArgument::MinimumIsNotANumber,
+      ));
     }
     if rng.is_nan() {
-      return Err(WrapError::RangeIsNotANumber);
+      return Err(WrapError::InvalidArgument(
+        WrapErrorInvalidArgument::RangeIsNotANumber,
+      ));
     }
     if val.is_nan() {
-      return Err(WrapError::ValueIsNotANumber);
+      return Err(WrapError::InvalidArgument(
+        WrapErrorInvalidArgument::ValueIsNotANumber,
+      ));
     }
     if rng <= 0.0 {
-      return Err(WrapError::RangeIsNonPositive(rng));
+      return Err(WrapError::InvalidArgument(
+        WrapErrorInvalidArgument::RangeIsNonPositive(rng),
+      ));
     }
     let max = min + rng;
-    if val < min {
-      Ok(val + ((min - val) / rng).ceil() * rng)
-    } else if val < max {
-      Ok(val)
-    } else {
-      Ok(val - (1.0 + ((val - max) / rng).floor()) * rng)
+    if min <= val && val < max {
+      return Ok(val);
     }
+    let delta = val - min;
+    if delta == -min {
+      return Err(WrapError::FloatResolution(
+        WrapErrorFloatResolution::DeltaIsNegativeMinimum,
+      ));
+    }
+    if delta == val {
+      return Err(WrapError::FloatResolution(
+        WrapErrorFloatResolution::DeltaIsValue,
+      ));
+    }
+    let cycles = (delta / rng).floor();
+    if cycles == 0.0 {
+      return Err(WrapError::FloatResolution(
+        WrapErrorFloatResolution::CyclesIsZero,
+      ));
+    }
+    let offset = cycles * rng;
+    if offset == 0.0 {
+      return Err(WrapError::FloatResolution(
+        WrapErrorFloatResolution::OffsetIsZero,
+      ));
+    }
+    let calculated = val - offset;
+    if calculated < min {
+      return Err(WrapError::FloatResolution(
+        WrapErrorFloatResolution::CalculatedIsLessThanMinimum(calculated),
+      ));
+    }
+    if calculated >= max {
+      return Err(WrapError::FloatResolution(
+        WrapErrorFloatResolution::CalculatedIsNotLessThanMinimumPlusRange(
+          calculated,
+        ),
+      ));
+    }
+    Ok(calculated)
   }
 }
