@@ -437,3 +437,58 @@ impl Wrap {
     Ok(calculated)
   }
 }
+
+// -----------------------------------------------------------------------------
+/// The sigmoid or logistic function
+///
+/// # Examples
+/// ```
+/// use com_croftsoft_core::math::math_lib::sigmoid;
+/// assert_eq!(
+///   sigmoid(f64::NEG_INFINITY),
+///   0.0);
+/// assert_eq!(
+///   sigmoid(-1.0),
+///   0.2689414213699951);
+/// assert_eq!(
+///   sigmoid(0.0),
+///   0.5);
+/// assert_eq!(
+///   sigmoid(1.0),
+///   0.7310585786300049);
+/// assert_eq!(
+///   sigmoid(f64::INFINITY),
+///   1.0);
+/// ```
+// -----------------------------------------------------------------------------
+pub fn sigmoid(a: f64) -> f64 {
+  1.0 / (1.0 + (-a).exp())
+}
+
+// -----------------------------------------------------------------------------
+/// The derivative of the sigmoid function with respect to the argument
+///
+/// # Examples
+/// ```
+/// use com_croftsoft_core::math::math_lib::sigmoid_derivative;
+/// assert_eq!(
+///   sigmoid_derivative(f64::NEG_INFINITY),
+///   0.0);
+/// assert_eq!(
+///   sigmoid_derivative(-1.0),
+///   0.19661193324148185);
+/// assert_eq!(
+///   sigmoid_derivative(0.0),
+///   0.25);
+/// assert_eq!(
+///   sigmoid_derivative(1.0),
+///   0.19661193324148185);
+/// assert_eq!(
+///   sigmoid_derivative(f64::INFINITY),
+///   0.0);
+/// ```
+// -----------------------------------------------------------------------------
+pub fn sigmoid_derivative(a: f64) -> f64 {
+  let s = sigmoid(a);
+  s * (1.0 - s)
+}
