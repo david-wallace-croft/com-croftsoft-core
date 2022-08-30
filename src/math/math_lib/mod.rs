@@ -438,6 +438,40 @@ impl Wrap {
   }
 }
 
+#[derive(Debug, Eq, PartialEq)]
+pub enum FactorError {
+  ArgumentIsZeroOrOne(u64),
+}
+
+// -----------------------------------------------------------------------------
+/// Factors a number into its primes
+///
+/// TODO: Not yet tested
+// -----------------------------------------------------------------------------
+pub fn factor(n: u64) -> Result<Vec<u64>, FactorError> {
+  if n < 2 {
+    return Err(FactorError::ArgumentIsZeroOrOne(n));
+  }
+  let mut prime_vec = Vec::new();
+  let mut mut_n = n;
+  let mut max = n / 2;
+  let mut i = 2;
+  loop {
+    if mut_n % i == 0 {
+      prime_vec.push(i);
+      mut_n /= i;
+      max = mut_n / 2;
+      i = 1;
+    }
+    i += 1;
+    if i > max {
+      // TODO: Instead check that mut_n < 2?
+      break;
+    }
+  }
+  Ok(prime_vec)
+}
+
 // -----------------------------------------------------------------------------
 /// The sigmoid or logistic function
 ///
