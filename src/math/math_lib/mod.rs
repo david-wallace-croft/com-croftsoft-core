@@ -457,8 +457,6 @@ pub enum FactorError {
 /// assert_eq!(factor(7).unwrap(), vec!(7));
 /// assert_eq!(factor(8).unwrap(), vec!(2, 2, 2));
 /// assert_eq!(factor(9).unwrap(), vec!(3, 3));
-/// assert_eq!(factor(10).unwrap(), vec!(2, 5));
-/// assert_eq!(factor(11).unwrap(), vec!(11));
 /// ```
 // -----------------------------------------------------------------------------
 pub fn factor(n: u64) -> Result<Vec<u64>, FactorError> {
