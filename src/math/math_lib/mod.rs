@@ -447,6 +447,8 @@ pub enum FactorError {
 /// Factors a number into its primes
 /// ```
 /// use com_croftsoft_core::math::math_lib::*;
+/// assert_eq!(factor(0).unwrap_err(), FactorError::ArgumentIsZeroOrOne(0));
+/// assert_eq!(factor(1).unwrap_err(), FactorError::ArgumentIsZeroOrOne(1));
 /// assert_eq!(factor(2).unwrap(), vec!(2));
 /// assert_eq!(factor(3).unwrap(), vec!(3));
 /// assert_eq!(factor(4).unwrap(), vec!(2, 2));
@@ -457,8 +459,6 @@ pub enum FactorError {
 /// assert_eq!(factor(9).unwrap(), vec!(3, 3));
 /// assert_eq!(factor(10).unwrap(), vec!(2, 5));
 /// assert_eq!(factor(11).unwrap(), vec!(11));
-/// assert_eq!(factor(0).unwrap_err(), FactorError::ArgumentIsZeroOrOne(0));
-/// assert_eq!(factor(1).unwrap_err(), FactorError::ArgumentIsZeroOrOne(1));
 /// ```
 // -----------------------------------------------------------------------------
 pub fn factor(n: u64) -> Result<Vec<u64>, FactorError> {
