@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-08-28
+//! - Rust version: 2022-08-31
 //! - Rust since: 2022-08-24
 //! - Java version: 2008-08-09
 //! - Java since: 1998-12-27
@@ -445,28 +445,38 @@ pub enum FactorError {
 
 // -----------------------------------------------------------------------------
 /// Factors a number into its primes
-///
-/// TODO: Not yet tested
+/// ```
+/// use com_croftsoft_core::math::math_lib::*;
+/// assert_eq!(factor(2).unwrap(), vec!(2));
+/// assert_eq!(factor(3).unwrap(), vec!(3));
+/// assert_eq!(factor(4).unwrap(), vec!(2, 2));
+/// assert_eq!(factor(5).unwrap(), vec!(5));
+/// assert_eq!(factor(6).unwrap(), vec!(2, 3));
+/// assert_eq!(factor(7).unwrap(), vec!(7));
+/// assert_eq!(factor(8).unwrap(), vec!(2, 2, 2));
+/// assert_eq!(factor(9).unwrap(), vec!(3, 3));
+/// assert_eq!(factor(10).unwrap(), vec!(2, 5));
+/// assert_eq!(factor(11).unwrap(), vec!(11));
+/// assert_eq!(factor(0).unwrap_err(), FactorError::ArgumentIsZeroOrOne(0));
+/// assert_eq!(factor(1).unwrap_err(), FactorError::ArgumentIsZeroOrOne(1));
+/// ```
 // -----------------------------------------------------------------------------
 pub fn factor(n: u64) -> Result<Vec<u64>, FactorError> {
   if n < 2 {
     return Err(FactorError::ArgumentIsZeroOrOne(n));
   }
   let mut prime_vec = Vec::new();
-  let mut mut_n = n;
-  let mut max = n / 2;
-  let mut i = 2;
+  let mut dividend = n;
+  let mut divisor = 2;
   loop {
-    if mut_n % i == 0 {
-      prime_vec.push(i);
-      mut_n /= i;
-      max = mut_n / 2;
-      i = 1;
-    }
-    i += 1;
-    if i > max {
-      // TODO: Instead check that mut_n < 2?
-      break;
+    if dividend % divisor == 0 {
+      prime_vec.push(divisor);
+      dividend /= divisor;
+      if dividend == 1 {
+        break;
+      }
+    } else {
+      divisor += 1;
     }
   }
   Ok(prime_vec)
