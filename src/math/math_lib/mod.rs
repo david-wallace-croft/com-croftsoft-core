@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-08-31
+//! - Rust version: 2022-09-01
 //! - Rust since: 2022-08-24
 //! - Java version: 2008-08-09
 //! - Java since: 1998-12-27
@@ -120,7 +120,7 @@
 ///   ClipError::ValueIsNotANumber);
 /// ```
 // -----------------------------------------------------------------------------
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Clip {
   pub maximum: f64,
   pub minimum: f64,
@@ -180,7 +180,7 @@ impl Clip {
 /// # Links
 /// <https://en.wikipedia.org/wiki/Cumulative_distribution_function>
 // -----------------------------------------------------------------------------
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct CumulativeDistributionFunction {
   pub x: f64,
   pub lambda: f64,
@@ -193,6 +193,79 @@ impl CumulativeDistributionFunction {
     }
     1.0 - (-self.lambda * self.x).exp()
   }
+}
+
+// -----------------------------------------------------------------------------
+/// Coordinates specified as angle and radius from the origin
+// -----------------------------------------------------------------------------
+#[derive(Clone, Debug, PartialEq)]
+pub struct PolarCoordinates {
+  pub angle: f64,
+  pub radius: f64,
+}
+
+impl PolarCoordinates {
+  // ---------------------------------------------------------------------------
+  /// Converts from polar to rectangular coordinates
+  ///
+  /// # Examples
+  /// ```
+  /// use com_croftsoft_core::math::math_lib::*;
+  /// assert_eq!(
+  ///   PolarCoordinates {
+  ///     angle: 0.0,
+  ///     radius: 1.0,
+  ///   }.to_rectangular_coordinates(),
+  ///   RectangularCoordinates {
+  ///     x: 1.0,
+  ///     y: 0.0,
+  ///   });
+  /// assert_eq!(
+  ///   PolarCoordinates {
+  ///     angle: std::f64::consts::FRAC_PI_2,
+  ///     radius: 1.0,
+  ///   }.to_rectangular_coordinates(),
+  ///   RectangularCoordinates {
+  ///     x: 6.123233995736766e-17,
+  ///     y: 1.0,
+  ///   });
+  /// assert_eq!(
+  ///   PolarCoordinates {
+  ///     angle: std::f64::consts::PI,
+  ///     radius: 1.0,
+  ///   }.to_rectangular_coordinates(),
+  ///   RectangularCoordinates {
+  ///     x: -1.0,
+  ///     y: 1.2246467991473532e-16,
+  ///   });
+  /// assert_eq!(
+  ///   PolarCoordinates {
+  ///     angle: 3.0 * std::f64::consts::FRAC_PI_2,
+  ///     radius: 2.0,
+  ///   }.to_rectangular_coordinates(),
+  ///   RectangularCoordinates {
+  ///     x: -3.6739403974420594e-16,
+  ///     y: -2.0,
+  ///   });
+  /// ```
+  // ---------------------------------------------------------------------------
+  pub fn to_rectangular_coordinates(&self) -> RectangularCoordinates {
+    let angle = self.angle;
+    let radius = self.radius;
+    RectangularCoordinates {
+      x: radius * angle.cos(),
+      y: radius * angle.sin(),
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+/// Cartesian (x, y) coordinates
+// -----------------------------------------------------------------------------
+#[derive(Clone, Debug, PartialEq)]
+pub struct RectangularCoordinates {
+  pub x: f64,
+  pub y: f64,
 }
 
 // -----------------------------------------------------------------------------
@@ -320,7 +393,7 @@ impl CumulativeDistributionFunction {
 ///     WrapErrorInvalidArgument::ValueIsNotANumber));
 /// ```
 // -----------------------------------------------------------------------------
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Wrap {
   pub minimum: f64,
   pub range: f64,
