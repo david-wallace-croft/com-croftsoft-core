@@ -554,6 +554,40 @@ pub fn factor(n: u64) -> Result<Vec<u64>, FactorError> {
 }
 
 // -----------------------------------------------------------------------------
+/// Computes the greatest common factor for two positive integers
+///
+/// ```
+/// use com_croftsoft_core::math::math_lib::*;
+/// assert_eq!(greatest_common_factor(3, 5).unwrap(), 1);
+/// assert_eq!(greatest_common_factor(4, 6).unwrap(), 2);
+/// assert_eq!(greatest_common_factor(6, 9).unwrap(), 3);
+/// ```
+// -----------------------------------------------------------------------------
+pub fn greatest_common_factor(
+  n0: u64,
+  n1: u64,
+) -> Result<u64, FactorError> {
+  let mut gcf: u64 = 1;
+  let factor_result_0 = factor(n0);
+  if let Err(factor_error) = factor_result_0 {
+    return Err(factor_error);
+  };
+  let factor_vec_0 = factor_result_0.unwrap();
+  let factor_result_1 = factor(n1);
+  if let Err(factor_error) = factor_result_1 {
+    return Err(factor_error);
+  }
+  let mut factor_vec_1 = factor_result_1.unwrap();
+  for (index, factor_0) in factor_vec_0.iter().enumerate() {
+    if factor_vec_1.contains(factor_0) {
+      gcf *= factor_0;
+      factor_vec_1.remove(index);
+    }
+  }
+  Ok(gcf)
+}
+
+// -----------------------------------------------------------------------------
 /// The sigmoid or logistic function
 ///
 /// # Examples
