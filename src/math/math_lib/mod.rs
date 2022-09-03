@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-01
+//! - Rust version: 2022-09-03
 //! - Rust since: 2022-08-24
 //! - Java version: 2008-08-09
 //! - Java since: 1998-12-27
@@ -553,31 +553,38 @@ pub fn factor(n: u64) -> Result<Vec<u64>, FactorError> {
   Ok(prime_vec)
 }
 
+#[derive(Debug, Eq, PartialEq)]
+pub enum GreatestCommonFactorError {
+  ArgumentIsZero,
+}
+
 // -----------------------------------------------------------------------------
 /// Computes the greatest common factor for two positive integers
 ///
 /// ```
 /// use com_croftsoft_core::math::math_lib::*;
-/// assert_eq!(greatest_common_factor(3, 5).unwrap(), 1);
-/// assert_eq!(greatest_common_factor(4, 6).unwrap(), 2);
-/// assert_eq!(greatest_common_factor(6, 9).unwrap(), 3);
+/// assert_eq!(
+///   greatest_common_factor(0, 1).unwrap_err(),
+///   GreatestCommonFactorError::ArgumentIsZero);
+/// assert_eq!(greatest_common_factor(1, 2).unwrap(), 1);
+/// assert_eq!(greatest_common_factor(2, 3).unwrap(), 1);
+/// assert_eq!(greatest_common_factor(2, 4).unwrap(), 2);
+/// assert_eq!(greatest_common_factor(3, 6).unwrap(), 3);
 /// ```
 // -----------------------------------------------------------------------------
 pub fn greatest_common_factor(
   n0: u64,
   n1: u64,
-) -> Result<u64, FactorError> {
-  let mut gcf: u64 = 1;
-  let factor_result_0 = factor(n0);
-  if let Err(factor_error) = factor_result_0 {
-    return Err(factor_error);
-  };
-  let factor_vec_0 = factor_result_0.unwrap();
-  let factor_result_1 = factor(n1);
-  if let Err(factor_error) = factor_result_1 {
-    return Err(factor_error);
+) -> Result<u64, GreatestCommonFactorError> {
+  if n0 == 0 || n1 == 0 {
+    return Err(GreatestCommonFactorError::ArgumentIsZero);
   }
-  let mut factor_vec_1 = factor_result_1.unwrap();
+  if n0 == 1 || n1 == 1 {
+    return Ok(1);
+  }
+  let mut gcf: u64 = 1;
+  let factor_vec_0 = factor(n0).unwrap();
+  let mut factor_vec_1 = factor(n1).unwrap();
   for (index, factor_0) in factor_vec_0.iter().enumerate() {
     if factor_vec_1.contains(factor_0) {
       gcf *= factor_0;
