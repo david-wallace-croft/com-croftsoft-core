@@ -20,7 +20,7 @@
 // -----------------------------------------------------------------------------
 /// The row and column indices of a Matrix
 // -----------------------------------------------------------------------------
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Indices {
   pub row: usize,
   pub column: usize,
@@ -43,7 +43,7 @@ pub struct Indices {
 ///   Matrix::default().add(1.0));      // The same by adding one to the default
 /// let indices = Indices { row: 0, column: 3 }; // first row, last column
 /// assert_eq!(
-///   Matrix::<2, 4>::default().set(&indices, 1.0).get(&indices),
+///   Matrix::<2, 4>::default().set(indices, 1.0).get(indices),
 ///   1.0);
 /// ```
 // -----------------------------------------------------------------------------
@@ -84,7 +84,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   pub fn get(
     &self,
-    indices: &Indices,
+    indices: Indices,
   ) -> f64 {
     self.data[indices.row][indices.column]
   }
@@ -103,7 +103,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   pub fn set(
     &mut self,
-    indices: &Indices,
+    indices: Indices,
     value: f64,
   ) -> &mut Self {
     self.data[indices.row][indices.column] = value;
