@@ -18,7 +18,7 @@
 // =============================================================================
 
 // -----------------------------------------------------------------------------
-/// The row and column indices of a Matrix
+/// The row and column indices of a Matrix, indexed from zero
 // -----------------------------------------------------------------------------
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Indices {
@@ -34,7 +34,7 @@ pub struct Indices {
 /// use com_croftsoft_core::math::matrix::*;
 /// assert_eq!(
 ///   &Matrix::<2, 4>::default(),       // A "two by four" matrix of all zeroes
-///   &Matrix { data: [[0.0; 4]; 2] }); // A matrix of two rows and four columns
+///   &Matrix { rows: [[0.0; 4]; 2] }); // A matrix of two rows and four columns
 /// assert_eq!(
 ///   &Matrix::<2, 4>::new(0.0),        // A 2x4 matrix of all zeroes
 ///   &Matrix::default());              // The same with the dimensions inferred
@@ -43,29 +43,32 @@ pub struct Indices {
 ///   Matrix::default().add(1.0));      // The same by adding one to the default
 /// let indices = Indices { row: 0, column: 3 }; // first row, last column
 /// assert_eq!(
-///   Matrix::<2, 4>::default().set(indices, 1.0).get(indices),
+///   Matrix::<2, 4>::default().set(indices, 1.0).get(indices), // set and get
 ///   1.0);
+/// assert_eq!(
+///   Matrix::<2, 4>::default().set(indices, 1.0).get_row(0), // set and get_row
+///   &[0.0, 0.0, 0.0, 1.0]);
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug, PartialEq)]
 pub struct Matrix<const R: usize, const C: usize> {
-  pub data: [[f64; C]; R],
+  pub rows: [[f64; C]; R],
 }
 
 impl<const R: usize, const C: usize> Default for Matrix<R, C> {
   // -----------------------------------------------------------------------------
-  /// Makes a new Matrix of all zeroes
+  /// Makes a new Matrix of all zero entries
   // -----------------------------------------------------------------------------
   fn default() -> Self {
     Self {
-      data: [[0.0; C]; R],
+      rows: [[0.0; C]; R],
     }
   }
 }
 
 impl<const R: usize, const C: usize> Matrix<R, C> {
   // -----------------------------------------------------------------------------
-  /// Adds the argument to all values in the matrix
+  /// Adds the argument to all entries in the matrix
   // -----------------------------------------------------------------------------
   pub fn add(
     &mut self,
@@ -73,40 +76,50 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   ) -> &mut Self {
     for r in 0..R {
       for c in 0..C {
-        self.data[r][c] += addend;
+        self.rows[r][c] += addend;
       }
     }
     self
   }
 
   // ---------------------------------------------------------------------------
-  /// Returns the value at the position given by the indices
+  /// Returns the entry at the position given by the indices
   // ---------------------------------------------------------------------------
   pub fn get(
     &self,
     indices: Indices,
   ) -> f64 {
-    self.data[indices.row][indices.column]
+    self.rows[indices.row][indices.column]
   }
 
   // ---------------------------------------------------------------------------
-  /// Makes a new Matrix with all values set to the argument
+  /// Returns a reference to a row of entries, indexed from zero
+  // ---------------------------------------------------------------------------
+  pub fn get_row(
+    &self,
+    row_index: usize,
+  ) -> &[f64; C] {
+    &self.rows[row_index]
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Makes a new Matrix with all entries set to the argument
   // ---------------------------------------------------------------------------
   pub fn new(value: f64) -> Self {
     Self {
-      data: [[value; C]; R],
+      rows: [[value; C]; R],
     }
   }
 
   // ---------------------------------------------------------------------------
-  /// Sets the value at the position given by the indices and then returns self
+  /// Sets the entry at the position given by the indices and then returns self
   // ---------------------------------------------------------------------------
   pub fn set(
     &mut self,
     indices: Indices,
     value: f64,
   ) -> &mut Self {
-    self.data[indices.row][indices.column] = value;
+    self.rows[indices.row][indices.column] = value;
     self
   }
 }
