@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-04
+//! - Rust version: 2022-09-05
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -36,7 +36,7 @@ pub struct Indices {
 ///   &Matrix::<2, 4>::default(),       // A "two by four" matrix of all zeroes
 ///   &Matrix { rows: [[0.0; 4]; 2] }); // A matrix of two rows and four columns
 /// assert_eq!(
-///   &Matrix::<2, 4>::new(0.0),        // A 2x4 matrix of all zeroes
+///   &Matrix::<2, 4>::new(0.0),        // A 2x4 matrix from a new() constructor
 ///   &Matrix::default());              // The same with the dimensions inferred
 /// assert_eq!(
 ///   &Matrix::<2, 4>::new(1.0),        // A 2x4 matrix of all ones
@@ -48,6 +48,9 @@ pub struct Indices {
 /// assert_eq!(
 ///   Matrix::<2, 4>::default().set(indices, 1.0).get_row(0), // set and get_row
 ///   &[0.0, 0.0, 0.0, 1.0]);
+/// assert_eq!(
+///   Matrix::<2, 4>::new(1.0).sum(),
+///   8.0);
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug, PartialEq)]
@@ -121,5 +124,14 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   ) -> &mut Self {
     self.rows[indices.row][indices.column] = value;
     self
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Calculates the sum of all of the entries in the Matrix
+  // ---------------------------------------------------------------------------
+  pub fn sum(&self) -> f64 {
+    self.rows.iter().fold(0.0, |sum, row| {
+      sum + row.iter().fold(0.0, |sum, entry| sum + entry)
+    })
   }
 }
