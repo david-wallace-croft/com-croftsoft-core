@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-05
+//! - Rust version: 2022-09-06
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -39,8 +39,11 @@ pub struct Indices {
 ///   &Matrix::<2, 4>::new(0.0),        // A 2x4 matrix from a new() constructor
 ///   &Matrix::default());              // The same with the dimensions inferred
 /// assert_eq!(
-///   &Matrix::<2, 4>::new(1.0),        // A 2x4 matrix of all ones
-///   Matrix::default().add(1.0));      // The same by adding one to the default
+///   &Matrix::<2, 4>::new(1.0),          // A 2x4 matrix of all ones
+///   Matrix::default().add_scalar(1.0)); // The same by adding 1 to the default
+/// assert_eq!(
+///   Matrix::<2, 4>::new(1.0).add_matrix(Matrix::new(1.0)), // matrix addition
+///   &Matrix::new(2.0));
 /// let indices = Indices { row: 0, column: 3 }; // first row, last column
 /// assert_eq!(
 ///   Matrix::<2, 4>::default().set(indices, 1.0).get(indices), // set and get
@@ -49,7 +52,7 @@ pub struct Indices {
 ///   Matrix::<2, 4>::default().set(indices, 1.0).get_row(0), // set and get_row
 ///   &[0.0, 0.0, 0.0, 1.0]);
 /// assert_eq!(
-///   Matrix::<2, 4>::new(1.0).sum(),
+///   Matrix::<2, 4>::new(1.0).sum(), // sum of all entities in the matrix
 ///   8.0);
 /// ```
 // -----------------------------------------------------------------------------
@@ -59,9 +62,9 @@ pub struct Matrix<const R: usize, const C: usize> {
 }
 
 impl<const R: usize, const C: usize> Default for Matrix<R, C> {
-  // -----------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   /// Makes a new Matrix of all zero entries
-  // -----------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   fn default() -> Self {
     Self {
       rows: [[0.0; C]; R],
@@ -70,10 +73,25 @@ impl<const R: usize, const C: usize> Default for Matrix<R, C> {
 }
 
 impl<const R: usize, const C: usize> Matrix<R, C> {
-  // -----------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------
+  /// Adds the argument entries to all corresponding entries and returns self
+  // ---------------------------------------------------------------------------
+  pub fn add_matrix(
+    &mut self,
+    other: Self,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] += other.rows[r][c];
+      }
+    }
+    self
+  }
+
+  // ---------------------------------------------------------------------------
   /// Adds the argument to all entries in the matrix
-  // -----------------------------------------------------------------------------
-  pub fn add(
+  // ---------------------------------------------------------------------------
+  pub fn add_scalar(
     &mut self,
     addend: f64,
   ) -> &mut Self {
