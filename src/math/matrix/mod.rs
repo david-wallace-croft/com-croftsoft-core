@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-06
+//! - Rust version: 2022-09-07
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -54,6 +54,9 @@ pub struct Indices {
 /// assert_eq!(
 ///   Matrix::<2, 4>::new(1.0).sum(), // sum of all entities in the matrix
 ///   8.0);
+/// assert_eq!(
+///   &Matrix { rows: [[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]] }.transpose(),
+///   &Matrix { rows: [[0.0, 3.0], [1.0, 4.0], [2.0, 5.0]] });
 /// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug, PartialEq)]
@@ -151,5 +154,20 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     self.rows.iter().fold(0.0, |sum, row| {
       sum + row.iter().fold(0.0, |sum, entry| sum + entry)
     })
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Returns a new Matrix with the rows and columns switched.
+  // ---------------------------------------------------------------------------
+  pub fn transpose(&self) -> Matrix<C, R> {
+    let mut transposed_matrix = Matrix {
+      rows: [[0.0; R]; C],
+    };
+    for (row_index, row) in self.rows.iter().enumerate() {
+      for (column_index, entry) in row.iter().enumerate() {
+        transposed_matrix.rows[column_index][row_index] = *entry;
+      }
+    }
+    transposed_matrix
   }
 }
