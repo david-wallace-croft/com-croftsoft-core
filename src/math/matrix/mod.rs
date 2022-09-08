@@ -44,10 +44,10 @@ pub struct Indices {
 /// assert_eq!(
 ///   Matrix::<2, 4>::new(1.0).add_matrix(Matrix::new(1.0)), // matrix addition
 ///   &Matrix::new(2.0));
-/// let indices = Indices { row: 0, column: 3 }; // first row, last column
 /// assert_eq!(
 ///   Matrix::<2, 4>::new(3.0).multiply_scalar(5.0),
 ///   &Matrix::new(15.0));
+/// let indices = Indices { row: 0, column: 3 }; // first row, last column
 /// assert_eq!(
 ///   Matrix::<2, 4>::default().set(indices, 1.0).get(indices), // set and get
 ///   1.0);
