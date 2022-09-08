@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-07
+//! - Rust version: 2022-09-08
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -45,6 +45,9 @@ pub struct Indices {
 ///   Matrix::<2, 4>::new(1.0).add_matrix(Matrix::new(1.0)), // matrix addition
 ///   &Matrix::new(2.0));
 /// let indices = Indices { row: 0, column: 3 }; // first row, last column
+/// assert_eq!(
+///   Matrix::<2, 4>::new(3.0).multiply_scalar(5.0),
+///   &Matrix::new(15.0));
 /// assert_eq!(
 ///   Matrix::<2, 4>::default().set(indices, 1.0).get(indices), // set and get
 ///   1.0);
@@ -92,7 +95,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Adds the argument to all entries in the matrix
+  /// Adds the scalar to all entries and then returns a reference to self
   // ---------------------------------------------------------------------------
   pub fn add_scalar(
     &mut self,
@@ -124,6 +127,21 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     row_index: usize,
   ) -> &[f64; C] {
     &self.rows[row_index]
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Multiplies all entries by the scalar then returns a reference to self
+  // ---------------------------------------------------------------------------
+  pub fn multiply_scalar(
+    &mut self,
+    multiplier: f64,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] *= multiplier;
+      }
+    }
+    self
   }
 
   // ---------------------------------------------------------------------------
