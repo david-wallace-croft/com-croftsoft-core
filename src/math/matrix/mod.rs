@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-08
+//! - Rust version: 2022-09-09
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -44,6 +44,29 @@ pub struct Indices {
 /// assert_eq!(
 ///   Matrix::<2, 4>::new(1.0).add_matrix(Matrix::new(1.0)), // matrix addition
 ///   &Matrix::new(2.0));
+/// assert_eq!(
+///   &Matrix::<2, 4>::new(2.0).multiply_matrix(Matrix::<4, 3>::new(3.0)),
+///   &Matrix::<2, 3>::new(24.0));
+/// let matrix_multiplicand = Matrix {
+///   rows: [[1.0, 0.0, 1.0],
+///          [2.0, 1.0, 1.0],
+///          [0.0, 1.0, 1.0],
+///          [1.0, 1.0, 2.0]],
+/// };
+/// let matrix_multiplier = Matrix {
+///   rows: [[1.0, 2.0, 1.0],
+///          [2.0, 3.0, 1.0],
+///          [4.0, 2.0, 2.0]],
+/// };
+/// let expected_matrix_product = Matrix {
+///   rows: [[5.0, 4.0, 3.0],
+///          [8.0, 9.0, 5.0],
+///          [6.0, 5.0, 3.0],
+///          [11.0, 9.0, 6.0]],
+/// };
+/// assert_eq!(
+///   &matrix_multiplicand.multiply_matrix(matrix_multiplier),
+///   &expected_matrix_product);
 /// assert_eq!(
 ///   Matrix::<2, 4>::new(3.0).multiply_scalar(5.0),
 ///   &Matrix::new(15.0));
@@ -127,6 +150,24 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     row_index: usize,
   ) -> &[f64; C] {
     &self.rows[row_index]
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Multiplies by the Matrix multiplier and returns the Matrix product
+  // ---------------------------------------------------------------------------
+  pub fn multiply_matrix<const K: usize>(
+    &self,
+    multiplier: Matrix<C, K>,
+  ) -> Matrix<R, K> {
+    let mut matrix_product = Matrix::<R, K>::default();
+    for r in 0..R {
+      for k in 0..K {
+        for i in 0..C {
+          matrix_product.rows[r][k] += self.rows[r][i] * multiplier.rows[i][k];
+        }
+      }
+    }
+    matrix_product
   }
 
   // ---------------------------------------------------------------------------
