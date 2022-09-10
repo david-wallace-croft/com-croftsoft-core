@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-09
+//! - Rust version: 2022-09-10
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -78,6 +78,12 @@ pub struct Indices {
 ///   Matrix::<2, 4>::default().set(indices, 1.0).get_row(0), // set and get_row
 ///   &[0.0, 0.0, 0.0, 1.0]);
 /// assert_eq!(
+///   &Matrix::<2, 4>::new(-1.0),              // A 2x4 matrix of negative ones
+///   Matrix::default().subtract_scalar(1.0)); // The same by subtracting one
+/// assert_eq!(
+///   Matrix::<2, 4>::new(3.0).subtract_matrix(Matrix::new(2.0)),
+///   &Matrix::new(1.0));                      // matrix subtraction
+/// assert_eq!(
 ///   Matrix::<2, 4>::new(1.0).sum(), // sum of all entities in the matrix
 ///   8.0);
 /// assert_eq!(
@@ -107,11 +113,11 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   pub fn add_matrix(
     &mut self,
-    other: Self,
+    addend: Self,
   ) -> &mut Self {
     for r in 0..R {
       for c in 0..C {
-        self.rows[r][c] += other.rows[r][c];
+        self.rows[r][c] += addend.rows[r][c];
       }
     }
     self
@@ -203,6 +209,36 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     value: f64,
   ) -> &mut Self {
     self.rows[indices.row][indices.column] = value;
+    self
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Subtracts the argument entries from corresponding entries and returns self
+  // ---------------------------------------------------------------------------
+  pub fn subtract_matrix(
+    &mut self,
+    subtrahend: Self,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] -= subtrahend.rows[r][c];
+      }
+    }
+    self
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Subtracts the scalar from all entries and then returns a reference to self
+  // ---------------------------------------------------------------------------
+  pub fn subtract_scalar(
+    &mut self,
+    subtrahend: f64,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] -= subtrahend;
+      }
+    }
     self
   }
 
