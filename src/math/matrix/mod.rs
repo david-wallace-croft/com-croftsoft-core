@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-10
+//! - Rust version: 2022-09-11
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -265,4 +265,29 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     }
     transposed_matrix
   }
+}
+
+// -----------------------------------------------------------------------------
+/// Makes a square matrix with the diagonal values set to 1.0 and all others 0.0
+///
+/// # Examples
+/// ```
+/// use com_croftsoft_core::math::matrix::*;
+/// assert_eq!(
+///   &identity(),
+///   &Matrix { rows: [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]] });
+/// assert_eq!(
+///   identity::<3>().sum(),
+///   3.0);
+/// assert_eq!(
+///   Matrix { rows: [[1.0, 2.0], [3.0, 4.0]] }.multiply_matrix(identity()),
+///   Matrix { rows: [[1.0, 2.0], [3.0, 4.0]] });
+/// ```
+// -----------------------------------------------------------------------------
+pub fn identity<const R: usize>() -> Matrix<R, R> {
+  let mut identity_matrix = Matrix::<R, R>::default();
+  for r in 0..R {
+    identity_matrix.rows[r][r] = 1.0;
+  }
+  identity_matrix
 }
