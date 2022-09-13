@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-12
+//! - Rust version: 2022-09-13
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -83,6 +83,10 @@ pub struct Indices {
 /// assert_eq!(
 ///   Matrix::<2, 4>::default().set(indices, 1.0).get_row(0), // set and get_row
 ///   &[0.0, 0.0, 0.0, 1.0]);
+/// assert_eq!(
+///   Matrix { rows: [[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]] }
+///     .submatrix::<1, 2>(Indices { row: 1, column: 0 }),
+///   Matrix { rows: [[3.0, 4.0]] });
 /// assert_eq!(
 ///   &Matrix::<2, 4>::new(-1.0),              // A 2x4 matrix of negative ones
 ///   Matrix::default().subtract_scalar(1.0)); // The same by subtracting one
@@ -234,6 +238,25 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   ) -> &mut Self {
     self.rows[indices.row][indices.column] = value;
     self
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Returns a new Matrix that is a submatrix of self
+  // ---------------------------------------------------------------------------
+  pub fn submatrix<const P: usize, const K: usize>(
+    &self,
+    offset_indices: Indices,
+  ) -> Matrix<P, K> {
+    let mut submatrix: Matrix<P, K> = Matrix::default();
+    let offset_row: usize = offset_indices.row;
+    let offset_column: usize = offset_indices.column;
+    for row in 0..P {
+      for column in 0..K {
+        submatrix.rows[row][column] =
+          self.rows[row + offset_row][column + offset_column];
+      }
+    }
+    submatrix
   }
 
   // ---------------------------------------------------------------------------
