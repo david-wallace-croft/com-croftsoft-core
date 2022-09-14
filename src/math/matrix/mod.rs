@@ -45,6 +45,9 @@ pub struct Indices {
 ///   Matrix::<2, 4>::new(1.0).add_matrix(Matrix::new(1.0)), // matrix addition
 ///   &Matrix::new(2.0));
 /// assert_eq!(
+///   Matrix::<2, 4>::new(0.0).matches_exactly(&Matrix::default()),
+///   true);
+/// assert_eq!(
 ///   &Matrix::<2, 4>::new(2.0).multiply_matrix(Matrix::<4, 3>::new(3.0)),
 ///   &Matrix::<2, 3>::new(24.0));
 /// let mut matrix_1x4 = Matrix { rows: [[0.0, 1.0, 2.0, 3.0]] };
@@ -166,6 +169,23 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     row_index: usize,
   ) -> &[f64; C] {
     &self.rows[row_index]
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Returns true if the other Matrix has the exact same entries
+  // ---------------------------------------------------------------------------
+  pub fn matches_exactly(
+    &self,
+    other: &Self,
+  ) -> bool {
+    for r in 0..R {
+      for c in 0..C {
+        if self.rows[r][c] != other.rows[r][c] {
+          return false;
+        }
+      }
+    }
+    true
   }
 
   // ---------------------------------------------------------------------------
