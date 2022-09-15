@@ -45,6 +45,11 @@ pub struct Indices {
 ///   Matrix::<2, 4>::new(1.0).add_matrix(Matrix::new(1.0)), // matrix addition
 ///   &Matrix::new(2.0));
 /// assert_eq!(
+///   Matrix::<2, 4>::new(1.0 / 3.0).matches_closely(
+///     &Matrix::new(0.33),
+///     0.01),
+///   true);
+/// assert_eq!(
 ///   Matrix::<2, 4>::new(0.0).matches_exactly(&Matrix::default()),
 ///   true);
 /// assert_eq!(
@@ -169,6 +174,27 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     row_index: usize,
   ) -> &[f64; C] {
     &self.rows[row_index]
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Returns true if all entry differences are not greater than the tolerance.
+  ///
+  /// The magnitude_tolerance should be a positive number.
+  // ---------------------------------------------------------------------------
+  pub fn matches_closely(
+    &self,
+    other: &Self,
+    magnitude_tolerance: f64,
+  ) -> bool {
+    for r in 0..R {
+      for c in 0..C {
+        let magnitude_difference = (self.rows[r][c] - other.rows[r][c]).abs();
+        if magnitude_difference > magnitude_tolerance {
+          return false;
+        }
+      }
+    }
+    true
   }
 
   // ---------------------------------------------------------------------------
