@@ -177,19 +177,19 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Returns true if all entry differences are not greater than the tolerance.
+  /// Returns false if any difference magnitude is greater than the tolerance.
   ///
-  /// The magnitude_tolerance should be a positive number.
+  /// The tolerance should be a positive number.
   // ---------------------------------------------------------------------------
   pub fn matches_closely(
     &self,
     other: &Self,
-    magnitude_tolerance: f64,
+    tolerance: f64,
   ) -> bool {
     for r in 0..R {
       for c in 0..C {
         let magnitude_difference = (self.rows[r][c] - other.rows[r][c]).abs();
-        if magnitude_difference > magnitude_tolerance {
+        if magnitude_difference > tolerance {
           return false;
         }
       }
