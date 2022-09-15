@@ -188,8 +188,8 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   ) -> bool {
     for r in 0..R {
       for c in 0..C {
-        let magnitude_difference = (self.rows[r][c] - other.rows[r][c]).abs();
-        if magnitude_difference > tolerance {
+        let difference_magnitude = (self.rows[r][c] - other.rows[r][c]).abs();
+        if difference_magnitude > tolerance {
           return false;
         }
       }
