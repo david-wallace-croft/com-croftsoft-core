@@ -7,6 +7,7 @@
 
 ## Features
 
+- No dependencies on other crates
 - Financial calculations
 - Mathematical constants and functions
 - Matrix mathematics

@@ -8,6 +8,7 @@
 //! - Rust since: 2022-07-30
 //!
 //! # Features
+//! - No dependencies on other crates
 //! - Financial calculations
 //! - Mathematical constants and functions
 //! - Matrix mathematics
