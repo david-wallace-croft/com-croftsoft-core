@@ -8,7 +8,7 @@
 ## Features
 
 - Financial calculations
-- Mathematical constants
+- Mathematical constants and functions
 - Matrix mathematics
 
 ## Documentation
