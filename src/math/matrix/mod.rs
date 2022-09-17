@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-13
+//! - Rust version: 2022-09-17
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -17,6 +17,11 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+#[cfg(test)]
+mod tests;
+
+use std::ops::Add;
+
 // -----------------------------------------------------------------------------
 /// The row and column indices of a Matrix, indexed from zero
 // -----------------------------------------------------------------------------
@@ -28,101 +33,59 @@ pub struct Indices {
 
 // -----------------------------------------------------------------------------
 /// A mathematical matrix structure
-///
-/// # Examples
-/// ```
-/// use com_croftsoft_core::math::matrix::*;
-/// assert_eq!(
-///   &Matrix::<2, 4>::default(),       // A "two by four" matrix of all zeroes
-///   &Matrix { rows: [[0.0; 4]; 2] }); // A matrix of two rows and four columns
-/// assert_eq!(
-///   &Matrix::<2, 4>::new(0.0),        // A 2x4 matrix from a new() constructor
-///   &Matrix::default());              // The same with the dimensions inferred
-/// assert_eq!(
-///   &Matrix::<2, 4>::new(1.0),          // A 2x4 matrix of all ones
-///   Matrix::default().add_scalar(1.0)); // The same by adding 1 to the default
-/// assert_eq!(
-///   Matrix::<2, 4>::new(1.0).add_matrix(Matrix::new(1.0)), // matrix addition
-///   &Matrix::new(2.0));
-/// assert_eq!(
-///   Matrix::<2, 4>::new(1.0 / 3.0).matches_closely(
-///     &Matrix::new(0.33),
-///     0.01),
-///   true);
-/// assert_eq!(
-///   Matrix::<2, 4>::new(0.0).matches_exactly(&Matrix::default()),
-///   true);
-/// assert_eq!(
-///   &Matrix::<2, 4>::new(2.0).multiply_matrix(Matrix::<4, 3>::new(3.0)),
-///   &Matrix::<2, 3>::new(24.0));
-/// let mut matrix_1x4 = Matrix { rows: [[0.0, 1.0, 2.0, 3.0]] };
-/// let weighting_matrix = Matrix { rows: [[4.0, 3.0, 2.0, 1.0]] };
-/// let expected_hadamard_product = Matrix { rows: [[0.0, 3.0, 4.0, 3.0]] };
-/// assert_eq!(
-///   matrix_1x4.multiply_entries(&weighting_matrix),
-///   &expected_hadamard_product);
-/// let matrix_multiplicand = Matrix {
-///   rows: [[1.0, 0.0, 1.0],
-///          [2.0, 1.0, 1.0],
-///          [0.0, 1.0, 1.0],
-///          [1.0, 1.0, 2.0]],
-/// };
-/// let matrix_multiplier = Matrix {
-///   rows: [[1.0, 2.0, 1.0],
-///          [2.0, 3.0, 1.0],
-///          [4.0, 2.0, 2.0]],
-/// };
-/// let expected_matrix_product = Matrix {
-///   rows: [[5.0, 4.0, 3.0],
-///          [8.0, 9.0, 5.0],
-///          [6.0, 5.0, 3.0],
-///          [11.0, 9.0, 6.0]],
-/// };
-/// assert_eq!(
-///   &matrix_multiplicand.multiply_matrix(matrix_multiplier),
-///   &expected_matrix_product);
-/// assert_eq!(
-///   Matrix::<2, 4>::new(3.0).multiply_scalar(5.0),
-///   &Matrix::new(15.0));
-/// let indices = Indices { row: 0, column: 3 }; // first row, last column
-/// assert_eq!(
-///   Matrix::<2, 4>::default().set(indices, 1.0).get(indices), // set and get
-///   1.0);
-/// assert_eq!(
-///   Matrix::<2, 4>::default().set(indices, 1.0).get_row(0), // set and get_row
-///   &[0.0, 0.0, 0.0, 1.0]);
-/// assert_eq!(
-///   Matrix { rows: [[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]] }
-///     .submatrix::<1, 2>(Indices { row: 1, column: 0 }),
-///   Matrix { rows: [[3.0, 4.0]] });
-/// assert_eq!(
-///   &Matrix::<2, 4>::new(-1.0),              // A 2x4 matrix of negative ones
-///   Matrix::default().subtract_scalar(1.0)); // The same by subtracting one
-/// assert_eq!(
-///   Matrix::<2, 4>::new(3.0).subtract_matrix(Matrix::new(2.0)),
-///   &Matrix::new(1.0));                      // matrix subtraction
-/// assert_eq!(
-///   Matrix::<2, 4>::new(1.0).sum(), // sum of all entities in the matrix
-///   8.0);
-/// assert_eq!(
-///   &Matrix { rows: [[0.0, 1.0, 2.0], [3.0, 4.0, 5.0]] }.transpose(),
-///   &Matrix { rows: [[0.0, 3.0], [1.0, 4.0], [2.0, 5.0]] });
-/// ```
 // -----------------------------------------------------------------------------
 #[derive(Clone, Debug, PartialEq)]
 pub struct Matrix<const R: usize, const C: usize> {
   pub rows: [[f64; C]; R],
 }
 
-impl<const R: usize, const C: usize> Default for Matrix<R, C> {
-  // ---------------------------------------------------------------------------
-  /// Makes a new Matrix of all zero entries
-  // ---------------------------------------------------------------------------
-  fn default() -> Self {
-    Self {
-      rows: [[0.0; C]; R],
+pub fn add_matrix_to_matrix<const R: usize, const C: usize>(
+  addend_matrix_0: &Matrix<R, C>,
+  addend_matrix_1: &Matrix<R, C>,
+) -> Matrix<R, C> {
+  let mut sum = Matrix::<R, C>::default();
+  for r in 0..R {
+    for c in 0..C {
+      sum.rows[r][c] = addend_matrix_0.rows[r][c] + addend_matrix_1.rows[r][c];
     }
   }
+  sum
+}
+
+pub fn add_matrix_to_scalar<const R: usize, const C: usize>(
+  addend_matrix: &Matrix<R, C>,
+  addend_scalar: f64,
+) -> Matrix<R, C> {
+  let mut sum = Matrix::<R, C>::default();
+  for r in 0..R {
+    for c in 0..C {
+      sum.rows[r][c] = addend_matrix.rows[r][c] + addend_scalar;
+    }
+  }
+  sum
+}
+
+// -----------------------------------------------------------------------------
+/// Makes a square matrix with the diagonal values set to 1.0 and all others 0.0
+// -----------------------------------------------------------------------------
+pub fn identity<const R: usize>() -> Matrix<R, R> {
+  let mut identity_matrix = Matrix::<R, R>::default();
+  for r in 0..R {
+    identity_matrix.rows[r][r] = 1.0;
+  }
+  identity_matrix
+}
+
+pub fn negate<const R: usize, const C: usize>(
+  matrix: &Matrix<R, C>
+) -> Matrix<R, C> {
+  let mut negated_matrix = Matrix::<R, C>::default();
+  for r in 0..R {
+    for c in 0..C {
+      negated_matrix.rows[r][c] = -matrix.rows[r][c];
+    }
+  }
+  negated_matrix
 }
 
 impl<const R: usize, const C: usize> Matrix<R, C> {
@@ -265,6 +228,15 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     self
   }
 
+  pub fn negate(&mut self) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] *= -1.0;
+      }
+    }
+    self
+  }
+
   // ---------------------------------------------------------------------------
   /// Makes a new Matrix with all entries set to the argument
   // ---------------------------------------------------------------------------
@@ -360,27 +332,105 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 }
 
-// -----------------------------------------------------------------------------
-/// Makes a square matrix with the diagonal values set to 1.0 and all others 0.0
-///
-/// # Examples
-/// ```
-/// use com_croftsoft_core::math::matrix::*;
-/// assert_eq!(
-///   &identity(),
-///   &Matrix { rows: [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]] });
-/// assert_eq!(
-///   identity::<3>().sum(),
-///   3.0);
-/// assert_eq!(
-///   Matrix { rows: [[1.0, 2.0], [3.0, 4.0]] }.multiply_matrix(identity()),
-///   Matrix { rows: [[1.0, 2.0], [3.0, 4.0]] });
-/// ```
-// -----------------------------------------------------------------------------
-pub fn identity<const R: usize>() -> Matrix<R, R> {
-  let mut identity_matrix = Matrix::<R, R>::default();
-  for r in 0..R {
-    identity_matrix.rows[r][r] = 1.0;
+impl<const R: usize, const C: usize> Add<Matrix<R, C>> for f64 {
+  type Output = Matrix<R, C>;
+
+  fn add(
+    self,
+    rhs: Matrix<R, C>,
+  ) -> Matrix<R, C> {
+    add_matrix_to_scalar(&rhs, self)
   }
-  identity_matrix
+}
+
+impl<const R: usize, const C: usize> Add<&Matrix<R, C>> for f64 {
+  type Output = Matrix<R, C>;
+
+  fn add(
+    self,
+    rhs: &Matrix<R, C>,
+  ) -> Matrix<R, C> {
+    add_matrix_to_scalar(rhs, self)
+  }
+}
+
+impl<const R: usize, const C: usize> Add<f64> for Matrix<R, C> {
+  type Output = Matrix<R, C>;
+
+  fn add(
+    self,
+    rhs: f64,
+  ) -> Matrix<R, C> {
+    add_matrix_to_scalar(&self, rhs)
+  }
+}
+
+impl<const R: usize, const C: usize> Add<f64> for &Matrix<R, C> {
+  type Output = Matrix<R, C>;
+
+  fn add(
+    self,
+    rhs: f64,
+  ) -> Matrix<R, C> {
+    add_matrix_to_scalar(self, rhs)
+  }
+}
+
+impl<'a, 'b, const R: usize, const C: usize> Add<&'b Matrix<R, C>>
+  for &'a Matrix<R, C>
+{
+  type Output = Matrix<R, C>;
+
+  fn add(
+    self,
+    rhs: &'b Matrix<R, C>,
+  ) -> Matrix<R, C> {
+    add_matrix_to_matrix(self, rhs)
+  }
+}
+
+impl<'a, const R: usize, const C: usize> Add<Matrix<R, C>>
+  for &'a Matrix<R, C>
+{
+  type Output = Matrix<R, C>;
+
+  fn add(
+    self,
+    rhs: Matrix<R, C>,
+  ) -> Matrix<R, C> {
+    add_matrix_to_matrix(self, &rhs)
+  }
+}
+
+impl<const R: usize, const C: usize> Add<&Matrix<R, C>> for Matrix<R, C> {
+  type Output = Matrix<R, C>;
+
+  fn add(
+    self,
+    rhs: &Matrix<R, C>,
+  ) -> Matrix<R, C> {
+    add_matrix_to_matrix(&self, rhs)
+  }
+}
+
+impl<const R: usize, const C: usize> Add<Matrix<R, C>> for Matrix<R, C> {
+  type Output = Matrix<R, C>;
+
+  fn add(
+    self,
+    rhs: Matrix<R, C>,
+  ) -> Matrix<R, C> {
+    add_matrix_to_matrix(&self, &rhs)
+  }
+}
+
+impl<const R: usize, const C: usize> Default for Matrix<R, C> {
+  // ---------------------------------------------------------------------------
+  /// Makes a new Matrix of all zero entries
+  // ---------------------------------------------------------------------------
+  fn default() -> Self {
+    Self {
+      rows: [[0.0; C]; R],
+    }
+  }
 }
