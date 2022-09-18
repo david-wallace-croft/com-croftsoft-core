@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-17
+//! - Rust version: 2022-09-18
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -20,7 +20,7 @@
 #[cfg(test)]
 mod tests;
 
-use std::ops::Add;
+use std::ops::{Add, AddAssign};
 
 // -----------------------------------------------------------------------------
 /// The row and column indices of a Matrix, indexed from zero
@@ -94,7 +94,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   pub fn add_matrix(
     &mut self,
-    addend: Self,
+    addend: &Self,
   ) -> &mut Self {
     for r in 0..R {
       for c in 0..C {
@@ -122,7 +122,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   /// Returns the entry at the position given by the indices
   // ---------------------------------------------------------------------------
-  pub fn get(
+  pub fn get_entry(
     &self,
     indices: Indices,
   ) -> f64 {
@@ -200,7 +200,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   pub fn multiply_matrix<const K: usize>(
     &self,
-    multiplier: Matrix<C, K>,
+    multiplier: &Matrix<C, K>,
   ) -> Matrix<R, K> {
     let mut matrix_product = Matrix::<R, K>::default();
     for r in 0..R {
@@ -249,7 +249,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   /// Sets the entry at the position given by the indices and then returns self
   // ---------------------------------------------------------------------------
-  pub fn set(
+  pub fn set_entry(
     &mut self,
     indices: Indices,
     value: f64,
@@ -282,7 +282,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   pub fn subtract_matrix(
     &mut self,
-    subtrahend: Self,
+    subtrahend: &Self,
   ) -> &mut Self {
     for r in 0..R {
       for c in 0..C {
@@ -421,6 +421,55 @@ impl<const R: usize, const C: usize> Add<Matrix<R, C>> for Matrix<R, C> {
     rhs: Matrix<R, C>,
   ) -> Matrix<R, C> {
     add_matrix_to_matrix(&self, &rhs)
+  }
+}
+
+impl<const R: usize, const C: usize> AddAssign<f64> for Matrix<R, C> {
+  fn add_assign(
+    &mut self,
+    scalar: f64,
+  ) {
+    self.add_scalar(scalar);
+  }
+}
+
+impl<const R: usize, const C: usize> AddAssign<Matrix<R, C>> for Matrix<R, C> {
+  fn add_assign(
+    &mut self,
+    matrix: Matrix<R, C>,
+  ) {
+    self.add_matrix(&matrix);
+  }
+}
+
+impl<const R: usize, const C: usize> AddAssign<Matrix<R, C>>
+  for &mut Matrix<R, C>
+{
+  fn add_assign(
+    &mut self,
+    matrix: Matrix<R, C>,
+  ) {
+    self.add_matrix(&matrix);
+  }
+}
+
+impl<const R: usize, const C: usize> AddAssign<&Matrix<R, C>> for Matrix<R, C> {
+  fn add_assign(
+    &mut self,
+    matrix: &Matrix<R, C>,
+  ) {
+    self.add_matrix(matrix);
+  }
+}
+
+impl<const R: usize, const C: usize> AddAssign<&Matrix<R, C>>
+  for &mut Matrix<R, C>
+{
+  fn add_assign(
+    &mut self,
+    matrix: &Matrix<R, C>,
+  ) {
+    self.add_matrix(matrix);
   }
 }
 
