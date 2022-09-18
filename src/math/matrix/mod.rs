@@ -320,9 +320,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   /// Returns a new Matrix with the rows and columns switched.
   // ---------------------------------------------------------------------------
   pub fn transpose(&self) -> Matrix<C, R> {
-    let mut transposed_matrix = Matrix {
-      rows: [[0.0; R]; C],
-    };
+    let mut transposed_matrix = Matrix::<C, R>::default();
     for (row_index, row) in self.rows.iter().enumerate() {
       for (column_index, entry) in row.iter().enumerate() {
         transposed_matrix.rows[column_index][row_index] = *entry;
