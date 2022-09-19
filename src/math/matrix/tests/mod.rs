@@ -238,6 +238,12 @@ fn test_multiply_scalar() {
 }
 
 #[test]
+fn test_neg() {
+  assert_eq!(-Matrix::<1, 1>::new(1.0), Matrix::new(-1.0));
+  assert_eq!(-&Matrix::<1, 1>::new(1.0), Matrix::new(-1.0));
+}
+
+#[test]
 fn test_negate_matrix() {
   assert_eq!(negate(&Matrix::<1, 1>::new(1.0)), Matrix::new(-1.0));
 }

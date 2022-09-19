@@ -20,7 +20,7 @@
 #[cfg(test)]
 mod tests;
 
-use std::ops::{Add, AddAssign};
+use std::ops::{Add, AddAssign, Neg};
 
 // -----------------------------------------------------------------------------
 /// The row and column indices of a Matrix, indexed from zero
@@ -374,29 +374,14 @@ impl<const R: usize, const C: usize> Add<f64> for &Matrix<R, C> {
   }
 }
 
-impl<'a, 'b, const R: usize, const C: usize> Add<&'b Matrix<R, C>>
-  for &'a Matrix<R, C>
-{
-  type Output = Matrix<R, C>;
-
-  fn add(
-    self,
-    rhs: &'b Matrix<R, C>,
-  ) -> Matrix<R, C> {
-    add_matrix_to_matrix(self, rhs)
-  }
-}
-
-impl<'a, const R: usize, const C: usize> Add<Matrix<R, C>>
-  for &'a Matrix<R, C>
-{
+impl<const R: usize, const C: usize> Add<Matrix<R, C>> for Matrix<R, C> {
   type Output = Matrix<R, C>;
 
   fn add(
     self,
     rhs: Matrix<R, C>,
-  ) -> Matrix<R, C> {
-    add_matrix_to_matrix(self, &rhs)
+  ) -> Self::Output {
+    add_matrix_to_matrix(&self, &rhs)
   }
 }
 
@@ -406,19 +391,32 @@ impl<const R: usize, const C: usize> Add<&Matrix<R, C>> for Matrix<R, C> {
   fn add(
     self,
     rhs: &Matrix<R, C>,
-  ) -> Matrix<R, C> {
+  ) -> Self::Output {
     add_matrix_to_matrix(&self, rhs)
   }
 }
 
-impl<const R: usize, const C: usize> Add<Matrix<R, C>> for Matrix<R, C> {
+impl<const R: usize, const C: usize> Add<Matrix<R, C>> for &Matrix<R, C> {
   type Output = Matrix<R, C>;
 
   fn add(
     self,
     rhs: Matrix<R, C>,
-  ) -> Matrix<R, C> {
-    add_matrix_to_matrix(&self, &rhs)
+  ) -> Self::Output {
+    add_matrix_to_matrix(self, &rhs)
+  }
+}
+
+impl<'a, 'b, const R: usize, const C: usize> Add<&'b Matrix<R, C>>
+  for &'a Matrix<R, C>
+{
+  type Output = Matrix<R, C>;
+
+  fn add(
+    self,
+    rhs: &'b Matrix<R, C>,
+  ) -> Self::Output {
+    add_matrix_to_matrix(self, rhs)
   }
 }
 
@@ -479,5 +477,21 @@ impl<const R: usize, const C: usize> Default for Matrix<R, C> {
     Self {
       rows: [[0.0; C]; R],
     }
+  }
+}
+
+impl<const R: usize, const C: usize> Neg for Matrix<R, C> {
+  type Output = Matrix<R, C>;
+
+  fn neg(self) -> Self::Output {
+    negate(&self)
+  }
+}
+
+impl<const R: usize, const C: usize> Neg for &Matrix<R, C> {
+  type Output = Matrix<R, C>;
+
+  fn neg(self) -> Self::Output {
+    negate(self)
   }
 }
