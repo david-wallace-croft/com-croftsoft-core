@@ -262,6 +262,48 @@ fn test_new() {
 }
 
 #[test]
+fn test_sub() {
+  assert_eq!(&Matrix::<1, 1>::new(3.0) - 2.0, Matrix::new(1.0));
+  assert_eq!(Matrix::<1, 1>::new(3.0) - 2.0, Matrix::new(1.0));
+  assert_eq!(
+    &Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0),
+    Matrix::new(1.0)
+  );
+  assert_eq!(
+    Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0),
+    Matrix::new(1.0)
+  );
+  assert_eq!(
+    Matrix::<1, 1>::new(3.0) - Matrix::new(2.0),
+    Matrix::new(1.0)
+  );
+  assert_eq!(
+    &Matrix::<1, 1>::new(3.0) - Matrix::new(2.0),
+    Matrix::new(1.0)
+  );
+}
+
+#[test]
+fn test_sub_assign() {
+  let matrix_1 = Matrix::<1, 1>::new(1.0);
+  let mut matrix = Matrix::<1, 1>::new(3.0);
+  matrix -= 2.0;
+  assert_eq!(matrix, matrix_1);
+  let mut matrix = Matrix::<1, 1>::new(3.0);
+  matrix -= Matrix::<1, 1>::new(2.0);
+  assert_eq!(matrix, matrix_1);
+  let mut matrix = Matrix::<1, 1>::new(3.0);
+  matrix -= &Matrix::<1, 1>::new(2.0);
+  assert_eq!(matrix, matrix_1);
+  let mut matrix = &mut Matrix::<1, 1>::new(3.0);
+  matrix -= Matrix::<1, 1>::new(2.0);
+  assert_eq!(matrix, &matrix_1);
+  let mut matrix = &mut Matrix::<1, 1>::new(3.0);
+  matrix -= &Matrix::<1, 1>::new(2.0);
+  assert_eq!(matrix, &matrix_1);
+}
+
+#[test]
 fn test_submatrix() {
   assert_eq!(
     Matrix {
