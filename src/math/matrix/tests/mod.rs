@@ -289,11 +289,27 @@ fn test_subtract_matrix() {
 }
 
 #[test]
+fn test_subtract_matrix_from_matrix() {
+  assert_eq!(
+    subtract_matrix_from_matrix(&Matrix::<1, 1>::new(3.0), &Matrix::new(2.0)),
+    Matrix::new(1.0)
+  );
+}
+
+#[test]
 fn test_subtract_scalar() {
   assert_eq!(
     &Matrix::<2, 4>::new(-1.0), // A 2x4 matrix of negative ones
     Matrix::default().subtract_scalar(1.0)
   ); // The same by subtracting one
+}
+
+#[test]
+fn test_subtract_scalar_from_matrix() {
+  assert_eq!(
+    subtract_scalar_from_matrix(&Matrix::<1, 1>::new(3.0), 2.0),
+    Matrix::new(1.0)
+  );
 }
 
 #[test]

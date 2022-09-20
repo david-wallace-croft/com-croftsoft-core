@@ -20,7 +20,7 @@
 #[cfg(test)]
 mod tests;
 
-use std::ops::{Add, AddAssign, Neg};
+use std::ops::{Add, AddAssign, Neg, Sub};
 
 // -----------------------------------------------------------------------------
 /// The row and column indices of a Matrix, indexed from zero
@@ -86,6 +86,32 @@ pub fn negate<const R: usize, const C: usize>(
     }
   }
   negated_matrix
+}
+
+pub fn subtract_matrix_from_matrix<const R: usize, const C: usize>(
+  minuend: &Matrix<R, C>,
+  subtrahend: &Matrix<R, C>,
+) -> Matrix<R, C> {
+  let mut difference = Matrix::<R, C>::default();
+  for r in 0..R {
+    for c in 0..C {
+      difference.rows[r][c] = minuend.rows[r][c] - subtrahend.rows[r][c];
+    }
+  }
+  difference
+}
+
+pub fn subtract_scalar_from_matrix<const R: usize, const C: usize>(
+  minuend: &Matrix<R, C>,
+  subtrahend: f64,
+) -> Matrix<R, C> {
+  let mut difference = Matrix::<R, C>::default();
+  for r in 0..R {
+    for c in 0..C {
+      difference.rows[r][c] = minuend.rows[r][c] - subtrahend;
+    }
+  }
+  difference
 }
 
 impl<const R: usize, const C: usize> Matrix<R, C> {
