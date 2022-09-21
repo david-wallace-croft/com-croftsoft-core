@@ -11,6 +11,7 @@
 - Financial calculations
 - Mathematical constants and functions
 - Matrix mathematics
+  - Structures, methods, functions, and operators
 
 ## Documentation
 

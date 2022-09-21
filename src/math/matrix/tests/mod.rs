@@ -263,24 +263,15 @@ fn test_new() {
 
 #[test]
 fn test_sub() {
-  assert_eq!(&Matrix::<1, 1>::new(3.0) - 2.0, Matrix::new(1.0));
-  assert_eq!(Matrix::<1, 1>::new(3.0) - 2.0, Matrix::new(1.0));
-  assert_eq!(
-    &Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0),
-    Matrix::new(1.0)
-  );
-  assert_eq!(
-    Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0),
-    Matrix::new(1.0)
-  );
-  assert_eq!(
-    Matrix::<1, 1>::new(3.0) - Matrix::new(2.0),
-    Matrix::new(1.0)
-  );
-  assert_eq!(
-    &Matrix::<1, 1>::new(3.0) - Matrix::new(2.0),
-    Matrix::new(1.0)
-  );
+  let matrix_1 = Matrix::<1, 1>::new(1.0);
+  assert_eq!(Matrix::<1, 1>::new(3.0) - 2.0, matrix_1);
+  assert_eq!(&Matrix::<1, 1>::new(3.0) - 2.0, matrix_1);
+  assert_eq!(3.0 - Matrix::<1, 1>::new(2.0), matrix_1);
+  assert_eq!(3.0 - &Matrix::<1, 1>::new(2.0), matrix_1);
+  assert_eq!(Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0), matrix_1);
+  assert_eq!(&Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0), matrix_1);
+  assert_eq!(Matrix::<1, 1>::new(3.0) - Matrix::new(2.0), matrix_1);
+  assert_eq!(&Matrix::<1, 1>::new(3.0) - Matrix::new(2.0), matrix_1);
 }
 
 #[test]

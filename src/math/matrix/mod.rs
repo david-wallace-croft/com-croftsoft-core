@@ -550,9 +550,9 @@ impl<const R: usize, const C: usize> Sub<f64> for Matrix<R, C> {
 
   fn sub(
     self,
-    rhs: f64,
+    subtrahend: f64,
   ) -> Self::Output {
-    subtract_scalar_from_matrix(&self, rhs)
+    subtract_scalar_from_matrix(&self, subtrahend)
   }
 }
 
@@ -561,9 +561,31 @@ impl<const R: usize, const C: usize> Sub<f64> for &Matrix<R, C> {
 
   fn sub(
     self,
-    rhs: f64,
+    subtrahend: f64,
   ) -> Self::Output {
-    subtract_scalar_from_matrix(self, rhs)
+    subtract_scalar_from_matrix(self, subtrahend)
+  }
+}
+
+impl<const R: usize, const C: usize> Sub<Matrix<R, C>> for f64 {
+  type Output = Matrix<R, C>;
+
+  fn sub(
+    self,
+    subtrahend: Matrix<R, C>,
+  ) -> Self::Output {
+    subtract_matrix_from_scalar(self, &subtrahend)
+  }
+}
+
+impl<const R: usize, const C: usize> Sub<&Matrix<R, C>> for f64 {
+  type Output = Matrix<R, C>;
+
+  fn sub(
+    self,
+    subtrahend: &Matrix<R, C>,
+  ) -> Self::Output {
+    subtract_matrix_from_scalar(self, subtrahend)
   }
 }
 
