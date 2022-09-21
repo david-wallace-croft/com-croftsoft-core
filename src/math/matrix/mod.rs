@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-20
+//! - Rust version: 2022-09-21
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -96,6 +96,19 @@ pub fn subtract_matrix_from_matrix<const R: usize, const C: usize>(
   for r in 0..R {
     for c in 0..C {
       difference.rows[r][c] = minuend.rows[r][c] - subtrahend.rows[r][c];
+    }
+  }
+  difference
+}
+
+pub fn subtract_matrix_from_scalar<const R: usize, const C: usize>(
+  minuend: f64,
+  subtrahend: &Matrix<R, C>,
+) -> Matrix<R, C> {
+  let mut difference = Matrix::<R, C>::new(minuend);
+  for r in 0..R {
+    for c in 0..C {
+      difference.rows[r][c] -= subtrahend.rows[r][c];
     }
   }
   difference

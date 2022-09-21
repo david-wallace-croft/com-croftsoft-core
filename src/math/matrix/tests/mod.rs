@@ -339,6 +339,14 @@ fn test_subtract_matrix_from_matrix() {
 }
 
 #[test]
+fn test_subtract_matrix_from_scalar() {
+  assert_eq!(
+    subtract_matrix_from_scalar(3.0, &Matrix::<1, 1>::new(2.0)),
+    Matrix::new(1.0)
+  );
+}
+
+#[test]
 fn test_subtract_scalar() {
   assert_eq!(
     &Matrix::<2, 4>::new(-1.0), // A 2x4 matrix of negative ones
