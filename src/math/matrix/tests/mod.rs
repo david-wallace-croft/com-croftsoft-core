@@ -230,6 +230,14 @@ fn test_multiply_matrix() {
 }
 
 #[test]
+fn test_multiply_matrix_with_scalar() {
+  assert_eq!(
+    multiply_matrix_with_scalar(&Matrix::<1, 1>::new(2.0), 3.0),
+    Matrix::new(6.0)
+  );
+}
+
+#[test]
 fn test_multiply_scalar() {
   assert_eq!(
     Matrix::<2, 4>::new(3.0).multiply_scalar(5.0),

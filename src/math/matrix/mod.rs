@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-21
+//! - Rust version: 2022-09-22
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -74,6 +74,19 @@ pub fn identity<const R: usize>() -> Matrix<R, R> {
     identity_matrix.rows[r][r] = 1.0;
   }
   identity_matrix
+}
+
+pub fn multiply_matrix_with_scalar<const R: usize, const C: usize>(
+  matrix: &Matrix<R, C>,
+  scalar: f64,
+) -> Matrix<R, C> {
+  let mut product = Matrix::<R, C>::new(scalar);
+  for r in 0..R {
+    for c in 0..C {
+      product.rows[r][c] *= matrix.rows[r][c];
+    }
+  }
+  product
 }
 
 pub fn negate<const R: usize, const C: usize>(
