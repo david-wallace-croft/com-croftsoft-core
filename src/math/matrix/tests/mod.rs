@@ -1,3 +1,16 @@
+// =============================================================================
+//! - Unit tests for the Matrix functions and methods
+//!
+//! # Metadata
+//! - Copyright: &copy; 2022 [`CroftSoft Inc`]
+//! - Author: [`David Wallace Croft`]
+//! - Version: 2022-09-23
+//! - Since: 2022-09-04
+//!
+//! [`CroftSoft Inc`]: https://www.croftsoft.com/
+//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+// =============================================================================
+
 #[cfg(test)]
 use super::*;
 
@@ -46,17 +59,17 @@ fn test_add_assign() {
 }
 
 #[test]
-fn test_add_matrix_to_matrix() {
+fn test_add_matrix_with_matrix() {
   assert_eq!(
-    add_matrix_to_matrix(&Matrix::<1, 1>::new(1.0), &Matrix::new(2.0)),
+    add_matrix_with_matrix(&Matrix::<1, 1>::new(1.0), &Matrix::new(2.0)),
     Matrix::new(3.0)
   );
 }
 
 #[test]
-fn test_add_matrix_to_scalar() {
+fn test_add_matrix_with_scalar() {
   assert_eq!(
-    add_matrix_to_scalar(&Matrix::<1, 1>::new(1.0), 2.0),
+    add_matrix_with_scalar(&Matrix::<1, 1>::new(1.0), 2.0),
     Matrix::new(3.0)
   );
 }
@@ -226,6 +239,17 @@ fn test_multiply_matrix() {
   assert_eq!(
     &matrix_multiplicand.multiply_matrix(&matrix_multiplier),
     &expected_matrix_product
+  );
+}
+
+#[test]
+fn test_multiply_matrix_with_matrix() {
+  assert_eq!(
+    multiply_matrix_with_matrix(
+      &Matrix::<2, 4>::new(2.0),
+      &Matrix::<4, 3>::new(3.0)
+    ),
+    Matrix::<2, 3>::new(24.0)
   );
 }
 

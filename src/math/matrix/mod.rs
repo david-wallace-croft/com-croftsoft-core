@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-22
+//! - Rust version: 2022-09-23
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -39,27 +39,27 @@ pub struct Matrix<const R: usize, const C: usize> {
   pub rows: [[f64; C]; R],
 }
 
-pub fn add_matrix_to_matrix<const R: usize, const C: usize>(
-  addend_matrix_0: &Matrix<R, C>,
-  addend_matrix_1: &Matrix<R, C>,
+pub fn add_matrix_with_matrix<const R: usize, const C: usize>(
+  augend: &Matrix<R, C>,
+  addend: &Matrix<R, C>,
 ) -> Matrix<R, C> {
   let mut sum = Matrix::<R, C>::default();
   for r in 0..R {
     for c in 0..C {
-      sum.rows[r][c] = addend_matrix_0.rows[r][c] + addend_matrix_1.rows[r][c];
+      sum.rows[r][c] = augend.rows[r][c] + addend.rows[r][c];
     }
   }
   sum
 }
 
-pub fn add_matrix_to_scalar<const R: usize, const C: usize>(
-  addend_matrix: &Matrix<R, C>,
-  addend_scalar: f64,
+pub fn add_matrix_with_scalar<const R: usize, const C: usize>(
+  augend: &Matrix<R, C>,
+  addend: f64,
 ) -> Matrix<R, C> {
   let mut sum = Matrix::<R, C>::default();
   for r in 0..R {
     for c in 0..C {
-      sum.rows[r][c] = addend_matrix.rows[r][c] + addend_scalar;
+      sum.rows[r][c] = augend.rows[r][c] + addend;
     }
   }
   sum
@@ -76,14 +76,33 @@ pub fn identity<const R: usize>() -> Matrix<R, R> {
   identity_matrix
 }
 
+pub fn multiply_matrix_with_matrix<
+  const R: usize,
+  const C: usize,
+  const K: usize,
+>(
+  multiplicand: &Matrix<R, C>,
+  multiplier: &Matrix<C, K>,
+) -> Matrix<R, K> {
+  let mut product = Matrix::<R, K>::default();
+  for r in 0..R {
+    for k in 0..K {
+      for i in 0..C {
+        product.rows[r][k] += multiplicand.rows[r][i] * multiplier.rows[i][k];
+      }
+    }
+  }
+  product
+}
+
 pub fn multiply_matrix_with_scalar<const R: usize, const C: usize>(
-  matrix: &Matrix<R, C>,
-  scalar: f64,
+  multiplicand: &Matrix<R, C>,
+  multiplier: f64,
 ) -> Matrix<R, C> {
-  let mut product = Matrix::<R, C>::new(scalar);
+  let mut product = Matrix::<R, C>::new(multiplier);
   for r in 0..R {
     for c in 0..C {
-      product.rows[r][c] *= matrix.rows[r][c];
+      product.rows[r][c] *= multiplicand.rows[r][c];
     }
   }
   product
@@ -391,7 +410,7 @@ impl<const R: usize, const C: usize> Add<Matrix<R, C>> for f64 {
     self,
     rhs: Matrix<R, C>,
   ) -> Self::Output {
-    add_matrix_to_scalar(&rhs, self)
+    add_matrix_with_scalar(&rhs, self)
   }
 }
 
@@ -402,7 +421,7 @@ impl<const R: usize, const C: usize> Add<&Matrix<R, C>> for f64 {
     self,
     rhs: &Matrix<R, C>,
   ) -> Self::Output {
-    add_matrix_to_scalar(rhs, self)
+    add_matrix_with_scalar(rhs, self)
   }
 }
 
@@ -413,7 +432,7 @@ impl<const R: usize, const C: usize> Add<f64> for Matrix<R, C> {
     self,
     rhs: f64,
   ) -> Self::Output {
-    add_matrix_to_scalar(&self, rhs)
+    add_matrix_with_scalar(&self, rhs)
   }
 }
 
@@ -424,7 +443,7 @@ impl<const R: usize, const C: usize> Add<f64> for &Matrix<R, C> {
     self,
     rhs: f64,
   ) -> Self::Output {
-    add_matrix_to_scalar(self, rhs)
+    add_matrix_with_scalar(self, rhs)
   }
 }
 
@@ -435,7 +454,7 @@ impl<const R: usize, const C: usize> Add<Matrix<R, C>> for Matrix<R, C> {
     self,
     rhs: Matrix<R, C>,
   ) -> Self::Output {
-    add_matrix_to_matrix(&self, &rhs)
+    add_matrix_with_matrix(&self, &rhs)
   }
 }
 
@@ -446,7 +465,7 @@ impl<const R: usize, const C: usize> Add<&Matrix<R, C>> for Matrix<R, C> {
     self,
     rhs: &Matrix<R, C>,
   ) -> Self::Output {
-    add_matrix_to_matrix(&self, rhs)
+    add_matrix_with_matrix(&self, rhs)
   }
 }
 
@@ -457,7 +476,7 @@ impl<const R: usize, const C: usize> Add<Matrix<R, C>> for &Matrix<R, C> {
     self,
     rhs: Matrix<R, C>,
   ) -> Self::Output {
-    add_matrix_to_matrix(self, &rhs)
+    add_matrix_with_matrix(self, &rhs)
   }
 }
 
@@ -470,7 +489,7 @@ impl<'a, 'b, const R: usize, const C: usize> Add<&'b Matrix<R, C>>
     self,
     rhs: &'b Matrix<R, C>,
   ) -> Self::Output {
-    add_matrix_to_matrix(self, rhs)
+    add_matrix_with_matrix(self, rhs)
   }
 }
 
@@ -479,18 +498,18 @@ impl<'a, 'b, const R: usize, const C: usize> Add<&'b Matrix<R, C>>
 impl<const R: usize, const C: usize> AddAssign<f64> for Matrix<R, C> {
   fn add_assign(
     &mut self,
-    scalar: f64,
+    rhs: f64,
   ) {
-    self.add_scalar(scalar);
+    self.add_scalar(rhs);
   }
 }
 
 impl<const R: usize, const C: usize> AddAssign<Matrix<R, C>> for Matrix<R, C> {
   fn add_assign(
     &mut self,
-    matrix: Matrix<R, C>,
+    rhs: Matrix<R, C>,
   ) {
-    self.add_matrix(&matrix);
+    self.add_matrix(&rhs);
   }
 }
 
@@ -499,18 +518,18 @@ impl<const R: usize, const C: usize> AddAssign<Matrix<R, C>>
 {
   fn add_assign(
     &mut self,
-    matrix: Matrix<R, C>,
+    rhs: Matrix<R, C>,
   ) {
-    self.add_matrix(&matrix);
+    self.add_matrix(&rhs);
   }
 }
 
 impl<const R: usize, const C: usize> AddAssign<&Matrix<R, C>> for Matrix<R, C> {
   fn add_assign(
     &mut self,
-    matrix: &Matrix<R, C>,
+    rhs: &Matrix<R, C>,
   ) {
-    self.add_matrix(matrix);
+    self.add_matrix(rhs);
   }
 }
 
@@ -519,9 +538,9 @@ impl<const R: usize, const C: usize> AddAssign<&Matrix<R, C>>
 {
   fn add_assign(
     &mut self,
-    matrix: &Matrix<R, C>,
+    rhs: &Matrix<R, C>,
   ) {
-    self.add_matrix(matrix);
+    self.add_matrix(rhs);
   }
 }
 
@@ -563,9 +582,9 @@ impl<const R: usize, const C: usize> Sub<f64> for Matrix<R, C> {
 
   fn sub(
     self,
-    subtrahend: f64,
+    rhs: f64,
   ) -> Self::Output {
-    subtract_scalar_from_matrix(&self, subtrahend)
+    subtract_scalar_from_matrix(&self, rhs)
   }
 }
 
@@ -574,9 +593,9 @@ impl<const R: usize, const C: usize> Sub<f64> for &Matrix<R, C> {
 
   fn sub(
     self,
-    subtrahend: f64,
+    rhs: f64,
   ) -> Self::Output {
-    subtract_scalar_from_matrix(self, subtrahend)
+    subtract_scalar_from_matrix(self, rhs)
   }
 }
 
@@ -585,9 +604,9 @@ impl<const R: usize, const C: usize> Sub<Matrix<R, C>> for f64 {
 
   fn sub(
     self,
-    subtrahend: Matrix<R, C>,
+    rhs: Matrix<R, C>,
   ) -> Self::Output {
-    subtract_matrix_from_scalar(self, &subtrahend)
+    subtract_matrix_from_scalar(self, &rhs)
   }
 }
 
@@ -596,9 +615,9 @@ impl<const R: usize, const C: usize> Sub<&Matrix<R, C>> for f64 {
 
   fn sub(
     self,
-    subtrahend: &Matrix<R, C>,
+    rhs: &Matrix<R, C>,
   ) -> Self::Output {
-    subtract_matrix_from_scalar(self, subtrahend)
+    subtract_matrix_from_scalar(self, rhs)
   }
 }
 
@@ -653,18 +672,18 @@ impl<'a, 'b, const R: usize, const C: usize> Sub<&'b Matrix<R, C>>
 impl<const R: usize, const C: usize> SubAssign<f64> for Matrix<R, C> {
   fn sub_assign(
     &mut self,
-    scalar: f64,
+    rhs: f64,
   ) {
-    self.subtract_scalar(scalar);
+    self.subtract_scalar(rhs);
   }
 }
 
 impl<const R: usize, const C: usize> SubAssign<Matrix<R, C>> for Matrix<R, C> {
   fn sub_assign(
     &mut self,
-    matrix: Matrix<R, C>,
+    rhs: Matrix<R, C>,
   ) {
-    self.subtract_matrix(&matrix);
+    self.subtract_matrix(&rhs);
   }
 }
 
@@ -673,18 +692,18 @@ impl<const R: usize, const C: usize> SubAssign<Matrix<R, C>>
 {
   fn sub_assign(
     &mut self,
-    matrix: Matrix<R, C>,
+    rhs: Matrix<R, C>,
   ) {
-    self.subtract_matrix(&matrix);
+    self.subtract_matrix(&rhs);
   }
 }
 
 impl<const R: usize, const C: usize> SubAssign<&Matrix<R, C>> for Matrix<R, C> {
   fn sub_assign(
     &mut self,
-    matrix: &Matrix<R, C>,
+    rhs: &Matrix<R, C>,
   ) {
-    self.subtract_matrix(matrix);
+    self.subtract_matrix(rhs);
   }
 }
 
@@ -693,8 +712,8 @@ impl<const R: usize, const C: usize> SubAssign<&Matrix<R, C>>
 {
   fn sub_assign(
     &mut self,
-    matrix: &Matrix<R, C>,
+    rhs: &Matrix<R, C>,
   ) {
-    self.subtract_matrix(matrix);
+    self.subtract_matrix(rhs);
   }
 }
