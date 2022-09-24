@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-23
+//! - Rust version: 2022-09-24
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -20,7 +20,7 @@
 #[cfg(test)]
 mod tests;
 
-use std::ops::{Add, AddAssign, Neg, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Mul, Neg, Sub, SubAssign};
 
 // -----------------------------------------------------------------------------
 /// The row and column indices of a Matrix, indexed from zero
@@ -554,6 +554,104 @@ impl<const R: usize, const C: usize> Default for Matrix<R, C> {
     Self {
       rows: [[0.0; C]; R],
     }
+  }
+}
+
+// Mul -------------------------------------------------------------------------
+
+impl<const R: usize, const C: usize> Mul<Matrix<R, C>> for f64 {
+  type Output = Matrix<R, C>;
+
+  fn mul(
+    self,
+    rhs: Matrix<R, C>,
+  ) -> Self::Output {
+    multiply_matrix_with_scalar(&rhs, self)
+  }
+}
+
+impl<const R: usize, const C: usize> Mul<&Matrix<R, C>> for f64 {
+  type Output = Matrix<R, C>;
+
+  fn mul(
+    self,
+    rhs: &Matrix<R, C>,
+  ) -> Self::Output {
+    multiply_matrix_with_scalar(rhs, self)
+  }
+}
+
+impl<const R: usize, const C: usize> Mul<f64> for Matrix<R, C> {
+  type Output = Self;
+
+  fn mul(
+    self,
+    rhs: f64,
+  ) -> Self::Output {
+    multiply_matrix_with_scalar(&self, rhs)
+  }
+}
+
+impl<const R: usize, const C: usize> Mul<f64> for &Matrix<R, C> {
+  type Output = Matrix<R, C>;
+
+  fn mul(
+    self,
+    rhs: f64,
+  ) -> Self::Output {
+    multiply_matrix_with_scalar(self, rhs)
+  }
+}
+
+impl<const R: usize, const C: usize, const K: usize> Mul<Matrix<C, K>>
+  for Matrix<R, C>
+{
+  type Output = Matrix<R, K>;
+
+  fn mul(
+    self,
+    rhs: Matrix<C, K>,
+  ) -> Self::Output {
+    multiply_matrix_with_matrix(&self, &rhs)
+  }
+}
+
+impl<const R: usize, const C: usize, const K: usize> Mul<&Matrix<C, K>>
+  for Matrix<R, C>
+{
+  type Output = Matrix<R, K>;
+
+  fn mul(
+    self,
+    rhs: &Matrix<C, K>,
+  ) -> Self::Output {
+    multiply_matrix_with_matrix(&self, rhs)
+  }
+}
+
+impl<const R: usize, const C: usize, const K: usize> Mul<Matrix<C, K>>
+  for &Matrix<R, C>
+{
+  type Output = Matrix<R, K>;
+
+  fn mul(
+    self,
+    rhs: Matrix<C, K>,
+  ) -> Self::Output {
+    multiply_matrix_with_matrix(self, &rhs)
+  }
+}
+
+impl<'a, 'b, const R: usize, const C: usize, const K: usize>
+  Mul<&'b Matrix<C, K>> for &'a Matrix<R, C>
+{
+  type Output = Matrix<R, K>;
+
+  fn mul(
+    self,
+    rhs: &'b Matrix<C, K>,
+  ) -> Self::Output {
+    multiply_matrix_with_matrix(self, rhs)
   }
 }
 

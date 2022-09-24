@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-09-23
+//! - Version: 2022-09-24
 //! - Since: 2022-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -160,6 +160,31 @@ fn test_matches_closely() {
     Matrix::<2, 4>::new(1.0 / 3.0).matches_closely(&Matrix::new(0.33), 0.01)
   );
   assert!(Matrix::<2, 4>::new(0.0).matches_exactly(&Matrix::default()));
+}
+
+#[test]
+fn test_mul() {
+  let matrix_2 = Matrix::<1, 1>::new(2.0);
+  assert_eq!(2.0 * Matrix::<1, 1>::new(1.0), matrix_2);
+  assert_eq!(2.0 * &Matrix::<1, 1>::new(1.0), matrix_2);
+  assert_eq!(Matrix::<1, 1>::new(1.0) * 2.0, matrix_2);
+  assert_eq!(&Matrix::<1, 1>::new(1.0) * 2.0, matrix_2);
+  assert_eq!(
+    Matrix::<1, 2>::new(1.0) * Matrix::<2, 3>::new(2.0),
+    Matrix::<1, 3>::new(4.0)
+  );
+  assert_eq!(
+    Matrix::<1, 2>::new(1.0) * &Matrix::<2, 3>::new(2.0),
+    Matrix::<1, 3>::new(4.0)
+  );
+  assert_eq!(
+    &Matrix::<1, 2>::new(1.0) * Matrix::<2, 3>::new(2.0),
+    Matrix::<1, 3>::new(4.0)
+  );
+  assert_eq!(
+    &Matrix::<1, 2>::new(1.0) * &Matrix::<2, 3>::new(2.0),
+    Matrix::<1, 3>::new(4.0)
+  );
 }
 
 #[test]
