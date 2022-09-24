@@ -16,12 +16,12 @@ use super::*;
 
 #[test]
 fn test_add() {
-  assert_eq!(1.0 + &Matrix::<1, 1>::new(2.0), Matrix::new(3.0));
   assert_eq!(1.0 + Matrix::<1, 1>::new(2.0), Matrix::new(3.0));
-  assert_eq!(&Matrix::<1, 1>::new(1.0) + 2.0, Matrix::new(3.0));
+  assert_eq!(1.0 + &Matrix::<1, 1>::new(2.0), Matrix::new(3.0));
   assert_eq!(Matrix::<1, 1>::new(1.0) + 2.0, Matrix::new(3.0));
+  assert_eq!(&Matrix::<1, 1>::new(1.0) + 2.0, Matrix::new(3.0));
   assert_eq!(
-    &Matrix::<1, 1>::new(1.0) + &Matrix::new(2.0),
+    Matrix::<1, 1>::new(1.0) + Matrix::new(2.0),
     Matrix::new(3.0)
   );
   assert_eq!(
@@ -29,11 +29,11 @@ fn test_add() {
     Matrix::new(3.0)
   );
   assert_eq!(
-    Matrix::<1, 1>::new(1.0) + Matrix::new(2.0),
+    &Matrix::<1, 1>::new(1.0) + Matrix::new(2.0),
     Matrix::new(3.0)
   );
   assert_eq!(
-    &Matrix::<1, 1>::new(1.0) + Matrix::new(2.0),
+    &Matrix::<1, 1>::new(1.0) + &Matrix::new(2.0),
     Matrix::new(3.0)
   );
 }
