@@ -78,7 +78,10 @@ fn test_add_assign() {
 #[test]
 fn test_add_matrix_with_matrix() {
   assert_eq!(
-    add_matrix_with_matrix(&Matrix::<1, 1>::new(1.0), &Matrix::new(2.0)),
+    Matrix::add_matrix_with_matrix(
+      &Matrix::<1, 1>::new(1.0),
+      &Matrix::new(2.0)
+    ),
     Matrix::new(3.0)
   );
 }
@@ -86,7 +89,7 @@ fn test_add_matrix_with_matrix() {
 #[test]
 fn test_add_matrix_with_scalar() {
   assert_eq!(
-    add_matrix_with_scalar(&Matrix::<1, 1>::new(1.0), 2.0),
+    Matrix::add_matrix_with_scalar(&Matrix::<1, 1>::new(1.0), 2.0),
     Matrix::new(3.0)
   );
 }
@@ -150,7 +153,7 @@ fn test_get_row() {
 #[test]
 fn test_identity() {
   assert_eq!(
-    &identity(),
+    &Matrix::identity(),
     &Matrix {
       rows: [
         [1.0, 0.0, 0.0],
@@ -159,7 +162,7 @@ fn test_identity() {
       ]
     }
   );
-  assert_eq!(identity::<3>().sum(), 3.0);
+  assert_eq!(Matrix::<3, 3>::identity().sum(), 3.0);
   assert_eq!(
     Matrix {
       rows: [
@@ -167,7 +170,7 @@ fn test_identity() {
         [3.0, 4.0]
       ]
     }
-    .multiply_with_square_matrix(&identity()),
+    .multiply_with_square_matrix(&Matrix::identity()),
     &Matrix {
       rows: [
         [1.0, 2.0],
@@ -276,7 +279,7 @@ fn test_multiply_with_corresponding_entries() {
 #[test]
 fn test_multiply_matrix_with_matrix() {
   assert_eq!(
-    multiply_matrix_with_matrix(
+    Matrix::multiply_matrix_with_matrix(
       &Matrix::<2, 4>::new(2.0),
       &Matrix::<4, 3>::new(3.0)
     ),
@@ -287,7 +290,7 @@ fn test_multiply_matrix_with_matrix() {
 #[test]
 fn test_multiply_matrix_with_scalar() {
   assert_eq!(
-    multiply_matrix_with_scalar(&Matrix::<1, 1>::new(2.0), 3.0),
+    Matrix::multiply_matrix_with_scalar(&Matrix::<1, 1>::new(2.0), 3.0),
     Matrix::new(6.0)
   );
 }
@@ -375,7 +378,7 @@ fn test_negate() {
 #[test]
 fn test_negate_matrix() {
   let matrix = Matrix::<1, 1>::new(1.0);
-  assert_eq!(negate_matrix(&matrix), Matrix::new(-1.0));
+  assert_eq!(Matrix::negate_matrix(&matrix), Matrix::new(-1.0));
 }
 
 #[test]
@@ -468,7 +471,10 @@ fn test_subtract_matrix() {
 #[test]
 fn test_subtract_matrix_from_matrix() {
   assert_eq!(
-    subtract_matrix_from_matrix(&Matrix::<1, 1>::new(3.0), &Matrix::new(2.0)),
+    Matrix::subtract_matrix_from_matrix(
+      &Matrix::<1, 1>::new(3.0),
+      &Matrix::new(2.0)
+    ),
     Matrix::new(1.0)
   );
 }
@@ -476,25 +482,25 @@ fn test_subtract_matrix_from_matrix() {
 #[test]
 fn test_subtract_matrix_from_scalar() {
   assert_eq!(
-    subtract_matrix_from_scalar(3.0, &Matrix::<1, 1>::new(2.0)),
+    Matrix::subtract_matrix_from_scalar(3.0, &Matrix::<1, 1>::new(2.0)),
     Matrix::new(1.0)
   );
 }
 
 #[test]
-fn test_subtract_scalar() {
+fn test_subtract_scalar_from_self() {
   assert_eq!(
     // A 2x4 matrix of negative ones
     &Matrix::<2, 4>::new(-1.0),
     // The same by subtracting one
-    Matrix::default().subtract_scalar(1.0)
+    Matrix::default().subtract_scalar_from_self(1.0)
   );
 }
 
 #[test]
 fn test_subtract_scalar_from_matrix() {
   assert_eq!(
-    subtract_scalar_from_matrix(&Matrix::<1, 1>::new(3.0), 2.0),
+    Matrix::subtract_scalar_from_matrix(&Matrix::<1, 1>::new(3.0), 2.0),
     Matrix::new(1.0)
   );
 }
