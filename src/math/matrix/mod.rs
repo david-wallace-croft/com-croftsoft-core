@@ -192,12 +192,31 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Multiplies each entry by the other corresponding entry and returns self
+  /// Multiplies entries and returns the Hadamard product as a new Matrix
+  ///
+  /// <https://en.wikipedia.org/wiki/Hadamard_product_(matrices)>
+  // ---------------------------------------------------------------------------
+  pub fn multiply_entrywise_matrix_with_matrix(
+    original_matrix: &Self,
+    weighting_matrix: &Self,
+  ) -> Self {
+    let mut hadamard_product = Self::default();
+    for r in 0..R {
+      for c in 0..C {
+        hadamard_product.rows[r][c] =
+          original_matrix.rows[r][c] * weighting_matrix.rows[r][c];
+      }
+    }
+    hadamard_product
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Multiplies corresponding entries and then returns a reference to self
   ///
   /// This result is known as the Hadamard Product:<br>
   /// <https://en.wikipedia.org/wiki/Hadamard_product_(matrices)>
   // ---------------------------------------------------------------------------
-  pub fn multiply_matrix_entries_with_self(
+  pub fn multiply_entrywise_matrix_with_self(
     &mut self,
     weighting_matrix: &Self,
   ) -> &mut Self {
@@ -210,7 +229,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Multiplies all entries by the scalar then returns a reference to self
+  /// Multiplies all entries by the scalar and then returns a reference to self
   // ---------------------------------------------------------------------------
   pub fn multiply_self_with_scalar(
     &mut self,

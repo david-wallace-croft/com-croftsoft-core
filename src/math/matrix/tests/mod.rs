@@ -256,27 +256,53 @@ fn test_mul_assign() {
 }
 
 #[test]
-fn test_multiply_matrix_entries_with_self() {
-  let mut self_matrix_1x4 = Matrix {
+fn test_multiply_entrywise_matrix_with_matrix() {
+  let original_matrix_1x4 = Matrix {
     rows: [[
       0.0, 1.0, 2.0, 3.0,
     ]],
   };
-  let weighting_matrix = Matrix {
+  let weighting_matrix_1x4 = Matrix {
     rows: [[
       4.0, 3.0, 2.0, 1.0,
     ]],
   };
-  let expected_hadamard_product = Matrix {
+  let expected_hadamard_product_1x4 = Matrix {
     rows: [[
       0.0, 3.0, 4.0, 3.0,
     ]],
   };
   assert_eq!(
-    self_matrix_1x4.multiply_matrix_entries_with_self(&weighting_matrix),
-    &expected_hadamard_product
+    Matrix::multiply_entrywise_matrix_with_matrix(
+      &original_matrix_1x4,
+      &weighting_matrix_1x4
+    ),
+    expected_hadamard_product_1x4
   );
-  assert_eq!(self_matrix_1x4, expected_hadamard_product);
+}
+
+#[test]
+fn test_multiply_entrywise_matrix_with_self() {
+  let mut self_matrix_1x4 = Matrix {
+    rows: [[
+      0.0, 1.0, 2.0, 3.0,
+    ]],
+  };
+  let weighting_matrix_1x4 = Matrix {
+    rows: [[
+      4.0, 3.0, 2.0, 1.0,
+    ]],
+  };
+  let expected_hadamard_product_1x4 = Matrix {
+    rows: [[
+      0.0, 3.0, 4.0, 3.0,
+    ]],
+  };
+  assert_eq!(
+    self_matrix_1x4.multiply_entrywise_matrix_with_self(&weighting_matrix_1x4),
+    &expected_hadamard_product_1x4
+  );
+  assert_eq!(self_matrix_1x4, expected_hadamard_product_1x4);
 }
 
 #[test]
