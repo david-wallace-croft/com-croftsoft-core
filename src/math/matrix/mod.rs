@@ -39,19 +39,6 @@ pub struct Matrix<const R: usize, const C: usize> {
   pub rows: [[f64; C]; R],
 }
 
-impl<const R: usize> Matrix<R, R> {
-  // ---------------------------------------------------------------------------
-  /// Makes a square matrix with the diagonal values set to 1.0 and all others 0
-  // ---------------------------------------------------------------------------
-  pub fn identity() -> Self {
-    let mut identity_matrix = Self::default();
-    for r in 0..R {
-      identity_matrix.rows[r][r] = 1.0;
-    }
-    identity_matrix
-  }
-}
-
 impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   /// Adds the arguments and return the sum as a new Matrix
@@ -410,6 +397,21 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
       }
     }
     transposed_matrix
+  }
+}
+
+// Square Matrix ---------------------------------------------------------------
+
+impl<const R: usize> Matrix<R, R> {
+  // ---------------------------------------------------------------------------
+  /// Makes a square matrix with the diagonal values set to 1.0 and all others 0
+  // ---------------------------------------------------------------------------
+  pub fn identity() -> Self {
+    let mut identity_matrix = Self::default();
+    for r in 0..R {
+      identity_matrix.rows[r][r] = 1.0;
+    }
+    identity_matrix
   }
 }
 
