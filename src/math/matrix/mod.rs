@@ -41,6 +41,21 @@ pub struct Matrix<const R: usize, const C: usize> {
 
 impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
+  /// Adds the argument entries to all corresponding entries and returns self
+  // ---------------------------------------------------------------------------
+  pub fn add_matrix(
+    &mut self,
+    addend: &Self,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] += addend.rows[r][c];
+      }
+    }
+    self
+  }
+
+  // ---------------------------------------------------------------------------
   /// Adds the arguments and return the sum as a new Matrix
   // ---------------------------------------------------------------------------
   pub fn add_matrix_with_matrix(
@@ -73,24 +88,9 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Adds the argument entries to all corresponding entries and returns self
-  // ---------------------------------------------------------------------------
-  pub fn add_matrix_to_self(
-    &mut self,
-    addend: &Self,
-  ) -> &mut Self {
-    for r in 0..R {
-      for c in 0..C {
-        self.rows[r][c] += addend.rows[r][c];
-      }
-    }
-    self
-  }
-
-  // ---------------------------------------------------------------------------
   /// Adds the scalar to all entries and then returns a reference to self
   // ---------------------------------------------------------------------------
-  pub fn add_scalar_to_self(
+  pub fn add_scalar(
     &mut self,
     addend: f64,
   ) -> &mut Self {
@@ -178,6 +178,25 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     product
   }
 
+  // ---------------------------------------------------------------------------
+  /// Multiplies entries and returns the Hadamard product as a new Matrix
+  ///
+  /// <https://en.wikipedia.org/wiki/Hadamard_product_(matrices)>
+  // ---------------------------------------------------------------------------
+  pub fn multiply_matrix_with_matrix_entrywise(
+    original_matrix: &Self,
+    weighting_matrix: &Self,
+  ) -> Self {
+    let mut hadamard_product = Self::default();
+    for r in 0..R {
+      for c in 0..C {
+        hadamard_product.rows[r][c] =
+          original_matrix.rows[r][c] * weighting_matrix.rows[r][c];
+      }
+    }
+    hadamard_product
+  }
+
   pub fn multiply_matrix_with_scalar(
     multiplicand: &Self,
     multiplier: f64,
@@ -192,22 +211,19 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Multiplies entries and returns the Hadamard product as a new Matrix
-  ///
-  /// <https://en.wikipedia.org/wiki/Hadamard_product_(matrices)>
+  /// Multiplies with a square matrix and then returns a reference to self
   // ---------------------------------------------------------------------------
-  pub fn multiply_entrywise_matrix_with_matrix(
-    original_matrix: &Self,
-    weighting_matrix: &Self,
-  ) -> Self {
-    let mut hadamard_product = Self::default();
+  pub fn multiply_with_matrix(
+    &mut self,
+    multiplier: &Matrix<C, C>,
+  ) -> &mut Self {
+    let product = Self::multiply_matrix_with_matrix(self, multiplier);
     for r in 0..R {
       for c in 0..C {
-        hadamard_product.rows[r][c] =
-          original_matrix.rows[r][c] * weighting_matrix.rows[r][c];
+        self.rows[r][c] = product.rows[r][c];
       }
     }
-    hadamard_product
+    self
   }
 
   // ---------------------------------------------------------------------------
@@ -216,7 +232,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   /// This result is known as the Hadamard Product:<br>
   /// <https://en.wikipedia.org/wiki/Hadamard_product_(matrices)>
   // ---------------------------------------------------------------------------
-  pub fn multiply_entrywise_matrix_with_self(
+  pub fn multiply_with_matrix_entrywise(
     &mut self,
     weighting_matrix: &Self,
   ) -> &mut Self {
@@ -231,7 +247,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   // ---------------------------------------------------------------------------
   /// Multiplies all entries by the scalar and then returns a reference to self
   // ---------------------------------------------------------------------------
-  pub fn multiply_self_with_scalar(
+  pub fn multiply_with_scalar(
     &mut self,
     multiplier: f64,
   ) -> &mut Self {
@@ -244,21 +260,20 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Multiplies with a square matrix and then returns a reference to self
+  /// Multiplies all entries by -1.0 and then returns a reference to self
   // ---------------------------------------------------------------------------
-  pub fn multiply_self_with_square_matrix(
-    &mut self,
-    multiplier: &Matrix<C, C>,
-  ) -> &mut Self {
-    let product = Self::multiply_matrix_with_matrix(self, multiplier);
+  pub fn negate(&mut self) -> &mut Self {
     for r in 0..R {
       for c in 0..C {
-        self.rows[r][c] = product.rows[r][c];
+        self.rows[r][c] *= -1.0;
       }
     }
     self
   }
 
+  // ---------------------------------------------------------------------------
+  /// Multiplies all entries by -1.0 and then returns the new negated Matrix
+  // ---------------------------------------------------------------------------
   pub fn negate_matrix(matrix: &Self) -> Self {
     let mut negated_matrix = Self::default();
     for r in 0..R {
@@ -267,18 +282,6 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
       }
     }
     negated_matrix
-  }
-
-  // ---------------------------------------------------------------------------
-  /// Multiplies all entries by -1.0 and then returns a reference to self
-  // ---------------------------------------------------------------------------
-  pub fn negate_self(&mut self) -> &mut Self {
-    for r in 0..R {
-      for c in 0..C {
-        self.rows[r][c] *= -1.0;
-      }
-    }
-    self
   }
 
   // ---------------------------------------------------------------------------
@@ -322,6 +325,21 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
+  /// Subtracts the argument entries from corresponding entries and returns self
+  // ---------------------------------------------------------------------------
+  pub fn subtract_matrix(
+    &mut self,
+    subtrahend: &Self,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] -= subtrahend.rows[r][c];
+      }
+    }
+    self
+  }
+
+  // ---------------------------------------------------------------------------
   /// Subtracts the 2nd from the 1st and returns the difference as a new Matrix
   // ---------------------------------------------------------------------------
   pub fn subtract_matrix_from_matrix(
@@ -335,21 +353,6 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
       }
     }
     difference
-  }
-
-  // ---------------------------------------------------------------------------
-  /// Subtracts the argument entries from corresponding entries and returns self
-  // ---------------------------------------------------------------------------
-  pub fn subtract_matrix_from_self(
-    &mut self,
-    subtrahend: &Self,
-  ) -> &mut Self {
-    for r in 0..R {
-      for c in 0..C {
-        self.rows[r][c] -= subtrahend.rows[r][c];
-      }
-    }
-    self
   }
 
   // ---------------------------------------------------------------------------
@@ -369,6 +372,21 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
+  /// Subtracts the scalar from all entries and then returns a reference to self
+  // ---------------------------------------------------------------------------
+  pub fn subtract_scalar(
+    &mut self,
+    subtrahend: f64,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] -= subtrahend;
+      }
+    }
+    self
+  }
+
+  // ---------------------------------------------------------------------------
   /// Subtracts the 2nd from the 1st and returns the difference as a new Matrix
   // ---------------------------------------------------------------------------
   pub fn subtract_scalar_from_matrix(
@@ -385,24 +403,9 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Subtracts the scalar from all entries and then returns a reference to self
-  // ---------------------------------------------------------------------------
-  pub fn subtract_scalar_from_self(
-    &mut self,
-    subtrahend: f64,
-  ) -> &mut Self {
-    for r in 0..R {
-      for c in 0..C {
-        self.rows[r][c] -= subtrahend;
-      }
-    }
-    self
-  }
-
-  // ---------------------------------------------------------------------------
   /// Calculates the sum of all of the entries in the Matrix
   // ---------------------------------------------------------------------------
-  pub fn sum(&self) -> f64 {
+  pub fn sum_entries(&self) -> f64 {
     self.rows.iter().fold(0.0, |sum, row| {
       sum + row.iter().fold(0.0, |sum, entry| sum + entry)
     })
@@ -536,7 +539,7 @@ impl<const R: usize, const C: usize> AddAssign<f64> for Matrix<R, C> {
     &mut self,
     rhs: f64,
   ) {
-    self.add_scalar_to_self(rhs);
+    self.add_scalar(rhs);
   }
 }
 
@@ -545,7 +548,7 @@ impl<const R: usize, const C: usize> AddAssign<f64> for &mut Matrix<R, C> {
     &mut self,
     rhs: f64,
   ) {
-    self.add_scalar_to_self(rhs);
+    self.add_scalar(rhs);
   }
 }
 
@@ -554,7 +557,7 @@ impl<const R: usize, const C: usize> AddAssign<Matrix<R, C>> for Matrix<R, C> {
     &mut self,
     rhs: Matrix<R, C>,
   ) {
-    self.add_matrix_to_self(&rhs);
+    self.add_matrix(&rhs);
   }
 }
 
@@ -565,7 +568,7 @@ impl<const R: usize, const C: usize> AddAssign<Matrix<R, C>>
     &mut self,
     rhs: Matrix<R, C>,
   ) {
-    self.add_matrix_to_self(&rhs);
+    self.add_matrix(&rhs);
   }
 }
 
@@ -574,7 +577,7 @@ impl<const R: usize, const C: usize> AddAssign<&Matrix<R, C>> for Matrix<R, C> {
     &mut self,
     rhs: &Matrix<R, C>,
   ) {
-    self.add_matrix_to_self(rhs);
+    self.add_matrix(rhs);
   }
 }
 
@@ -585,7 +588,7 @@ impl<const R: usize, const C: usize> AddAssign<&Matrix<R, C>>
     &mut self,
     rhs: &Matrix<R, C>,
   ) {
-    self.add_matrix_to_self(rhs);
+    self.add_matrix(rhs);
   }
 }
 
@@ -707,7 +710,7 @@ impl<const R: usize, const C: usize> MulAssign<f64> for Matrix<R, C> {
     &mut self,
     rhs: f64,
   ) {
-    self.multiply_self_with_scalar(rhs);
+    self.multiply_with_scalar(rhs);
   }
 }
 
@@ -716,7 +719,7 @@ impl<const R: usize, const C: usize> MulAssign<f64> for &mut Matrix<R, C> {
     &mut self,
     rhs: f64,
   ) {
-    self.multiply_self_with_scalar(rhs);
+    self.multiply_with_scalar(rhs);
   }
 }
 
@@ -725,7 +728,7 @@ impl<const R: usize, const C: usize> MulAssign<Matrix<C, C>> for Matrix<R, C> {
     &mut self,
     rhs: Matrix<C, C>,
   ) {
-    self.multiply_self_with_square_matrix(&rhs);
+    self.multiply_with_matrix(&rhs);
   }
 }
 
@@ -734,7 +737,7 @@ impl<const R: usize, const C: usize> MulAssign<&Matrix<C, C>> for Matrix<R, C> {
     &mut self,
     rhs: &Matrix<C, C>,
   ) {
-    self.multiply_self_with_square_matrix(rhs);
+    self.multiply_with_matrix(rhs);
   }
 }
 
@@ -745,7 +748,7 @@ impl<const R: usize, const C: usize> MulAssign<Matrix<C, C>>
     &mut self,
     rhs: Matrix<C, C>,
   ) {
-    self.multiply_self_with_square_matrix(&rhs);
+    self.multiply_with_matrix(&rhs);
   }
 }
 
@@ -756,7 +759,7 @@ impl<const R: usize, const C: usize> MulAssign<&Matrix<C, C>>
     &mut self,
     rhs: &Matrix<C, C>,
   ) {
-    self.multiply_self_with_square_matrix(rhs);
+    self.multiply_with_matrix(rhs);
   }
 }
 
@@ -877,7 +880,7 @@ impl<const R: usize, const C: usize> SubAssign<f64> for Matrix<R, C> {
     &mut self,
     rhs: f64,
   ) {
-    self.subtract_scalar_from_self(rhs);
+    self.subtract_scalar(rhs);
   }
 }
 
@@ -886,7 +889,7 @@ impl<const R: usize, const C: usize> SubAssign<f64> for &mut Matrix<R, C> {
     &mut self,
     rhs: f64,
   ) {
-    self.subtract_scalar_from_self(rhs);
+    self.subtract_scalar(rhs);
   }
 }
 
@@ -895,7 +898,7 @@ impl<const R: usize, const C: usize> SubAssign<Matrix<R, C>> for Matrix<R, C> {
     &mut self,
     rhs: Matrix<R, C>,
   ) {
-    self.subtract_matrix_from_self(&rhs);
+    self.subtract_matrix(&rhs);
   }
 }
 
@@ -906,7 +909,7 @@ impl<const R: usize, const C: usize> SubAssign<Matrix<R, C>>
     &mut self,
     rhs: Matrix<R, C>,
   ) {
-    self.subtract_matrix_from_self(&rhs);
+    self.subtract_matrix(&rhs);
   }
 }
 
@@ -915,7 +918,7 @@ impl<const R: usize, const C: usize> SubAssign<&Matrix<R, C>> for Matrix<R, C> {
     &mut self,
     rhs: &Matrix<R, C>,
   ) {
-    self.subtract_matrix_from_self(rhs);
+    self.subtract_matrix(rhs);
   }
 }
 
@@ -926,6 +929,6 @@ impl<const R: usize, const C: usize> SubAssign<&Matrix<R, C>>
     &mut self,
     rhs: &Matrix<R, C>,
   ) {
-    self.subtract_matrix_from_self(rhs);
+    self.subtract_matrix(rhs);
   }
 }

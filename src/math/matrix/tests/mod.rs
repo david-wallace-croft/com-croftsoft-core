@@ -76,6 +76,13 @@ fn test_add_assign() {
 }
 
 #[test]
+fn test_add_matrix() {
+  let mut self_matrix = Matrix::<2, 4>::new(1.0);
+  assert_eq!(self_matrix.add_matrix(&Matrix::new(1.0)), &Matrix::new(2.0));
+  assert_eq!(self_matrix, Matrix::new(2.0));
+}
+
+#[test]
 fn test_add_matrix_with_matrix() {
   assert_eq!(
     Matrix::add_matrix_with_matrix(
@@ -95,22 +102,12 @@ fn test_add_matrix_with_scalar() {
 }
 
 #[test]
-fn test_add_matrix_to_self() {
-  let mut self_matrix = Matrix::<2, 4>::new(1.0);
-  assert_eq!(
-    self_matrix.add_matrix_to_self(&Matrix::new(1.0)),
-    &Matrix::new(2.0)
-  );
-  assert_eq!(self_matrix, Matrix::new(2.0));
-}
-
-#[test]
-fn test_add_with_scalar() {
+fn test_add_scalar() {
   assert_eq!(
     // A 2x4 matrix of all ones
     &Matrix::<2, 4>::new(1.0),
     // The same by adding 1 to the default
-    Matrix::default().add_scalar_to_self(1.0)
+    Matrix::default().add_scalar(1.0)
   );
 }
 
@@ -164,7 +161,7 @@ fn test_identity() {
       ]
     }
   );
-  assert_eq!(Matrix::<3, 3>::identity().sum(), 3.0);
+  assert_eq!(Matrix::<3, 3>::identity().sum_entries(), 3.0);
   assert_eq!(
     Matrix {
       rows: [
@@ -172,7 +169,7 @@ fn test_identity() {
         [3.0, 4.0]
       ]
     }
-    .multiply_self_with_square_matrix(&Matrix::identity()),
+    .multiply_with_matrix(&Matrix::identity()),
     &Matrix {
       rows: [
         [1.0, 2.0],
@@ -256,7 +253,18 @@ fn test_mul_assign() {
 }
 
 #[test]
-fn test_multiply_entrywise_matrix_with_matrix() {
+fn test_multiply_matrix_with_matrix() {
+  assert_eq!(
+    Matrix::multiply_matrix_with_matrix(
+      &Matrix::<2, 4>::new(2.0),
+      &Matrix::<4, 3>::new(3.0)
+    ),
+    Matrix::<2, 3>::new(24.0)
+  );
+}
+
+#[test]
+fn test_multiply_matrix_with_matrix_entrywise() {
   let original_matrix_1x4 = Matrix {
     rows: [[
       0.0, 1.0, 2.0, 3.0,
@@ -273,46 +281,11 @@ fn test_multiply_entrywise_matrix_with_matrix() {
     ]],
   };
   assert_eq!(
-    Matrix::multiply_entrywise_matrix_with_matrix(
+    Matrix::multiply_matrix_with_matrix_entrywise(
       &original_matrix_1x4,
       &weighting_matrix_1x4
     ),
     expected_hadamard_product_1x4
-  );
-}
-
-#[test]
-fn test_multiply_entrywise_matrix_with_self() {
-  let mut self_matrix_1x4 = Matrix {
-    rows: [[
-      0.0, 1.0, 2.0, 3.0,
-    ]],
-  };
-  let weighting_matrix_1x4 = Matrix {
-    rows: [[
-      4.0, 3.0, 2.0, 1.0,
-    ]],
-  };
-  let expected_hadamard_product_1x4 = Matrix {
-    rows: [[
-      0.0, 3.0, 4.0, 3.0,
-    ]],
-  };
-  assert_eq!(
-    self_matrix_1x4.multiply_entrywise_matrix_with_self(&weighting_matrix_1x4),
-    &expected_hadamard_product_1x4
-  );
-  assert_eq!(self_matrix_1x4, expected_hadamard_product_1x4);
-}
-
-#[test]
-fn test_multiply_matrix_with_matrix() {
-  assert_eq!(
-    Matrix::multiply_matrix_with_matrix(
-      &Matrix::<2, 4>::new(2.0),
-      &Matrix::<4, 3>::new(3.0)
-    ),
-    Matrix::<2, 3>::new(24.0)
   );
 }
 
@@ -325,12 +298,12 @@ fn test_multiply_matrix_with_scalar() {
 }
 
 #[test]
-fn test_multiply_self_with_square_matrix() {
+fn test_multiply_with_matrix() {
   let mut self_multiplicand = Matrix::<2, 4>::new(2.0);
   let multiplier = Matrix::<4, 4>::new(3.0);
   let expected_product = Matrix::<2, 4>::new(24.0);
   assert_eq!(
-    self_multiplicand.multiply_self_with_square_matrix(&multiplier),
+    self_multiplicand.multiply_with_matrix(&multiplier),
     &expected_product
   );
   assert_eq!(self_multiplicand, expected_product);
@@ -380,20 +353,41 @@ fn test_multiply_self_with_square_matrix() {
     ],
   };
   assert_eq!(
-    self_multiplicand.multiply_self_with_square_matrix(&multiplier),
+    self_multiplicand.multiply_with_matrix(&multiplier),
     &expected_product
   );
   assert_eq!(self_multiplicand, expected_product);
 }
 
 #[test]
-fn test_multiply_self_with_scalar() {
+fn test_multiply_with_matrix_entrywise() {
+  let mut self_matrix_1x4 = Matrix {
+    rows: [[
+      0.0, 1.0, 2.0, 3.0,
+    ]],
+  };
+  let weighting_matrix_1x4 = Matrix {
+    rows: [[
+      4.0, 3.0, 2.0, 1.0,
+    ]],
+  };
+  let expected_hadamard_product_1x4 = Matrix {
+    rows: [[
+      0.0, 3.0, 4.0, 3.0,
+    ]],
+  };
+  assert_eq!(
+    self_matrix_1x4.multiply_with_matrix_entrywise(&weighting_matrix_1x4),
+    &expected_hadamard_product_1x4
+  );
+  assert_eq!(self_matrix_1x4, expected_hadamard_product_1x4);
+}
+
+#[test]
+fn test_multiply_with_scalar() {
   let mut self_matrix = Matrix::<1, 1>::new(3.0);
   let expected_product = Matrix::<1, 1>::new(15.0);
-  assert_eq!(
-    self_matrix.multiply_self_with_scalar(5.0),
-    &expected_product
-  );
+  assert_eq!(self_matrix.multiply_with_scalar(5.0), &expected_product);
   assert_eq!(self_matrix, expected_product);
 }
 
@@ -406,10 +400,10 @@ fn test_neg() {
 }
 
 #[test]
-fn test_negate_self() {
+fn test_negate() {
   let mut self_matrix = Matrix::<1, 1>::new(1.0);
   let expected_negated = Matrix::<1, 1>::new(-1.0);
-  assert_eq!(self_matrix.negate_self(), &expected_negated);
+  assert_eq!(self_matrix.negate(), &expected_negated);
   assert_eq!(self_matrix, expected_negated);
 }
 
@@ -499,12 +493,12 @@ fn test_submatrix() {
 }
 
 #[test]
-fn test_subtract_matrix_from_self() {
+fn test_subtract_matrix() {
   let mut self_matrix = Matrix::<1, 1>::new(3.0);
   let subtrahend = Matrix::new(2.0);
   let expected_difference = Matrix::new(1.0);
   assert_eq!(
-    self_matrix.subtract_matrix_from_self(&subtrahend),
+    self_matrix.subtract_matrix(&subtrahend),
     &expected_difference,
   );
   assert_eq!(self_matrix, expected_difference);
@@ -530,12 +524,12 @@ fn test_subtract_matrix_from_scalar() {
 }
 
 #[test]
-fn test_subtract_scalar_from_self() {
+fn test_subtract_scalar() {
   assert_eq!(
     // A 2x4 matrix of negative ones
     &Matrix::<2, 4>::new(-1.0),
     // The same by subtracting one
-    Matrix::default().subtract_scalar_from_self(1.0)
+    Matrix::default().subtract_scalar(1.0)
   );
 }
 
@@ -548,10 +542,10 @@ fn test_subtract_scalar_from_matrix() {
 }
 
 #[test]
-fn test_sum() {
+fn test_sum_entries() {
   assert_eq!(
     // sum of all entities in the matrix
-    Matrix::<2, 4>::new(1.0).sum(),
+    Matrix::<2, 4>::new(1.0).sum_entries(),
     8.0
   );
 }
