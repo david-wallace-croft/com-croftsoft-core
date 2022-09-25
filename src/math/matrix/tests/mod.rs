@@ -95,11 +95,13 @@ fn test_add_matrix_with_scalar() {
 }
 
 #[test]
-fn test_add_with_matrix() {
+fn test_add_matrix_to_self() {
+  let mut self_matrix = Matrix::<2, 4>::new(1.0);
   assert_eq!(
-    Matrix::<2, 4>::new(1.0).add_with_matrix(&Matrix::new(1.0)),
+    self_matrix.add_matrix_to_self(&Matrix::new(1.0)),
     &Matrix::new(2.0)
   );
+  assert_eq!(self_matrix, Matrix::new(2.0));
 }
 
 #[test]
@@ -108,7 +110,7 @@ fn test_add_with_scalar() {
     // A 2x4 matrix of all ones
     &Matrix::<2, 4>::new(1.0),
     // The same by adding 1 to the default
-    Matrix::default().add_with_scalar(1.0)
+    Matrix::default().add_scalar_to_self(1.0)
   );
 }
 
@@ -170,7 +172,7 @@ fn test_identity() {
         [3.0, 4.0]
       ]
     }
-    .multiply_with_square_matrix(&Matrix::identity()),
+    .multiply_self_with_square_matrix(&Matrix::identity()),
     &Matrix {
       rows: [
         [1.0, 2.0],
@@ -254,8 +256,8 @@ fn test_mul_assign() {
 }
 
 #[test]
-fn test_multiply_with_corresponding_entries() {
-  let mut matrix_1x4 = Matrix {
+fn test_multiply_matrix_entries_with_self() {
+  let mut self_matrix_1x4 = Matrix {
     rows: [[
       0.0, 1.0, 2.0, 3.0,
     ]],
@@ -271,9 +273,10 @@ fn test_multiply_with_corresponding_entries() {
     ]],
   };
   assert_eq!(
-    matrix_1x4.multiply_with_corresponding_entries(&weighting_matrix),
+    self_matrix_1x4.multiply_matrix_entries_with_self(&weighting_matrix),
     &expected_hadamard_product
   );
+  assert_eq!(self_matrix_1x4, expected_hadamard_product);
 }
 
 #[test]
@@ -296,13 +299,16 @@ fn test_multiply_matrix_with_scalar() {
 }
 
 #[test]
-fn test_multiply_with_square_matrix() {
+fn test_multiply_self_with_square_matrix() {
+  let mut self_multiplicand = Matrix::<2, 4>::new(2.0);
+  let multiplier = Matrix::<4, 4>::new(3.0);
+  let expected_product = Matrix::<2, 4>::new(24.0);
   assert_eq!(
-    Matrix::<2, 4>::new(2.0)
-      .multiply_with_square_matrix(&Matrix::<4, 4>::new(3.0)),
-    &Matrix::<2, 4>::new(24.0)
+    self_multiplicand.multiply_self_with_square_matrix(&multiplier),
+    &expected_product
   );
-  let mut matrix_multiplicand = Matrix {
+  assert_eq!(self_multiplicand, expected_product);
+  let mut self_multiplicand = Matrix {
     rows: [
       [
         1.0, 0.0, 1.0,
@@ -318,7 +324,7 @@ fn test_multiply_with_square_matrix() {
       ],
     ],
   };
-  let matrix_multiplier = Matrix {
+  let multiplier = Matrix {
     rows: [
       [
         1.0, 2.0, 1.0,
@@ -331,7 +337,7 @@ fn test_multiply_with_square_matrix() {
       ],
     ],
   };
-  let expected_matrix_product = Matrix {
+  let expected_product = Matrix {
     rows: [
       [
         5.0, 4.0, 3.0,
@@ -348,17 +354,21 @@ fn test_multiply_with_square_matrix() {
     ],
   };
   assert_eq!(
-    matrix_multiplicand.multiply_with_square_matrix(&matrix_multiplier),
-    &expected_matrix_product
+    self_multiplicand.multiply_self_with_square_matrix(&multiplier),
+    &expected_product
   );
+  assert_eq!(self_multiplicand, expected_product);
 }
 
 #[test]
-fn test_multiply_scalar() {
+fn test_multiply_self_with_scalar() {
+  let mut self_matrix = Matrix::<1, 1>::new(3.0);
+  let expected_product = Matrix::<1, 1>::new(15.0);
   assert_eq!(
-    Matrix::<2, 4>::new(3.0).multiply_with_scalar(5.0),
-    &Matrix::new(15.0)
+    self_matrix.multiply_self_with_scalar(5.0),
+    &expected_product
   );
+  assert_eq!(self_matrix, expected_product);
 }
 
 #[test]
@@ -370,9 +380,11 @@ fn test_neg() {
 }
 
 #[test]
-fn test_negate() {
-  let mut matrix = Matrix::<1, 1>::new(1.0);
-  assert_eq!(matrix.negate(), &Matrix::new(-1.0));
+fn test_negate_self() {
+  let mut self_matrix = Matrix::<1, 1>::new(1.0);
+  let expected_negated = Matrix::<1, 1>::new(-1.0);
+  assert_eq!(self_matrix.negate_self(), &expected_negated);
+  assert_eq!(self_matrix, expected_negated);
 }
 
 #[test]
@@ -461,11 +473,15 @@ fn test_submatrix() {
 }
 
 #[test]
-fn test_subtract_matrix() {
+fn test_subtract_matrix_from_self() {
+  let mut self_matrix = Matrix::<1, 1>::new(3.0);
+  let subtrahend = Matrix::new(2.0);
+  let expected_difference = Matrix::new(1.0);
   assert_eq!(
-    Matrix::<2, 4>::new(3.0).subtract_matrix(&Matrix::new(2.0)),
-    &Matrix::new(1.0)
+    self_matrix.subtract_matrix_from_self(&subtrahend),
+    &expected_difference,
   );
+  assert_eq!(self_matrix, expected_difference);
 }
 
 #[test]
