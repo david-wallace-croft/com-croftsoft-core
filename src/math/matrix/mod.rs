@@ -1,5 +1,5 @@
 // =============================================================================
-//! - A mathematical matrix structure
+//! - A mathematical matrix that uses const generics for the rows and columns
 //!
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
