@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-09-24
+//! - Version: 2022-09-25
 //! - Since: 2022-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -16,22 +16,30 @@ use super::*;
 
 #[test]
 fn test_add() {
-  assert_eq!(1.0 + Matrix::<1, 1>::new(2.0), Matrix::new(3.0));
-  assert_eq!(1.0 + &Matrix::<1, 1>::new(2.0), Matrix::new(3.0));
+  // augend and f64
   assert_eq!(Matrix::<1, 1>::new(1.0) + 2.0, Matrix::new(3.0));
+  // &augend and f64
   assert_eq!(&Matrix::<1, 1>::new(1.0) + 2.0, Matrix::new(3.0));
+  // f64 and addend
+  assert_eq!(1.0 + Matrix::<1, 1>::new(2.0), Matrix::new(3.0));
+  // f64 and &addend
+  assert_eq!(1.0 + &Matrix::<1, 1>::new(2.0), Matrix::new(3.0));
+  // augend and addend
   assert_eq!(
     Matrix::<1, 1>::new(1.0) + Matrix::new(2.0),
     Matrix::new(3.0)
   );
+  // augend and &addend
   assert_eq!(
     Matrix::<1, 1>::new(1.0) + &Matrix::new(2.0),
     Matrix::new(3.0)
   );
+  // &augend and addend
   assert_eq!(
     &Matrix::<1, 1>::new(1.0) + Matrix::new(2.0),
     Matrix::new(3.0)
   );
+  // &augend and &addend
   assert_eq!(
     &Matrix::<1, 1>::new(1.0) + &Matrix::new(2.0),
     Matrix::new(3.0)
@@ -41,18 +49,27 @@ fn test_add() {
 #[test]
 fn test_add_assign() {
   let matrix_3 = Matrix::<1, 1>::new(3.0);
+  // augend and f64
   let mut matrix = Matrix::<1, 1>::new(1.0);
   matrix += 2.0;
   assert_eq!(matrix, matrix_3);
+  // &augend and f64
+  let mut matrix = &mut Matrix::<1, 1>::new(1.0);
+  matrix += 2.0;
+  assert_eq!(matrix, &matrix_3);
+  // augend and addend
   let mut matrix = Matrix::<1, 1>::new(1.0);
   matrix += Matrix::<1, 1>::new(2.0);
   assert_eq!(matrix, matrix_3);
+  // augend and &addend
   let mut matrix = Matrix::<1, 1>::new(1.0);
   matrix += &Matrix::<1, 1>::new(2.0);
   assert_eq!(matrix, matrix_3);
+  // &augend and addend
   let mut matrix = &mut Matrix::<1, 1>::new(1.0);
   matrix += Matrix::<1, 1>::new(2.0);
   assert_eq!(matrix, &matrix_3);
+  // &augend and &addend
   let mut matrix = &mut Matrix::<1, 1>::new(1.0);
   matrix += &Matrix::<1, 1>::new(2.0);
   assert_eq!(matrix, &matrix_3);
@@ -75,37 +92,42 @@ fn test_add_matrix_with_scalar() {
 }
 
 #[test]
-fn test_add_matrix() {
+fn test_add_with_matrix() {
   assert_eq!(
-    Matrix::<2, 4>::new(1.0).add_matrix(&Matrix::new(1.0)), // matrix addition
+    Matrix::<2, 4>::new(1.0).add_with_matrix(&Matrix::new(1.0)),
     &Matrix::new(2.0)
   );
 }
 
 #[test]
-fn test_add_scalar() {
+fn test_add_with_scalar() {
   assert_eq!(
-    &Matrix::<2, 4>::new(1.0), // A 2x4 matrix of all ones
-    Matrix::default().add_scalar(1.0)
-  ); // The same by adding 1 to the default
+    // A 2x4 matrix of all ones
+    &Matrix::<2, 4>::new(1.0),
+    // The same by adding 1 to the default
+    Matrix::default().add_with_scalar(1.0)
+  );
 }
 
 #[test]
 fn test_default() {
   assert_eq!(
-    &Matrix::<2, 4>::default(), // A "two by four" matrix of all zeroes
+    // A "two by four" matrix of all zeroes
+    &Matrix::<2, 4>::default(),
+    // A matrix of two rows and four columns
     &Matrix {
       rows: [[0.0; 4]; 2]
     }
-  ); // A matrix of two rows and four columns
+  );
 }
 
 #[test]
-fn test_get() {
+fn test_get_entry() {
+  // first row, last column
   let indices = Indices {
     row: 0,
     column: 3,
-  }; // first row, last column
+  };
   assert_eq!(
     Matrix::<2, 4>::default().set_entry(indices, 1.0).get_entry(indices),
     1.0
@@ -114,10 +136,11 @@ fn test_get() {
 
 #[test]
 fn test_get_row() {
+  // first row, last column
   let indices = Indices {
     row: 0,
     column: 3,
-  }; // first row, last column
+  };
   assert_eq!(
     Matrix::<2, 4>::default().set_entry(indices, 1.0).get_row(0),
     &[0.0, 0.0, 0.0, 1.0]
@@ -144,8 +167,8 @@ fn test_identity() {
         [3.0, 4.0]
       ]
     }
-    .multiply_matrix(&identity()),
-    Matrix {
+    .multiply_with_square_matrix(&identity()),
+    &Matrix {
       rows: [
         [1.0, 2.0],
         [3.0, 4.0]
@@ -165,22 +188,30 @@ fn test_matches_closely() {
 #[test]
 fn test_mul() {
   let matrix_2 = Matrix::<1, 1>::new(2.0);
-  assert_eq!(2.0 * Matrix::<1, 1>::new(1.0), matrix_2);
-  assert_eq!(2.0 * &Matrix::<1, 1>::new(1.0), matrix_2);
+  // multiplicand and f64
   assert_eq!(Matrix::<1, 1>::new(1.0) * 2.0, matrix_2);
+  // &multiplicand and f64
   assert_eq!(&Matrix::<1, 1>::new(1.0) * 2.0, matrix_2);
+  // f64 and multiplier
+  assert_eq!(2.0 * Matrix::<1, 1>::new(1.0), matrix_2);
+  // f64 and &multiplier
+  assert_eq!(2.0 * &Matrix::<1, 1>::new(1.0), matrix_2);
+  // multiplicand and multiplier
   assert_eq!(
     Matrix::<1, 2>::new(1.0) * Matrix::<2, 3>::new(2.0),
     Matrix::<1, 3>::new(4.0)
   );
+  // multiplicand and &multiplier
   assert_eq!(
     Matrix::<1, 2>::new(1.0) * &Matrix::<2, 3>::new(2.0),
     Matrix::<1, 3>::new(4.0)
   );
+  // &multiplicand and multiplier
   assert_eq!(
     &Matrix::<1, 2>::new(1.0) * Matrix::<2, 3>::new(2.0),
     Matrix::<1, 3>::new(4.0)
   );
+  // &multiplicand and &multiplier
   assert_eq!(
     &Matrix::<1, 2>::new(1.0) * &Matrix::<2, 3>::new(2.0),
     Matrix::<1, 3>::new(4.0)
@@ -188,7 +219,39 @@ fn test_mul() {
 }
 
 #[test]
-fn test_multiply_entries() {
+fn test_mul_assign() {
+  // muliplicand and f64
+  let mut multiplicand = Matrix::<1, 2>::new(1.0);
+  multiplicand *= 2.0;
+  assert_eq!(multiplicand, Matrix::<1, 2>::new(2.0));
+  // &muliplicand and f64
+  let mut multiplicand = &mut Matrix::<1, 2>::new(1.0);
+  multiplicand *= 2.0;
+  assert_eq!(multiplicand, &Matrix::<1, 2>::new(2.0));
+  // muliplicand and multiplier
+  let mut multiplicand = Matrix::<1, 2>::new(2.0);
+  let multiplier = Matrix::<2, 2>::new(3.0);
+  multiplicand *= multiplier;
+  assert_eq!(multiplicand, Matrix::<1, 2>::new(12.0));
+  // muliplicand and &multiplier
+  let mut multiplicand = Matrix::<1, 2>::new(2.0);
+  let multiplier = &Matrix::<2, 2>::new(3.0);
+  multiplicand *= multiplier;
+  assert_eq!(multiplicand, Matrix::<1, 2>::new(12.0));
+  // &muliplicand and multiplier
+  let mut multiplicand = &mut Matrix::<1, 2>::new(2.0);
+  let multiplier = Matrix::<2, 2>::new(3.0);
+  multiplicand *= multiplier;
+  assert_eq!(multiplicand, &Matrix::<1, 2>::new(12.0));
+  // &muliplicand and &multiplier
+  let mut multiplicand = &mut Matrix::<1, 2>::new(2.0);
+  let multiplier = &Matrix::<2, 2>::new(3.0);
+  multiplicand *= multiplier;
+  assert_eq!(multiplicand, &Matrix::<1, 2>::new(12.0));
+}
+
+#[test]
+fn test_multiply_with_corresponding_entries() {
   let mut matrix_1x4 = Matrix {
     rows: [[
       0.0, 1.0, 2.0, 3.0,
@@ -205,18 +268,38 @@ fn test_multiply_entries() {
     ]],
   };
   assert_eq!(
-    matrix_1x4.multiply_entries(&weighting_matrix),
+    matrix_1x4.multiply_with_corresponding_entries(&weighting_matrix),
     &expected_hadamard_product
   );
 }
 
 #[test]
-fn test_multiply_matrix() {
+fn test_multiply_matrix_with_matrix() {
   assert_eq!(
-    &Matrix::<2, 4>::new(2.0).multiply_matrix(&Matrix::<4, 3>::new(3.0)),
-    &Matrix::<2, 3>::new(24.0)
+    multiply_matrix_with_matrix(
+      &Matrix::<2, 4>::new(2.0),
+      &Matrix::<4, 3>::new(3.0)
+    ),
+    Matrix::<2, 3>::new(24.0)
   );
-  let matrix_multiplicand = Matrix {
+}
+
+#[test]
+fn test_multiply_matrix_with_scalar() {
+  assert_eq!(
+    multiply_matrix_with_scalar(&Matrix::<1, 1>::new(2.0), 3.0),
+    Matrix::new(6.0)
+  );
+}
+
+#[test]
+fn test_multiply_with_square_matrix() {
+  assert_eq!(
+    Matrix::<2, 4>::new(2.0)
+      .multiply_with_square_matrix(&Matrix::<4, 4>::new(3.0)),
+    &Matrix::<2, 4>::new(24.0)
+  );
+  let mut matrix_multiplicand = Matrix {
     rows: [
       [
         1.0, 0.0, 1.0,
@@ -262,90 +345,94 @@ fn test_multiply_matrix() {
     ],
   };
   assert_eq!(
-    &matrix_multiplicand.multiply_matrix(&matrix_multiplier),
+    matrix_multiplicand.multiply_with_square_matrix(&matrix_multiplier),
     &expected_matrix_product
-  );
-}
-
-#[test]
-fn test_multiply_matrix_with_matrix() {
-  assert_eq!(
-    multiply_matrix_with_matrix(
-      &Matrix::<2, 4>::new(2.0),
-      &Matrix::<4, 3>::new(3.0)
-    ),
-    Matrix::<2, 3>::new(24.0)
-  );
-}
-
-#[test]
-fn test_multiply_matrix_with_scalar() {
-  assert_eq!(
-    multiply_matrix_with_scalar(&Matrix::<1, 1>::new(2.0), 3.0),
-    Matrix::new(6.0)
   );
 }
 
 #[test]
 fn test_multiply_scalar() {
   assert_eq!(
-    Matrix::<2, 4>::new(3.0).multiply_scalar(5.0),
+    Matrix::<2, 4>::new(3.0).multiply_with_scalar(5.0),
     &Matrix::new(15.0)
   );
 }
 
 #[test]
 fn test_neg() {
+  // matrix
   assert_eq!(-Matrix::<1, 1>::new(1.0), Matrix::new(-1.0));
+  // &matrix
   assert_eq!(-&Matrix::<1, 1>::new(1.0), Matrix::new(-1.0));
 }
 
 #[test]
-fn test_negate_matrix() {
-  assert_eq!(negate(&Matrix::<1, 1>::new(1.0)), Matrix::new(-1.0));
+fn test_negate() {
+  let mut matrix = Matrix::<1, 1>::new(1.0);
+  assert_eq!(matrix.negate(), &Matrix::new(-1.0));
 }
 
 #[test]
-fn test_negate() {
-  assert_eq!(Matrix::<1, 1>::new(1.0).negate(), &Matrix::new(-1.0));
+fn test_negate_matrix() {
+  let matrix = Matrix::<1, 1>::new(1.0);
+  assert_eq!(negate_matrix(&matrix), Matrix::new(-1.0));
 }
 
 #[test]
 fn test_new() {
   assert_eq!(
-    &Matrix::<2, 4>::new(0.0), // A 2x4 matrix from a new() constructor
+    // A 2x4 matrix from a new() constructor
+    &Matrix::<2, 4>::new(0.0),
+    // The same with the dimensions inferred
     &Matrix::default()
-  ); // The same with the dimensions inferred
+  );
 }
 
 #[test]
 fn test_sub() {
   let matrix_1 = Matrix::<1, 1>::new(1.0);
+  // minuend and f64
   assert_eq!(Matrix::<1, 1>::new(3.0) - 2.0, matrix_1);
+  // &minuend and f64
   assert_eq!(&Matrix::<1, 1>::new(3.0) - 2.0, matrix_1);
+  // f64 and subtrahend
   assert_eq!(3.0 - Matrix::<1, 1>::new(2.0), matrix_1);
+  // f64 and &subtrahend
   assert_eq!(3.0 - &Matrix::<1, 1>::new(2.0), matrix_1);
-  assert_eq!(Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0), matrix_1);
-  assert_eq!(&Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0), matrix_1);
+  // minuend and subtrahend
   assert_eq!(Matrix::<1, 1>::new(3.0) - Matrix::new(2.0), matrix_1);
+  // minuend and &subtrahend
+  assert_eq!(Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0), matrix_1);
+  // &minuend and subtrahend
   assert_eq!(&Matrix::<1, 1>::new(3.0) - Matrix::new(2.0), matrix_1);
+  // &minuend and &subtahend
+  assert_eq!(&Matrix::<1, 1>::new(3.0) - &Matrix::new(2.0), matrix_1);
 }
 
 #[test]
 fn test_sub_assign() {
   let matrix_1 = Matrix::<1, 1>::new(1.0);
+  // minuend and f64
   let mut matrix = Matrix::<1, 1>::new(3.0);
   matrix -= 2.0;
   assert_eq!(matrix, matrix_1);
+  // &minuend and f64
+  let mut matrix = &mut Matrix::<1, 1>::new(3.0);
+  matrix -= 2.0;
+  assert_eq!(matrix, &matrix_1);
+  // minuend and subtrahend
   let mut matrix = Matrix::<1, 1>::new(3.0);
   matrix -= Matrix::<1, 1>::new(2.0);
   assert_eq!(matrix, matrix_1);
+  // minuend and &subtrahend
   let mut matrix = Matrix::<1, 1>::new(3.0);
   matrix -= &Matrix::<1, 1>::new(2.0);
   assert_eq!(matrix, matrix_1);
+  // &minuend and subtrahend
   let mut matrix = &mut Matrix::<1, 1>::new(3.0);
   matrix -= Matrix::<1, 1>::new(2.0);
   assert_eq!(matrix, &matrix_1);
+  // &minuend and &subtrahend
   let mut matrix = &mut Matrix::<1, 1>::new(3.0);
   matrix -= &Matrix::<1, 1>::new(2.0);
   assert_eq!(matrix, &matrix_1);
@@ -375,7 +462,7 @@ fn test_subtract_matrix() {
   assert_eq!(
     Matrix::<2, 4>::new(3.0).subtract_matrix(&Matrix::new(2.0)),
     &Matrix::new(1.0)
-  ); // matrix subtraction
+  );
 }
 
 #[test]
@@ -397,9 +484,11 @@ fn test_subtract_matrix_from_scalar() {
 #[test]
 fn test_subtract_scalar() {
   assert_eq!(
-    &Matrix::<2, 4>::new(-1.0), // A 2x4 matrix of negative ones
+    // A 2x4 matrix of negative ones
+    &Matrix::<2, 4>::new(-1.0),
+    // The same by subtracting one
     Matrix::default().subtract_scalar(1.0)
-  ); // The same by subtracting one
+  );
 }
 
 #[test]
@@ -413,7 +502,8 @@ fn test_subtract_scalar_from_matrix() {
 #[test]
 fn test_sum() {
   assert_eq!(
-    Matrix::<2, 4>::new(1.0).sum(), // sum of all entities in the matrix
+    // sum of all entities in the matrix
+    Matrix::<2, 4>::new(1.0).sum(),
     8.0
   );
 }
