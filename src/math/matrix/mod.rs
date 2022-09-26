@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-25
+//! - Rust version: 2022-09-26
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -233,6 +233,21 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
       }
     }
     submatrix
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Subtracts all entries from the scalar and then returns a reference to self
+  // ---------------------------------------------------------------------------
+  pub fn subtract_from_scalar(
+    &mut self,
+    minuend: f64,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] = minuend - self.rows[r][c];
+      }
+    }
+    self
   }
 
   // ---------------------------------------------------------------------------

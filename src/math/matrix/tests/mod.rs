@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-09-25
+//! - Version: 2022-09-26
 //! - Since: 2022-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -490,6 +490,18 @@ fn test_submatrix() {
       rows: [[3.0, 4.0]]
     }
   );
+}
+
+#[test]
+fn test_subtract_from_scalar() {
+  let minuend = 3.0;
+  let mut self_matrix = Matrix::<1, 1>::new(2.0);
+  let expected_difference = Matrix::new(1.0);
+  assert_eq!(
+    self_matrix.subtract_from_scalar(minuend),
+    &expected_difference,
+  );
+  assert_eq!(self_matrix, expected_difference);
 }
 
 #[test]
