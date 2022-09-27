@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-09-26
+//! - Version: 2022-09-27
 //! - Since: 2022-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -121,6 +121,13 @@ fn test_default() {
       rows: [[0.0; 4]; 2]
     }
   );
+}
+
+#[test]
+fn test_divide_by_scalar() {
+  let dividend = &mut Matrix::<1, 1>::new(6.0);
+  assert_eq!(dividend.divide_by_scalar(3.0), &Matrix::<1, 1>::new(2.0));
+  assert_eq!(dividend, &Matrix::<1, 1>::new(2.0));
 }
 
 #[test]

@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-26
+//! - Rust version: 2022-09-27
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -80,6 +80,21 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     for r in 0..R {
       for c in 0..C {
         self.rows[r][c] += addend;
+      }
+    }
+    self
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Divides each entry by the argument and then returns a reference to self
+  // ---------------------------------------------------------------------------
+  pub fn divide_by_scalar(
+    &mut self,
+    divisor: f64,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] /= divisor;
       }
     }
     self
