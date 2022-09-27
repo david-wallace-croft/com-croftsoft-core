@@ -131,6 +131,14 @@ fn test_divide_by_scalar() {
 }
 
 #[test]
+fn test_divide_matrix_by_scalar() {
+  assert_eq!(
+    Matrix::divide_matrix_by_scalar(&Matrix::<1, 1>::new(6.0), 3.0),
+    Matrix::<1, 1>::new(2.0)
+  );
+}
+
+#[test]
 fn test_get_entry() {
   // first row, last column
   let indices = Indices {

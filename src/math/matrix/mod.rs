@@ -338,7 +338,7 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Adds the arguments and return the sum as a new Matrix
+  /// Adds the arguments and then returns the sum as a new Matrix
   // ---------------------------------------------------------------------------
   pub fn add_matrix_with_scalar(
     augend: &Self,
@@ -354,7 +354,23 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
-  /// Multiplies the arguments and return the product as a new Matrix
+  /// Divides each entry by the scalar and then returns a new Matrix
+  // ---------------------------------------------------------------------------
+  pub fn divide_matrix_by_scalar(
+    dividend: &Self,
+    divisor: f64,
+  ) -> Self {
+    let mut quotient = Self::default();
+    for r in 0..R {
+      for c in 0..C {
+        quotient.rows[r][c] = dividend.rows[r][c] / divisor;
+      }
+    }
+    quotient
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Multiplies the arguments and then returns the product as a new Matrix
   // ---------------------------------------------------------------------------
   pub fn multiply_matrix_with_matrix<const K: usize>(
     multiplicand: &Self,
