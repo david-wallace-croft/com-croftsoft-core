@@ -20,7 +20,9 @@
 #[cfg(test)]
 mod tests;
 
-use std::ops::{Add, AddAssign, Mul, MulAssign, Neg, Sub, SubAssign};
+use std::ops::{
+  Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign,
+};
 
 // -----------------------------------------------------------------------------
 /// The row and column indices of a Matrix, indexed from zero
@@ -654,6 +656,50 @@ impl<const R: usize, const C: usize> AddAssign<&Matrix<R, C>>
     rhs: &Matrix<R, C>,
   ) {
     self.add_matrix(rhs);
+  }
+}
+
+// Operator Div ----------------------------------------------------------------
+
+impl<const R: usize, const C: usize> Div<f64> for Matrix<R, C> {
+  type Output = Self;
+
+  fn div(
+    self,
+    rhs: f64,
+  ) -> Self::Output {
+    Self::divide_matrix_by_scalar(&self, rhs)
+  }
+}
+
+impl<const R: usize, const C: usize> Div<f64> for &Matrix<R, C> {
+  type Output = Matrix<R, C>;
+
+  fn div(
+    self,
+    rhs: f64,
+  ) -> Self::Output {
+    Matrix::divide_matrix_by_scalar(self, rhs)
+  }
+}
+
+// Operator DivAssign ----------------------------------------------------------
+
+impl<const R: usize, const C: usize> DivAssign<f64> for Matrix<R, C> {
+  fn div_assign(
+    &mut self,
+    rhs: f64,
+  ) {
+    self.divide_by_scalar(rhs);
+  }
+}
+
+impl<const R: usize, const C: usize> DivAssign<f64> for &mut Matrix<R, C> {
+  fn div_assign(
+    &mut self,
+    rhs: f64,
+  ) {
+    self.divide_by_scalar(rhs);
   }
 }
 

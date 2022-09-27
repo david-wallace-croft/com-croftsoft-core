@@ -124,6 +124,28 @@ fn test_default() {
 }
 
 #[test]
+fn test_div() {
+  let matrix_2 = Matrix::<1, 1>::new(2.0);
+  // dividend and f64
+  assert_eq!(Matrix::<1, 1>::new(6.0) / 3.0, matrix_2);
+  // &divident and f64
+  assert_eq!(&Matrix::<1, 1>::new(6.0) / 3.0, matrix_2);
+}
+
+#[test]
+fn test_div_assign() {
+  let matrix_2 = Matrix::<1, 2>::new(2.0);
+  // dividend and f64
+  let mut dividend = Matrix::<1, 2>::new(6.0);
+  dividend /= 3.0;
+  assert_eq!(dividend, matrix_2);
+  // &dividend and f64
+  let mut dividend = &mut Matrix::<1, 2>::new(6.0);
+  dividend /= 3.0;
+  assert_eq!(dividend, &matrix_2);
+}
+
+#[test]
 fn test_divide_by_scalar() {
   let dividend = &mut Matrix::<1, 1>::new(6.0);
   assert_eq!(dividend.divide_by_scalar(3.0), &Matrix::<1, 1>::new(2.0));
