@@ -88,6 +88,21 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
   }
 
   // ---------------------------------------------------------------------------
+  /// Divides corresponding entries and then returns a reference to self
+  // ---------------------------------------------------------------------------
+  pub fn divide_by_matrix_entrywise(
+    &mut self,
+    divisor: &Self,
+  ) -> &mut Self {
+    for r in 0..R {
+      for c in 0..C {
+        self.rows[r][c] /= divisor.rows[r][c];
+      }
+    }
+    self
+  }
+
+  // ---------------------------------------------------------------------------
   /// Divides each entry by the argument and then returns a reference to self
   // ---------------------------------------------------------------------------
   pub fn divide_by_scalar(
@@ -353,6 +368,23 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
       }
     }
     sum
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Divides corresponding entries and returns the quotient as a new Matrix
+  // ---------------------------------------------------------------------------
+  pub fn divide_matrix_by_matrix_entrywise(
+    dividend_matrix: &Self,
+    divisor_matrix: &Self,
+  ) -> Self {
+    let mut quotient_matrix = Self::default();
+    for r in 0..R {
+      for c in 0..C {
+        quotient_matrix.rows[r][c] =
+          dividend_matrix.rows[r][c] / divisor_matrix.rows[r][c];
+      }
+    }
+    quotient_matrix
   }
 
   // ---------------------------------------------------------------------------

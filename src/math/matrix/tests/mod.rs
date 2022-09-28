@@ -146,6 +146,56 @@ fn test_div_assign() {
 }
 
 #[test]
+fn test_divide_by_matrix_entrywise() {
+  let mut self_matrix_1x4 = Matrix {
+    rows: [[
+      0.0, 3.0, 6.0, 9.0,
+    ]],
+  };
+  let divisor_matrix_1x4 = Matrix {
+    rows: [[
+      4.0, 3.0, 2.0, 1.0,
+    ]],
+  };
+  let expected_quotient_matrix_1x4 = Matrix {
+    rows: [[
+      0.0, 1.0, 3.0, 9.0,
+    ]],
+  };
+  assert_eq!(
+    self_matrix_1x4.divide_by_matrix_entrywise(&divisor_matrix_1x4),
+    &expected_quotient_matrix_1x4
+  );
+  assert_eq!(self_matrix_1x4, expected_quotient_matrix_1x4);
+}
+
+#[test]
+fn test_divide_matrix_by_matrix_entrywise() {
+  let dividend_matrix_1x4 = Matrix {
+    rows: [[
+      0.0, 3.0, 6.0, 9.0,
+    ]],
+  };
+  let divisor_matrix_1x4 = Matrix {
+    rows: [[
+      4.0, 3.0, 2.0, 1.0,
+    ]],
+  };
+  let expected_quotient_matrix_1x4 = Matrix {
+    rows: [[
+      0.0, 1.0, 3.0, 9.0,
+    ]],
+  };
+  assert_eq!(
+    Matrix::divide_matrix_by_matrix_entrywise(
+      &dividend_matrix_1x4,
+      &divisor_matrix_1x4
+    ),
+    expected_quotient_matrix_1x4
+  );
+}
+
+#[test]
 fn test_divide_by_scalar() {
   let dividend = &mut Matrix::<1, 1>::new(6.0);
   assert_eq!(dividend.divide_by_scalar(3.0), &Matrix::<1, 1>::new(2.0));
