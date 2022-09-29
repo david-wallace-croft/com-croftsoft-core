@@ -1,5 +1,5 @@
 // =============================================================================
-//! - A mathematical matrix that uses const generics for the rows and columns
+//! - The Matrix and supporting structures
 //!
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
@@ -17,7 +17,19 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-pub mod functions;
-pub mod methods;
-pub mod operators;
-pub mod structures;
+// -----------------------------------------------------------------------------
+/// The row and column indices of a Matrix, indexed from zero
+// -----------------------------------------------------------------------------
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct Indices {
+  pub row: usize,
+  pub column: usize,
+}
+
+// -----------------------------------------------------------------------------
+/// A mathematical matrix structure
+// -----------------------------------------------------------------------------
+#[derive(Clone, Debug, PartialEq)]
+pub struct Matrix<const R: usize, const C: usize> {
+  pub rows: [[f64; C]; R],
+}
