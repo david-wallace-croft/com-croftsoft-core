@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-29
+//! - Rust version: 2022-09-30
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -32,4 +32,18 @@ pub struct Indices {
 #[derive(Clone, Debug, PartialEq)]
 pub struct Matrix<const R: usize, const C: usize> {
   pub rows: [[f64; C]; R],
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct RotationDegrees {
+  pub x: f64,
+  pub y: f64,
+  pub z: f64,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct RotationRadians {
+  pub x: f64,
+  pub y: f64,
+  pub z: f64,
 }
