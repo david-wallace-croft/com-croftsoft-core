@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-30
+//! - Rust version: 2022-10-01
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -21,19 +21,6 @@
 mod test;
 
 use super::structures::*;
-
-// Default ---------------------------------------------------------------------
-
-impl<const R: usize, const C: usize> Default for Matrix<R, C> {
-  // ---------------------------------------------------------------------------
-  /// Makes a new Matrix of all zero entries
-  // ---------------------------------------------------------------------------
-  fn default() -> Self {
-    Self {
-      rows: [[0.0; C]; R],
-    }
-  }
-}
 
 // Associated functions --------------------------------------------------------
 
@@ -239,15 +226,45 @@ impl<const R: usize> Matrix<R, R> {
   }
 }
 
-// Associated functions for a 3x3 Matrix ---------------------------------------
+// Default ---------------------------------------------------------------------
 
-impl Matrix<3, 3> {
+impl<const R: usize, const C: usize> Default for Matrix<R, C> {
   // ---------------------------------------------------------------------------
-  /// Rotation matrices are multiplied in this order:  R = Rz * Ry * Rx
+  /// Makes a new Matrix of all zero entries
   // ---------------------------------------------------------------------------
-  pub fn to_rotation_matrix_from_radians(
-    rotation_radians: RotationRadians
-  ) -> Self {
+  fn default() -> Self {
+    Self {
+      rows: [[0.0; C]; R],
+    }
+  }
+}
+
+// From ------------------------------------------------------------------------
+
+impl From<RotationDegrees> for Matrix<3, 3> {
+  fn from(rotation_degrees: RotationDegrees) -> Self {
+    let rotation_radians = RotationRadians::from(rotation_degrees);
+    Matrix::from(rotation_radians)
+  }
+}
+
+impl From<RotationDegrees> for RotationRadians {
+  fn from(rotation_degrees: RotationDegrees) -> Self {
+    let RotationDegrees {
+      x,
+      y,
+      z,
+    } = rotation_degrees;
+    RotationRadians {
+      x: x.to_radians(),
+      y: y.to_radians(),
+      z: z.to_radians(),
+    }
+  }
+}
+
+impl From<RotationRadians> for Matrix<3, 3> {
+  fn from(rotation_radians: RotationRadians) -> Self {
     let RotationRadians {
       x,
       y,
@@ -278,21 +295,5 @@ impl Matrix<3, 3> {
         ],
       ],
     }
-  }
-
-  pub fn to_rotation_matrix_from_degrees(
-    rotation_degrees: RotationDegrees
-  ) -> Self {
-    let RotationDegrees {
-      x,
-      y,
-      z,
-    } = rotation_degrees;
-    let rotation_radians = RotationRadians {
-      x: x.to_radians(),
-      y: y.to_radians(),
-      z: z.to_radians(),
-    };
-    Matrix::to_rotation_matrix_from_radians(rotation_radians)
   }
 }
