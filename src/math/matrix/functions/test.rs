@@ -246,6 +246,48 @@ fn test_multiply_matrix_with_matrix() {
 }
 
 #[test]
+fn from_rotation_radians_to_rotation_degrees() {
+  assert_eq!(
+    RotationDegrees::from(RotationRadians {
+      x: 0.0,
+      y: 0.0,
+      z: 0.0,
+    }),
+    RotationDegrees {
+      x: 0.0,
+      y: 0.0,
+      z: 0.0,
+    }
+  );
+  assert_eq!(
+    RotationDegrees::from(RotationRadians {
+      x: core::f64::consts::FRAC_PI_2,
+      y: 0.0,
+      z: 0.0,
+    }),
+    RotationDegrees {
+      x: 90.0,
+      y: 0.0,
+      z: 0.0,
+    }
+  );
+  let rotation_degrees: RotationDegrees = RotationRadians {
+    x: 0.0,
+    y: 0.0,
+    z: 0.0,
+  }
+  .into();
+  assert_eq!(
+    rotation_degrees,
+    RotationDegrees {
+      x: 0.0,
+      y: 0.0,
+      z: 0.0,
+    }
+  );
+}
+
+#[test]
 fn test_multiply_matrix_with_matrix_entrywise() {
   let original_matrix_1x4 = Matrix {
     rows: [[

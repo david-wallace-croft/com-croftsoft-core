@@ -297,3 +297,18 @@ impl From<RotationRadians> for Matrix<3, 3> {
     }
   }
 }
+
+impl From<RotationRadians> for RotationDegrees {
+  fn from(rotation_radians: RotationRadians) -> Self {
+    let RotationRadians {
+      x,
+      y,
+      z,
+    } = rotation_radians;
+    RotationDegrees {
+      x: x.to_degrees(),
+      y: y.to_degrees(),
+      z: z.to_degrees(),
+    }
+  }
+}
