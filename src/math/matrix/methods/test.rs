@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-09-29
+//! - Version: 2022-10-03
 //! - Since: 2022-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -86,6 +86,12 @@ fn test_get_row() {
     Matrix::<2, 4>::default().set_entry(indices, 1.0).get_row(0),
     &[0.0, 0.0, 0.0, 1.0]
   );
+}
+
+#[test]
+fn test_is_square() {
+  assert!(Matrix::<1, 1>::default().is_square());
+  assert!(!Matrix::<1, 2>::default().is_square());
 }
 
 #[test]

@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-29
+//! - Rust version: 2022-10-03
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -103,6 +103,13 @@ impl<const R: usize, const C: usize> Matrix<R, C> {
     row_index: usize,
   ) -> &[f64; C] {
     &self.rows[row_index]
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Returns true if the number of rows equals the number of columns
+  // ---------------------------------------------------------------------------
+  pub fn is_square(&self) -> bool {
+    R == C
   }
 
   // ---------------------------------------------------------------------------
