@@ -19,5 +19,6 @@
 
 pub mod functions;
 pub mod methods;
-pub mod operators;
+pub mod operations;
 pub mod structures;
+pub mod trait_imps;
