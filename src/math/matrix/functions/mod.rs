@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-01
+//! - Rust version: 2022-10-05
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -223,5 +223,75 @@ impl<const R: usize> Matrix<R, R> {
       identity_matrix.rows[r][r] = 1.0;
     }
     identity_matrix
+  }
+}
+
+// Associated functions for a rotation Matrix ----------------------------------
+
+impl Matrix<3, 3> {
+  pub fn to_rotation_matrix_x_from_degrees(degrees: Degrees) -> Self {
+    Self::to_rotation_matrix_x_from_radians(degrees.into())
+  }
+
+  pub fn to_rotation_matrix_x_from_radians(radians: Radians) -> Self {
+    let cos = radians.0.cos();
+    let sin = radians.0.sin();
+    Matrix {
+      rows: [
+        [
+          1.0, 0.0, 0.0,
+        ],
+        [
+          0.0, cos, -sin,
+        ],
+        [
+          0.0, sin, cos,
+        ],
+      ],
+    }
+  }
+
+  pub fn to_rotation_matrix_y_from_degrees(degrees: Degrees) -> Self {
+    Self::to_rotation_matrix_y_from_radians(degrees.into())
+  }
+
+  pub fn to_rotation_matrix_y_from_radians(radians: Radians) -> Self {
+    let cos = radians.0.cos();
+    let sin = radians.0.sin();
+    Matrix {
+      rows: [
+        [
+          cos, 0.0, sin,
+        ],
+        [
+          0.0, 1.0, 0.0,
+        ],
+        [
+          -sin, 0.0, cos,
+        ],
+      ],
+    }
+  }
+
+  pub fn to_rotation_matrix_z_from_degrees(degrees: Degrees) -> Self {
+    Self::to_rotation_matrix_z_from_radians(degrees.into())
+  }
+
+  pub fn to_rotation_matrix_z_from_radians(radians: Radians) -> Self {
+    let cos = radians.0.cos();
+    let sin = radians.0.sin();
+    Matrix {
+      rows: [
+        [
+          cos, -sin, 0.0,
+        ],
+        [
+          sin, cos, 0.0,
+        ],
+        [
+          0.0, 0.0, 1.0,
+        ],
+      ],
+    }
   }
 }

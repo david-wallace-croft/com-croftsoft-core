@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-04
+//! - Rust version: 2022-10-05
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -36,6 +36,18 @@ impl<const R: usize, const C: usize> Default for Matrix<R, C> {
 }
 
 // From ------------------------------------------------------------------------
+
+impl From<Degrees> for Radians {
+  fn from(degrees: Degrees) -> Self {
+    Radians(degrees.0.to_radians())
+  }
+}
+
+impl From<Radians> for Degrees {
+  fn from(radians: Radians) -> Self {
+    Degrees(radians.0.to_degrees())
+  }
+}
 
 impl From<RotationDegrees> for Matrix<3, 3> {
   fn from(rotation_degrees: RotationDegrees) -> Self {

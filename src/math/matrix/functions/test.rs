@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-01
+//! - Version: 2022-10-05
 //! - Since: 2022-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -183,4 +183,52 @@ fn test_subtract_scalar_from_matrix() {
     Matrix::subtract_scalar_from_matrix(&Matrix::<1, 1>::new(3.0), 2.0),
     Matrix::new(1.0)
   );
+}
+
+#[test]
+fn test_to_rotation_matrix_x_from_degrees() {
+  assert_eq!(
+    Matrix::to_rotation_matrix_x_from_degrees(Degrees(0.0)),
+    Matrix::identity()
+  )
+}
+
+#[test]
+fn test_to_rotation_matrix_x_from_radians() {
+  assert_eq!(
+    Matrix::to_rotation_matrix_x_from_radians(Radians(0.0)),
+    Matrix::identity()
+  )
+}
+
+#[test]
+fn test_to_rotation_matrix_y_from_degrees() {
+  assert_eq!(
+    Matrix::to_rotation_matrix_y_from_degrees(Degrees(0.0)),
+    Matrix::identity()
+  )
+}
+
+#[test]
+fn test_to_rotation_matrix_y_from_radians() {
+  assert_eq!(
+    Matrix::to_rotation_matrix_y_from_radians(Radians(0.0)),
+    Matrix::identity()
+  )
+}
+
+#[test]
+fn test_to_rotation_matrix_z_from_degrees() {
+  assert_eq!(
+    Matrix::to_rotation_matrix_z_from_degrees(Degrees(0.0)),
+    Matrix::identity()
+  )
+}
+
+#[test]
+fn test_to_rotation_matrix_z_from_radians() {
+  assert_eq!(
+    Matrix::to_rotation_matrix_z_from_radians(Radians(0.0)),
+    Matrix::identity()
+  )
 }

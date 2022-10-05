@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-04
+//! - Version: 2022-10-05
 //! - Since: 2022-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -24,6 +24,18 @@ fn test_default() {
       rows: [[0.0; 4]; 2]
     }
   );
+}
+
+#[test]
+fn test_from_degrees_to_radians() {
+  assert_eq!(Radians::from(Degrees(0.0)), Radians(0.0));
+  assert_eq!(Radians(0.0), Degrees(0.0).into());
+}
+
+#[test]
+fn test_from_radians_to_degrees() {
+  assert_eq!(Degrees::from(Radians(0.0)), Degrees(0.0));
+  assert_eq!(Degrees(0.0), Radians(0.0).into());
 }
 
 #[test]
@@ -81,13 +93,15 @@ fn test_from_rotation_degrees_to_matrix() {
     },
     0.001
   ));
-  let rotation_matrix: Matrix<3, 3> = RotationDegrees {
-    x: 0.0,
-    y: 0.0,
-    z: 0.0,
-  }
-  .into();
-  assert_eq!(rotation_matrix, Matrix::identity());
+  assert_eq!(
+    Matrix::identity(),
+    RotationDegrees {
+      x: 0.0,
+      y: 0.0,
+      z: 0.0,
+    }
+    .into()
+  );
 }
 
 #[test]
@@ -116,19 +130,18 @@ fn test_from_rotation_degrees_to_rotation_radians() {
       z: 0.0,
     }
   );
-  let rotation_radians: RotationRadians = RotationDegrees {
-    x: 0.0,
-    y: 0.0,
-    z: 0.0,
-  }
-  .into();
   assert_eq!(
-    rotation_radians,
     RotationRadians {
       x: 0.0,
       y: 0.0,
       z: 0.0,
+    },
+    RotationDegrees {
+      x: 0.0,
+      y: 0.0,
+      z: 0.0,
     }
+    .into(),
   );
 }
 
@@ -142,13 +155,15 @@ fn test_from_rotation_radians_to_matrix() {
     }),
     Matrix::identity()
   );
-  let rotation_matrix: Matrix<3, 3> = RotationRadians {
-    x: 0.0,
-    y: 0.0,
-    z: 0.0,
-  }
-  .into();
-  assert_eq!(rotation_matrix, Matrix::identity());
+  assert_eq!(
+    Matrix::identity(),
+    RotationRadians {
+      x: 0.0,
+      y: 0.0,
+      z: 0.0,
+    }
+    .into()
+  );
 }
 
 #[test]
@@ -177,18 +192,17 @@ fn test_from_rotation_radians_to_rotation_degrees() {
       z: 0.0,
     }
   );
-  let rotation_degrees: RotationDegrees = RotationRadians {
-    x: 0.0,
-    y: 0.0,
-    z: 0.0,
-  }
-  .into();
   assert_eq!(
-    rotation_degrees,
     RotationDegrees {
       x: 0.0,
       y: 0.0,
       z: 0.0,
+    },
+    RotationRadians {
+      x: 0.0,
+      y: 0.0,
+      z: 0.0,
     }
+    .into()
   );
 }
