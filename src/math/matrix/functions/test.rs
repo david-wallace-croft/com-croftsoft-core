@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-05
+//! - Version: 2022-10-06
 //! - Since: 2022-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -190,7 +190,18 @@ fn test_to_rotation_matrix_x_from_degrees() {
   assert_eq!(
     Matrix::to_rotation_matrix_x_from_degrees(Degrees(0.0)),
     Matrix::identity()
-  )
+  );
+  assert!(Matrix::to_rotation_matrix_x_from_degrees(Degrees(90.0))
+    .matches_closely(
+      &Matrix {
+        rows: [
+          [1.0, 0.0, 0.0],
+          [0.0, 0.0, -1.0],
+          [0.0, 1.0, 0.0],
+        ]
+      },
+      0.001
+    ));
 }
 
 #[test]
@@ -198,7 +209,20 @@ fn test_to_rotation_matrix_x_from_radians() {
   assert_eq!(
     Matrix::to_rotation_matrix_x_from_radians(Radians(0.0)),
     Matrix::identity()
-  )
+  );
+  assert!(Matrix::to_rotation_matrix_x_from_radians(Radians(
+    core::f64::consts::FRAC_PI_2
+  ))
+  .matches_closely(
+    &Matrix {
+      rows: [
+        [1.0, 0.0, 0.0],
+        [0.0, 0.0, -1.0],
+        [0.0, 1.0, 0.0],
+      ]
+    },
+    0.001
+  ));
 }
 
 #[test]
@@ -206,7 +230,18 @@ fn test_to_rotation_matrix_y_from_degrees() {
   assert_eq!(
     Matrix::to_rotation_matrix_y_from_degrees(Degrees(0.0)),
     Matrix::identity()
-  )
+  );
+  assert!(Matrix::to_rotation_matrix_y_from_degrees(Degrees(90.0))
+    .matches_closely(
+      &Matrix {
+        rows: [
+          [0.0, 0.0, 1.0],
+          [0.0, 1.0, 0.0],
+          [-1.0, 0.0, 0.0],
+        ]
+      },
+      0.001
+    ));
 }
 
 #[test]
@@ -214,7 +249,20 @@ fn test_to_rotation_matrix_y_from_radians() {
   assert_eq!(
     Matrix::to_rotation_matrix_y_from_radians(Radians(0.0)),
     Matrix::identity()
-  )
+  );
+  assert!(Matrix::to_rotation_matrix_y_from_radians(Radians(
+    core::f64::consts::FRAC_PI_2
+  ))
+  .matches_closely(
+    &Matrix {
+      rows: [
+        [0.0, 0.0, 1.0],
+        [0.0, 1.0, 0.0],
+        [-1.0, 0.0, 0.0],
+      ]
+    },
+    0.001
+  ));
 }
 
 #[test]
@@ -222,7 +270,18 @@ fn test_to_rotation_matrix_z_from_degrees() {
   assert_eq!(
     Matrix::to_rotation_matrix_z_from_degrees(Degrees(0.0)),
     Matrix::identity()
-  )
+  );
+  assert!(Matrix::to_rotation_matrix_z_from_degrees(Degrees(90.0))
+    .matches_closely(
+      &Matrix {
+        rows: [
+          [0.0, -1.0, 0.0],
+          [1.0, 0.0, 0.0],
+          [0.0, 0.0, 1.0],
+        ]
+      },
+      0.001
+    ));
 }
 
 #[test]
@@ -230,5 +289,18 @@ fn test_to_rotation_matrix_z_from_radians() {
   assert_eq!(
     Matrix::to_rotation_matrix_z_from_radians(Radians(0.0)),
     Matrix::identity()
-  )
+  );
+  assert!(Matrix::to_rotation_matrix_z_from_radians(Radians(
+    core::f64::consts::FRAC_PI_2
+  ))
+  .matches_closely(
+    &Matrix {
+      rows: [
+        [0.0, -1.0, 0.0],
+        [1.0, 0.0, 0.0],
+        [0.0, 0.0, 1.0],
+      ]
+    },
+    0.001
+  ));
 }

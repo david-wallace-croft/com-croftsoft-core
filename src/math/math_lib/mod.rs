@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-09-03
+//! - Rust version: 2022-10-06
 //! - Rust since: 2022-08-24
 //! - Java version: 2008-08-09
 //! - Java since: 1998-12-27
@@ -222,7 +222,7 @@ impl PolarCoordinates {
   ///   });
   /// assert_eq!(
   ///   PolarCoordinates {
-  ///     angle: std::f64::consts::FRAC_PI_2,
+  ///     angle: core::f64::consts::FRAC_PI_2,
   ///     radius: 1.0,
   ///   }.to_rectangular_coordinates(),
   ///   RectangularCoordinates {
@@ -231,7 +231,7 @@ impl PolarCoordinates {
   ///   });
   /// assert_eq!(
   ///   PolarCoordinates {
-  ///     angle: std::f64::consts::PI,
+  ///     angle: core::f64::consts::PI,
   ///     radius: 1.0,
   ///   }.to_rectangular_coordinates(),
   ///   RectangularCoordinates {
@@ -240,7 +240,7 @@ impl PolarCoordinates {
   ///   });
   /// assert_eq!(
   ///   PolarCoordinates {
-  ///     angle: 3.0 * std::f64::consts::FRAC_PI_2,
+  ///     angle: 3.0 * core::f64::consts::FRAC_PI_2,
   ///     radius: 2.0,
   ///   }.to_rectangular_coordinates(),
   ///   RectangularCoordinates {
