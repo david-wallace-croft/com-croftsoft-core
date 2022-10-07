@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-05
+//! - Rust version: 2022-10-07
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -40,6 +40,63 @@ impl<const R: usize, const C: usize> Default for Matrix<R, C> {
 impl From<Degrees> for Radians {
   fn from(degrees: Degrees) -> Self {
     Radians(degrees.0.to_radians())
+  }
+}
+
+impl From<Matrix<3, 3>> for RotationDegrees {
+  fn from(rotation_matrix: Matrix<3, 3>) -> Self {
+    RotationRadians::from(rotation_matrix).into()
+  }
+}
+
+impl From<Matrix<3, 3>> for RotationRadians {
+  fn from(rotation_matrix: Matrix<3, 3>) -> Self {
+    // Adapted from Dunn and Parberry, 3D Math Primer, 2002, page 204.
+    let sp = -rotation_matrix.get_entry(Indices {
+      row: 1,
+      column: 2,
+    });
+    let heading;
+    let pitch;
+    let bank;
+    if sp.abs() > 0.99999 {
+      heading = -rotation_matrix
+        .get_entry(Indices {
+          row: 2,
+          column: 0,
+        })
+        .atan2(rotation_matrix.get_entry(Indices {
+          row: 0,
+          column: 0,
+        }));
+      pitch = core::f64::consts::FRAC_PI_2 * sp;
+      bank = 0.0;
+    } else {
+      heading = rotation_matrix
+        .get_entry(Indices {
+          row: 0,
+          column: 2,
+        })
+        .atan2(rotation_matrix.get_entry(Indices {
+          row: 2,
+          column: 2,
+        }));
+      pitch = sp.asin();
+      bank = rotation_matrix
+        .get_entry(Indices {
+          row: 1,
+          column: 0,
+        })
+        .atan2(rotation_matrix.get_entry(Indices {
+          row: 1,
+          column: 1,
+        }));
+    }
+    RotationRadians {
+      x: pitch,
+      y: heading,
+      z: bank,
+    }
   }
 }
 
