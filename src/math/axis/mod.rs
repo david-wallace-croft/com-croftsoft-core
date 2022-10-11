@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2008 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-10
+//! - Rust version: 2022-10-11
 //! - Rust since: 2022-10-10
 //! - Java version: 2008-05-09
 //! - Java since: 2008-05-09
@@ -35,5 +35,56 @@ impl AxisAngle {
     let y = self.y;
     let z = self.z;
     (x * x + y * y + z * z).sqrt()
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Returns false if any field value is greater than the tolerance.
+  ///
+  /// The tolerance should be a positive number.
+  // ---------------------------------------------------------------------------
+  pub fn matches_closely(
+    &self,
+    other: &Self,
+    tolerance: f64,
+  ) -> bool {
+    let difference_magnitude = (self.radians - other.radians).abs();
+    if difference_magnitude > tolerance {
+      return false;
+    }
+    let difference_magnitude = (self.x - other.x).abs();
+    if difference_magnitude > tolerance {
+      return false;
+    }
+    let difference_magnitude = (self.y - other.y).abs();
+    if difference_magnitude > tolerance {
+      return false;
+    }
+    let difference_magnitude = (self.z - other.z).abs();
+    if difference_magnitude > tolerance {
+      return false;
+    }
+    true
+  }
+
+  // ---------------------------------------------------------------------------
+  /// Returns false if any field value of other differs from the value of self.
+  // ---------------------------------------------------------------------------
+  pub fn matches_exactly(
+    &self,
+    other: &Self,
+  ) -> bool {
+    self.radians == other.radians
+      && self.x == other.x
+      && self.y == other.y
+      && self.z == other.z
+  }
+
+  /// Divides each entry by the magnitude and then returns a reference to self
+  pub fn normalize(&mut self) -> &mut Self {
+    let magnitude = self.magnitude();
+    self.x /= magnitude;
+    self.y /= magnitude;
+    self.z /= magnitude;
+    self
   }
 }
