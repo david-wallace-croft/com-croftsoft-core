@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2008 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-11
+//! - Rust version: 2022-10-12
 //! - Rust since: 2022-10-10
 //! - Java version: 2008-05-09
 //! - Java since: 2008-05-09
@@ -38,7 +38,7 @@ impl AxisAngle {
   }
 
   // ---------------------------------------------------------------------------
-  /// Returns false if any field value is greater than the tolerance.
+  /// Returns false if any difference magnitude is greater than the tolerance.
   ///
   /// The tolerance should be a positive number.
   // ---------------------------------------------------------------------------
@@ -47,23 +47,10 @@ impl AxisAngle {
     other: &Self,
     tolerance: f64,
   ) -> bool {
-    let difference_magnitude = (self.radians - other.radians).abs();
-    if difference_magnitude > tolerance {
-      return false;
-    }
-    let difference_magnitude = (self.x - other.x).abs();
-    if difference_magnitude > tolerance {
-      return false;
-    }
-    let difference_magnitude = (self.y - other.y).abs();
-    if difference_magnitude > tolerance {
-      return false;
-    }
-    let difference_magnitude = (self.z - other.z).abs();
-    if difference_magnitude > tolerance {
-      return false;
-    }
-    true
+    (self.radians - other.radians).abs() <= tolerance
+      && (self.x - other.x).abs() <= tolerance
+      && (self.y - other.y).abs() <= tolerance
+      && (self.z - other.z).abs() <= tolerance
   }
 
   // ---------------------------------------------------------------------------
