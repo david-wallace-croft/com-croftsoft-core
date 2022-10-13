@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-08
+//! - Version: 2022-10-13
 //! - Since: 2022-09-04
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -13,6 +13,8 @@
 
 #[cfg(test)]
 use super::super::structures::*;
+#[cfg(test)]
+use crate::math::axis::AxisAngle;
 #[cfg(test)]
 use core::f64::consts::FRAC_PI_2;
 
@@ -26,6 +28,30 @@ fn test_default() {
       rows: [[0.0; 4]; 2]
     }
   );
+}
+
+#[test]
+fn test_from_axis_angle_to_matrix() {
+  let axis_angle = AxisAngle {
+    radians: 0.0,
+    x: 1.0,
+    y: 0.0,
+    z: 0.0,
+  };
+  let expected_matrix = Matrix {
+    rows: [
+      [
+        1.0, 0.0, 0.0,
+      ],
+      [
+        0.0, 1.0, 0.0,
+      ],
+      [
+        0.0, 0.0, 1.0,
+      ],
+    ],
+  };
+  assert_eq!(Matrix::from(axis_angle), expected_matrix);
 }
 
 #[test]

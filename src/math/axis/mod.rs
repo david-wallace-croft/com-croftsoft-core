@@ -1,10 +1,10 @@
 // =============================================================================
-//! - Axis-angle
+//! - Axis-angle (used in 3D graphics)
 //!
 //! # Metadata
 //! - Copyright: &copy; 2008 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-12
+//! - Rust version: 2022-10-13
 //! - Rust since: 2022-10-10
 //! - Java version: 2008-05-09
 //! - Java since: 2008-05-09
@@ -30,6 +30,9 @@ pub struct AxisAngle {
 }
 
 impl AxisAngle {
+  // ---------------------------------------------------------------------------
+  /// Distance from the origin
+  // ---------------------------------------------------------------------------
   pub fn magnitude(&self) -> f64 {
     let x = self.x;
     let y = self.y;
@@ -54,7 +57,7 @@ impl AxisAngle {
   }
 
   // ---------------------------------------------------------------------------
-  /// Returns false if any field value of other differs from the value of self.
+  /// Returns false if any field value of other differs from the value of self
   // ---------------------------------------------------------------------------
   pub fn matches_exactly(
     &self,
@@ -66,7 +69,9 @@ impl AxisAngle {
       && self.z == other.z
   }
 
+  // ---------------------------------------------------------------------------
   /// Divides each entry by the magnitude and then returns a reference to self
+  // ---------------------------------------------------------------------------
   pub fn normalize(&mut self) -> &mut Self {
     let magnitude = self.magnitude();
     self.x /= magnitude;
