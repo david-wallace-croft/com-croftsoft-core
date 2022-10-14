@@ -83,6 +83,19 @@ impl AxisAngle {
   }
 }
 
+// Default ---------------------------------------------------------------------
+
+impl Default for AxisAngle {
+  fn default() -> Self {
+    Self {
+      radians: 0.0,
+      x: 1.0,
+      y: 0.0,
+      z: 0.0,
+    }
+  }
+}
+
 // From ------------------------------------------------------------------------
 
 impl From<AxisAngle> for Matrix<3, 3> {

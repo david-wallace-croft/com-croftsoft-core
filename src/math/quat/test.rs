@@ -13,3 +13,21 @@
 
 #[cfg(test)]
 use super::*;
+
+#[test]
+fn test_default() {
+  assert_eq!(
+    Quat::default(),
+    Quat {
+      w: 1.0,
+      x: 0.0,
+      y: 0.0,
+      z: 0.0
+    }
+  );
+}
+
+#[test]
+fn test_from_quat_to_axis_angle() {
+  assert_eq!(AxisAngle::from(Quat::default()), AxisAngle::default());
+}

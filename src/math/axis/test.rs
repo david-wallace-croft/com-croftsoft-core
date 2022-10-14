@@ -15,13 +15,21 @@
 use super::*;
 
 #[test]
+fn test_default() {
+  assert_eq!(
+    AxisAngle::default(),
+    AxisAngle {
+      radians: 0.0,
+      x: 1.0,
+      y: 0.0,
+      z: 0.0
+    }
+  );
+}
+
+#[test]
 fn test_from_axis_angle_to_matrix() {
-  let axis_angle = AxisAngle {
-    radians: 0.0,
-    x: 1.0,
-    y: 0.0,
-    z: 0.0,
-  };
+  let axis_angle = AxisAngle::default();
   let expected_matrix = Matrix {
     rows: [
       [
