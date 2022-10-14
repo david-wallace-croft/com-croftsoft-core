@@ -18,7 +18,7 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use super::matrix::structures::Matrix;
+use super::{matrix::structures::Matrix, quat::Quat};
 
 #[cfg(test)]
 mod test;
@@ -115,6 +115,19 @@ impl From<AxisAngle> for Matrix<3, 3> {
           c + (1.0 - c) * z * z,
         ],
       ],
+    }
+  }
+}
+
+impl From<AxisAngle> for Quat {
+  fn from(axis_angle: AxisAngle) -> Self {
+    let half_radians = axis_angle.radians / 2.0;
+    let sin_half_radians = half_radians.sin();
+    Quat {
+      w: half_radians.cos(),
+      x: sin_half_radians * axis_angle.x,
+      y: sin_half_radians * axis_angle.y,
+      z: sin_half_radians * axis_angle.z,
     }
   }
 }

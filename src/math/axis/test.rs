@@ -39,6 +39,25 @@ fn test_from_axis_angle_to_matrix() {
 }
 
 #[test]
+fn test_from_axis_angle_to_quat() {
+  let axis_angle = AxisAngle {
+    radians: 0.0,
+    x: 1.0,
+    y: 1.0,
+    z: 1.0,
+  };
+  assert_eq!(
+    Quat {
+      w: 1.0,
+      x: 0.0,
+      y: 0.0,
+      z: 0.0
+    },
+    axis_angle.into()
+  );
+}
+
+#[test]
 fn test_magnitude() {
   assert!(
     AxisAngle {
