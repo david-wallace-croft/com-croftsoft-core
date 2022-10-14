@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-11
+//! - Version: 2022-10-14
 //! - Since: 2022-10-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -13,6 +13,30 @@
 
 #[cfg(test)]
 use super::*;
+
+#[test]
+fn test_from_axis_angle_to_matrix() {
+  let axis_angle = AxisAngle {
+    radians: 0.0,
+    x: 1.0,
+    y: 0.0,
+    z: 0.0,
+  };
+  let expected_matrix = Matrix {
+    rows: [
+      [
+        1.0, 0.0, 0.0,
+      ],
+      [
+        0.0, 1.0, 0.0,
+      ],
+      [
+        0.0, 0.0, 1.0,
+      ],
+    ],
+  };
+  assert_eq!(Matrix::from(axis_angle), expected_matrix);
+}
 
 #[test]
 fn test_magnitude() {

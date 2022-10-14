@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2008 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-13
+//! - Rust version: 2022-10-14
 //! - Rust since: 2022-10-10
 //! - Java version: 2008-05-09
 //! - Java since: 2008-05-09
@@ -17,6 +17,8 @@
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
+
+use super::matrix::structures::Matrix;
 
 #[cfg(test)]
 mod test;
@@ -78,5 +80,41 @@ impl AxisAngle {
     self.y /= magnitude;
     self.z /= magnitude;
     self
+  }
+}
+
+// From ------------------------------------------------------------------------
+
+impl From<AxisAngle> for Matrix<3, 3> {
+  fn from(axis_angle: AxisAngle) -> Self {
+    let AxisAngle {
+      radians,
+      x,
+      y,
+      z,
+    } = axis_angle;
+    let c = radians.cos();
+    let s = radians.sin();
+    // Lengyel, "Mathematics for 3D Game Programming & Computer Graphics",
+    // Second Edition, p80, equation 3.22.
+    Matrix {
+      rows: [
+        [
+          c + (1.0 - c) * x * x,
+          (1.0 - c) * x * y - s * z,
+          (1.0 - c) * x * z + s * y,
+        ],
+        [
+          (1.0 - c) * x * y + s * z,
+          c + (1.0 - c) * y * y,
+          (1.0 - c) * y * z - s * x,
+        ],
+        [
+          (1.0 - c) * x * z - s * y,
+          (1.0 - c) * y * z + s * x,
+          c + (1.0 - c) * z * z,
+        ],
+      ],
+    }
   }
 }

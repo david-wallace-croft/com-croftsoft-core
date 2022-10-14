@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-13
+//! - Rust version: 2022-10-14
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -21,7 +21,6 @@
 mod test;
 
 use super::structures::*;
-use crate::math::axis::AxisAngle;
 
 // Default ---------------------------------------------------------------------
 
@@ -32,42 +31,6 @@ impl<const R: usize, const C: usize> Default for Matrix<R, C> {
   fn default() -> Self {
     Self {
       rows: [[0.0; C]; R],
-    }
-  }
-}
-
-// From ------------------------------------------------------------------------
-
-impl From<AxisAngle> for Matrix<3, 3> {
-  fn from(axis_angle: AxisAngle) -> Self {
-    let AxisAngle {
-      radians,
-      x,
-      y,
-      z,
-    } = axis_angle;
-    let c = radians.cos();
-    let s = radians.sin();
-    // Lengyel, "Mathematics for 3D Game Programming & Computer Graphics",
-    // Second Edition, p80, equation 3.22.
-    Matrix {
-      rows: [
-        [
-          c + (1.0 - c) * x * x,
-          (1.0 - c) * x * y - s * z,
-          (1.0 - c) * x * z + s * y,
-        ],
-        [
-          (1.0 - c) * x * y + s * z,
-          c + (1.0 - c) * y * y,
-          (1.0 - c) * y * z - s * x,
-        ],
-        [
-          (1.0 - c) * x * z - s * y,
-          (1.0 - c) * y * z + s * x,
-          c + (1.0 - c) * z * z,
-        ],
-      ],
     }
   }
 }
