@@ -34,7 +34,7 @@ pub struct Quat {
 // Functions
 
 impl Quat {
-  fn dot_product(
+  pub fn dot_product(
     quat0: &Self,
     quat1: &Self,
   ) -> Self {
