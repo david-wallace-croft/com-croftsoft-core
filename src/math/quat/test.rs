@@ -28,6 +28,29 @@ fn test_default() {
 }
 
 #[test]
+fn test_dot_product() {
+  let quat0 = Quat {
+    w: 2.0,
+    x: 3.0,
+    y: 4.0,
+    z: 5.0,
+  };
+  let quat1 = Quat {
+    w: 2.0,
+    x: 3.0,
+    y: 4.0,
+    z: 5.0,
+  };
+  let quat2 = Quat {
+    w: 4.0,
+    x: 9.0,
+    y: 16.0,
+    z: 25.0,
+  };
+  assert_eq!(Quat::dot_product(&quat0, &quat1), quat2);
+}
+
+#[test]
 fn test_from_quat_to_axis_angle() {
   assert_eq!(AxisAngle::from(Quat::default()), AxisAngle::default());
 }

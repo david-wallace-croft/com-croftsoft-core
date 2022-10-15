@@ -31,6 +31,22 @@ pub struct Quat {
   pub z: f64,
 }
 
+// Functions
+
+impl Quat {
+  fn dot_product(
+    quat0: &Self,
+    quat1: &Self,
+  ) -> Self {
+    Quat {
+      w: quat0.w * quat1.w,
+      x: quat0.x * quat1.x,
+      y: quat0.y * quat1.y,
+      z: quat0.z * quat1.z,
+    }
+  }
+}
+
 // Default ---------------------------------------------------------------------
 
 impl Default for Quat {
