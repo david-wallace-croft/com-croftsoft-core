@@ -45,6 +45,30 @@ impl Quat {
       z: quat0.z * quat1.z,
     }
   }
+
+  pub fn multiply(
+    quat0: &Self,
+    quat1: &Self,
+  ) -> Self {
+    let Quat {
+      w: w0,
+      x: x0,
+      y: y0,
+      z: z0,
+    } = quat0;
+    let Quat {
+      w: w1,
+      x: x1,
+      y: y1,
+      z: z1,
+    } = quat1;
+    Quat {
+      w: w0 * w1 - x0 * x1 - y0 * y1 - z0 * z1,
+      x: y0 * z1 - z0 * y1 + w0 * x1 + x0 * w1,
+      y: z0 * x1 - x0 * z1 + w0 * y1 + y0 * w1,
+      z: x0 * y1 - y0 * x1 + w0 * z1 + z0 * w1,
+    }
+  }
 }
 
 // Default ---------------------------------------------------------------------
