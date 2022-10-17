@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2008 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-14
+//! - Rust version: 2022-10-17
 //! - Rust since: 2022-10-10
 //! - Java version: 2008-05-09
 //! - Java since: 2008-05-02
@@ -19,6 +19,7 @@
 // =============================================================================
 
 use super::axis::AxisAngle;
+use std::ops::Mul;
 
 #[cfg(test)]
 mod test;
@@ -31,7 +32,7 @@ pub struct Quat {
   pub z: f64,
 }
 
-// Functions
+// Associated Functions
 
 impl Quat {
   pub fn dot_product(
@@ -46,7 +47,7 @@ impl Quat {
     }
   }
 
-  pub fn multiply(
+  pub fn multiply_quat_with_quat(
     quat0: &Self,
     quat1: &Self,
   ) -> Self {
@@ -71,7 +72,53 @@ impl Quat {
   }
 }
 
-// Default ---------------------------------------------------------------------
+// Operator Mul ----------------------------------------------------------------
+
+impl Mul<Quat> for Quat {
+  type Output = Quat;
+
+  fn mul(
+    self,
+    rhs: Quat,
+  ) -> Self::Output {
+    Quat::multiply_quat_with_quat(&self, &rhs)
+  }
+}
+
+impl Mul<Quat> for &Quat {
+  type Output = Quat;
+
+  fn mul(
+    self,
+    rhs: Quat,
+  ) -> Self::Output {
+    Quat::multiply_quat_with_quat(self, &rhs)
+  }
+}
+
+impl Mul<&Quat> for Quat {
+  type Output = Quat;
+
+  fn mul(
+    self,
+    rhs: &Quat,
+  ) -> Self::Output {
+    Quat::multiply_quat_with_quat(&self, rhs)
+  }
+}
+
+impl Mul<&Quat> for &Quat {
+  type Output = Quat;
+
+  fn mul(
+    self,
+    rhs: &Quat,
+  ) -> Self::Output {
+    Quat::multiply_quat_with_quat(self, rhs)
+  }
+}
+
+// Trait Default ---------------------------------------------------------------
 
 impl Default for Quat {
   fn default() -> Self {
@@ -84,7 +131,7 @@ impl Default for Quat {
   }
 }
 
-// From ------------------------------------------------------------------------
+// Trait From ------------------------------------------------------------------
 
 impl From<Quat> for AxisAngle {
   fn from(quat: Quat) -> Self {

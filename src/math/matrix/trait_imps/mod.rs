@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-14
+//! - Rust version: 2022-10-17
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -22,7 +22,7 @@ mod test;
 
 use super::structures::*;
 
-// Default ---------------------------------------------------------------------
+// Trait Default ---------------------------------------------------------------------
 
 impl<const R: usize, const C: usize> Default for Matrix<R, C> {
   // ---------------------------------------------------------------------------
@@ -34,6 +34,8 @@ impl<const R: usize, const C: usize> Default for Matrix<R, C> {
     }
   }
 }
+
+// Trait From ------------------------------------------------------------------------
 
 impl From<Degrees> for Radians {
   fn from(degrees: Degrees) -> Self {

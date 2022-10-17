@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-14
+//! - Version: 2022-10-17
 //! - Since: 2022-10-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -51,7 +51,33 @@ fn test_dot_product() {
 }
 
 #[test]
-fn test_multiply() {
+fn test_mul() {
+  let quat_rhs = Quat {
+    w: 1.0,
+    x: 2.0,
+    y: 3.0,
+    z: 4.0,
+  };
+  let quat_lhs = Quat {
+    w: 2.0,
+    x: 3.0,
+    y: 4.0,
+    z: 5.0,
+  };
+  let quat_product = Quat {
+    w: -36.0,
+    x: 8.0,
+    y: 8.0,
+    z: 14.0,
+  };
+  assert_eq!(quat_lhs * quat_rhs, quat_product);
+  assert_eq!(quat_lhs * &quat_rhs, quat_product);
+  assert_eq!(&quat_lhs * quat_rhs, quat_product);
+  assert_eq!(&quat_lhs * &quat_rhs, quat_product);
+}
+
+#[test]
+fn test_multiply_quat_with_quat() {
   let quat0 = Quat {
     w: 2.0,
     x: 3.0,
@@ -70,7 +96,7 @@ fn test_multiply() {
     y: 24.0,
     z: 26.0,
   };
-  assert_eq!(Quat::multiply(&quat0, &quat1), quat2);
+  assert_eq!(Quat::multiply_quat_with_quat(&quat0, &quat1), quat2);
 }
 
 #[test]
