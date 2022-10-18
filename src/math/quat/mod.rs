@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2008 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-17
+//! - Rust version: 2022-10-18
 //! - Rust since: 2022-10-10
 //! - Java version: 2008-05-09
 //! - Java since: 2008-05-02
@@ -19,10 +19,12 @@
 // =============================================================================
 
 use super::axis::AxisAngle;
-use std::ops::Mul;
+use std::ops::{Mul, MulAssign};
 
 #[cfg(test)]
 mod test;
+
+// Structures ------------------------------------------------------------------
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Quat {
@@ -32,7 +34,7 @@ pub struct Quat {
   pub z: f64,
 }
 
-// Associated Functions
+// Associated Functions --------------------------------------------------------
 
 impl Quat {
   pub fn dot_product(
@@ -69,6 +71,22 @@ impl Quat {
       y: z0 * x1 - x0 * z1 + w0 * y1 + y0 * w1,
       z: x0 * y1 - y0 * x1 + w0 * z1 + z0 * w1,
     }
+  }
+}
+
+// Methods ---------------------------------------------------------------------
+
+impl Quat {
+  pub fn multiply_with_quat(
+    &mut self,
+    multiplier: &Quat,
+  ) -> &mut Self {
+    let product = Quat::multiply_quat_with_quat(self, multiplier);
+    self.w = product.w;
+    self.x = product.x;
+    self.y = product.y;
+    self.z = product.z;
+    self
   }
 }
 
@@ -115,6 +133,44 @@ impl Mul<&Quat> for &Quat {
     rhs: &Quat,
   ) -> Self::Output {
     Quat::multiply_quat_with_quat(self, rhs)
+  }
+}
+
+// Operator MulAssign ----------------------------------------------------------
+
+impl MulAssign<Quat> for Quat {
+  fn mul_assign(
+    &mut self,
+    rhs: Quat,
+  ) {
+    self.multiply_with_quat(&rhs);
+  }
+}
+
+impl MulAssign<Quat> for &mut Quat {
+  fn mul_assign(
+    &mut self,
+    rhs: Quat,
+  ) {
+    self.multiply_with_quat(&rhs);
+  }
+}
+
+impl MulAssign<&Quat> for Quat {
+  fn mul_assign(
+    &mut self,
+    rhs: &Quat,
+  ) {
+    self.multiply_with_quat(rhs);
+  }
+}
+
+impl MulAssign<&Quat> for &mut Quat {
+  fn mul_assign(
+    &mut self,
+    rhs: &Quat,
+  ) {
+    self.multiply_with_quat(rhs);
   }
 }
 

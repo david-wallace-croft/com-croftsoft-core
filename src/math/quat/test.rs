@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-17
+//! - Version: 2022-10-18
 //! - Since: 2022-10-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -50,15 +50,16 @@ fn test_dot_product() {
   assert_eq!(Quat::dot_product(&quat0, &quat1), quat2);
 }
 
+#[allow(clippy::op_ref)]
 #[test]
 fn test_mul() {
-  let quat_rhs = Quat {
+  let quat_lhs = Quat {
     w: 1.0,
     x: 2.0,
     y: 3.0,
     z: 4.0,
   };
-  let quat_lhs = Quat {
+  let quat_rhs = Quat {
     w: 2.0,
     x: 3.0,
     y: 4.0,
@@ -66,14 +67,72 @@ fn test_mul() {
   };
   let quat_product = Quat {
     w: -36.0,
-    x: 8.0,
-    y: 8.0,
-    z: 14.0,
+    x: 6.0,
+    y: 12.0,
+    z: 12.0,
   };
   assert_eq!(quat_lhs * quat_rhs, quat_product);
   assert_eq!(quat_lhs * &quat_rhs, quat_product);
   assert_eq!(&quat_lhs * quat_rhs, quat_product);
   assert_eq!(&quat_lhs * &quat_rhs, quat_product);
+}
+
+#[test]
+fn test_mul_assign() {
+  let product = Quat {
+    w: -36.0,
+    x: 6.0,
+    y: 12.0,
+    z: 12.0,
+  };
+  // multiplicand and multiplier
+  let mut multiplicand = Quat {
+    w: 1.0,
+    x: 2.0,
+    y: 3.0,
+    z: 4.0,
+  };
+  let multiplier = Quat {
+    w: 2.0,
+    x: 3.0,
+    y: 4.0,
+    z: 5.0,
+  };
+  multiplicand *= multiplier;
+  assert_eq!(multiplicand, product);
+  // &multiplicand and multiplier
+  let mut multiplicand = &mut Quat {
+    w: 1.0,
+    x: 2.0,
+    y: 3.0,
+    z: 4.0,
+  };
+  multiplicand *= multiplier;
+  assert_eq!(multiplicand, &product);
+  // multiplicand and &multiplier
+  let mut multiplicand = Quat {
+    w: 1.0,
+    x: 2.0,
+    y: 3.0,
+    z: 4.0,
+  };
+  let multiplier = &Quat {
+    w: 2.0,
+    x: 3.0,
+    y: 4.0,
+    z: 5.0,
+  };
+  multiplicand *= multiplier;
+  assert_eq!(multiplicand, product);
+  // &multiplicand and &multiplier
+  let mut multiplicand = &mut Quat {
+    w: 1.0,
+    x: 2.0,
+    y: 3.0,
+    z: 4.0,
+  };
+  multiplicand *= multiplier;
+  assert_eq!(multiplicand, &product);
 }
 
 #[test]
