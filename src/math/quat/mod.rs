@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2008 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-18
+//! - Rust version: 2022-10-19
 //! - Rust since: 2022-10-10
 //! - Java version: 2008-05-09
 //! - Java since: 2008-05-02

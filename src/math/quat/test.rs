@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-18
+//! - Version: 2022-10-19
 //! - Since: 2022-10-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
