@@ -77,6 +77,27 @@ impl Quat {
 // Methods ---------------------------------------------------------------------
 
 impl Quat {
+  pub fn matches_closely(
+    &self,
+    other: &Self,
+    tolerance: f64,
+  ) -> bool {
+    (self.w - other.w).abs() <= tolerance
+      && (self.x - other.x).abs() <= tolerance
+      && (self.y - other.y).abs() <= tolerance
+      && (self.z - other.z).abs() <= tolerance
+  }
+
+  pub fn matches_exactly(
+    &self,
+    other: &Self,
+  ) -> bool {
+    self.w == other.w
+      && self.x == other.x
+      && self.y == other.y
+      && self.z == other.z
+  }
+
   pub fn multiply_with_quat(
     &mut self,
     multiplier: &Quat,

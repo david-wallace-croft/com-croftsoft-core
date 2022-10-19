@@ -50,6 +50,42 @@ fn test_dot_product() {
   assert_eq!(Quat::dot_product(&quat0, &quat1), quat2);
 }
 
+#[test]
+fn test_matches_closely() {
+  let quat0 = Quat {
+    w: 1.0,
+    x: 2.0,
+    y: 3.0,
+    z: 4.0,
+  };
+  let quat1 = Quat {
+    w: 1.005,
+    x: 2.005,
+    y: 3.005,
+    z: 4.005,
+  };
+  assert!(quat0.matches_closely(&quat1, 0.01));
+  assert!(!quat0.matches_closely(&quat1, 0.001));
+}
+
+#[test]
+fn test_matches_exactly() {
+  let quat0 = Quat {
+    w: 1.0,
+    x: 2.0,
+    y: 3.0,
+    z: 4.0,
+  };
+  let quat1 = Quat {
+    w: 1.005,
+    x: 2.005,
+    y: 3.005,
+    z: 4.005,
+  };
+  assert!(quat0.matches_exactly(&quat0));
+  assert!(!quat0.matches_exactly(&quat1));
+}
+
 #[allow(clippy::op_ref)]
 #[test]
 fn test_mul() {
