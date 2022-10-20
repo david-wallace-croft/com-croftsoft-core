@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-19
+//! - Version: 2022-10-20
 //! - Since: 2022-10-10
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -48,6 +48,77 @@ fn test_dot_product() {
     z: 30.0,
   };
   assert_eq!(Quat::dot_product(&quat0, &quat1), quat2);
+}
+
+#[test]
+fn test_from_quat_to_axis_angle() {
+  assert_eq!(AxisAngle::from(Quat::default()), AxisAngle::default());
+}
+
+#[test]
+fn test_from_rotation_degrees_to_quat() {
+  assert_eq!(Quat::from(RotationDegrees::default()), Quat::default());
+  let tolerance = 0.01;
+  assert!(Quat::from(RotationDegrees {
+    x: 0.0,
+    y: 0.0,
+    z: 90.0
+  })
+  .matches_closely(
+    &Quat {
+      x: 0.0,
+      y: 0.0,
+      z: 0.707,
+      w: 0.707,
+    },
+    tolerance
+  ));
+  assert!(Quat::from(RotationDegrees {
+    x: 0.0,
+    y: 90.0,
+    z: 0.0
+  })
+  .matches_closely(
+    &Quat {
+      x: 0.0,
+      y: 0.707,
+      z: 0.0,
+      w: 0.707,
+    },
+    tolerance
+  ));
+  assert!(Quat::from(RotationDegrees {
+    x: 0.0,
+    y: 0.0,
+    z: 90.0
+  })
+  .matches_closely(
+    &Quat {
+      x: 0.0,
+      y: 0.0,
+      z: 0.707,
+      w: 0.707,
+    },
+    tolerance
+  ));
+  // assert_eq!(
+  //   Quat::from(RotationDegrees {
+  //     x: 90.0,
+  //     y: 90.0,
+  //     z: 90.0
+  //   }),
+  //   Quat {
+  //     x: 0.707,
+  //     y: 0.006,
+  //     z: 0.707,
+  //     w: -0.006,
+  //   },
+  // );
+}
+
+#[test]
+fn test_from_rotation_radians_to_quat() {
+  assert_eq!(Quat::from(RotationRadians::default()), Quat::default());
 }
 
 #[test]
@@ -192,9 +263,4 @@ fn test_multiply_quat_with_quat() {
     z: 26.0,
   };
   assert_eq!(Quat::multiply_quat_with_quat(&quat0, &quat1), quat2);
-}
-
-#[test]
-fn test_from_quat_to_axis_angle() {
-  assert_eq!(AxisAngle::from(Quat::default()), AxisAngle::default());
 }

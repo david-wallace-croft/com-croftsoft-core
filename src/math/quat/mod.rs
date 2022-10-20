@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2008 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-19
+//! - Rust version: 2022-10-20
 //! - Rust since: 2022-10-10
 //! - Java version: 2008-05-09
 //! - Java since: 2008-05-02
@@ -18,7 +18,10 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use super::axis::AxisAngle;
+use super::{
+  axis::AxisAngle,
+  matrix::structures::{RotationDegrees, RotationRadians},
+};
 use std::ops::{Mul, MulAssign};
 
 #[cfg(test)]
@@ -229,5 +232,38 @@ impl From<Quat> for AxisAngle {
       y: y * one_over_sin_theta_over_2,
       z: z * one_over_sin_theta_over_2,
     }
+  }
+}
+
+impl From<RotationDegrees> for Quat {
+  fn from(rotation_degrees: RotationDegrees) -> Self {
+    Quat::from(RotationRadians::from(rotation_degrees))
+  }
+}
+
+impl From<RotationRadians> for Quat {
+  fn from(rotation_radians: RotationRadians) -> Self {
+    let axis_angle_x = AxisAngle {
+      radians: rotation_radians.x,
+      x: 0.0,
+      y: 0.0,
+      z: 1.0,
+    };
+    let axis_angle_y = AxisAngle {
+      radians: rotation_radians.y,
+      x: 0.0,
+      y: 1.0,
+      z: 0.0,
+    };
+    let axis_angle_z = AxisAngle {
+      radians: rotation_radians.z,
+      x: 0.0,
+      y: 0.0,
+      z: 1.0, // TODO: Is this right?
+    };
+    let quat_x = Quat::from(axis_angle_x);
+    let quat_y = Quat::from(axis_angle_y);
+    let quat_z = Quat::from(axis_angle_z);
+    quat_z * quat_y * quat_x
   }
 }

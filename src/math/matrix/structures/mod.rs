@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-07
+//! - Rust version: 2022-10-20
 //! - Rust since: 2022-09-04
 //! - Java version: 1998-12-27
 //!
@@ -46,14 +46,14 @@ pub struct Matrix<const R: usize, const C: usize> {
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Radians(pub f64);
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct RotationDegrees {
   pub x: f64,
   pub y: f64,
   pub z: f64,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, Default, PartialEq)]
 pub struct RotationRadians {
   pub x: f64,
   pub y: f64,
