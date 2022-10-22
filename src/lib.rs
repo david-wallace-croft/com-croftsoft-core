@@ -4,14 +4,18 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-09
+//! - Rust version: 2022-10-22
 //! - Rust since: 2022-07-30
 //!
 //! # Features
 //! - No dependencies on other crates
-//! - Financial calculations
-//! - Mathematical constants and functions
-//! - Matrix mathematics
+//! - Artificial Intelligence
+//!   - A* Algorithm
+//! - Mathematics
+//!   - 3D mathematics including axis angles and quaternions
+//!   - Financial calculations
+//!   - Mathematical constants and functions
+//!   - Matrix mathematics
 //!
 //! # History
 //! - An adaptation to Rust of the Java-based [`CroftSoft Core Library`]
@@ -21,5 +25,6 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+pub mod ai;
 pub mod math;
 pub mod role;

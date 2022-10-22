@@ -5,7 +5,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-21
+//! - Rust version: 2022-10-22
 //! - Rust since: 2022-10-21
 //!
 //! # History
@@ -20,7 +20,7 @@
 
 // pub mod functions;
 // pub mod methods;
-// pub mod operations;
-// pub mod structures;
-pub mod traits;
+pub mod operations;
+pub mod structures;
 // pub mod trait_imps;
+pub mod traits;
