@@ -1,14 +1,14 @@
 // =============================================================================
-//! - Mathematics and constants
+//! - Geometry
 //!
 //! # Metadata
-//! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-23
-//! - Rust since: 2022-07-30
+//! - Version: 2022-10-23
+//! - Since: 2022-10-23
 //!
 //! # History
-//! - Adapted from the Java package com.croftsoft.core.math
+//! - Adapted from the Java package com.croftsoft.core.math.geom
 //!   - In the Java-based [`CroftSoft Core Library`]
 //!
 //! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
@@ -16,10 +16,6 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-pub mod axis;
-pub mod finance_lib;
-pub mod geom;
-pub mod math_constants;
-pub mod math_lib;
-pub mod matrix;
-pub mod quat;
+pub mod structures;
+pub mod trait_imps;
+pub mod traits;
