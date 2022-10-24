@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-21
+//! - Rust version: 2022-10-24
 //! - Rust since: 2022-10-21
 //! - Java version: 2003-04-29
 //! - Java since: 2002-04-21
@@ -23,23 +23,23 @@
 pub trait Cartographer<N> {
   fn estimate_cost_to_goal(
     &self,
-    node: N,
+    node: &N,
   ) -> f64;
 
   fn get_adjacent_nodes(
     &self,
-    node: N,
-  ) -> Vec<N>;
+    node: &N,
+  ) -> &[N];
 
   fn get_cost_to_adjacent_node(
     &self,
-    from_node: N,
-    to_node: N,
+    from_node: &N,
+    to_node: &N,
   ) -> f64;
 
   fn is_goal_node(
     &self,
-    node: N,
+    node: &N,
   ) -> bool;
 }
 
@@ -47,6 +47,6 @@ pub trait Cartographer<N> {
 pub trait SpaceTester<P> {
   fn is_space_available(
     &self,
-    point_xy: P,
+    point_xy: &P,
   ) -> bool;
 }

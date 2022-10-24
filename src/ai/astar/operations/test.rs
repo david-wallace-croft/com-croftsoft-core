@@ -4,29 +4,35 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-22
+//! - Rust version: 2022-10-24
 //! - Rust since: 2022-10-22
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+use crate::ai::astar::structures::NodeInfo;
+use crate::math::geom::structures::Point2DD;
 use std::cmp::Ordering;
 
-use crate::ai::astar::structures::NodeInfo;
-
 #[cfg(test)]
-const NODE_INFO_0: NodeInfo<&str> = NodeInfo {
+const NODE_INFO_0: NodeInfo<Point2DD> = NodeInfo {
   cost_from_start: 0.0,
-  node: "alpha",
+  node: Point2DD {
+    x: 0.0,
+    y: 0.0,
+  },
   // parent_node_info: None,
   total_cost: 0.0,
 };
 
 #[cfg(test)]
-const NODE_INFO_1: NodeInfo<&str> = NodeInfo {
+const NODE_INFO_1: NodeInfo<Point2DD> = NodeInfo {
   cost_from_start: 0.0,
-  node: "beta",
+  node: Point2DD {
+    x: 0.0,
+    y: 0.0,
+  },
   // parent_node_info: None,
   total_cost: 1.0,
 };

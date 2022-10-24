@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-22
+//! - Rust version: 2022-10-24
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -19,12 +19,13 @@
 // =============================================================================
 
 use super::structures::NodeInfo;
+use crate::math::geom::traits::PointXY;
 use std::cmp::Ordering;
 
 #[cfg(test)]
 mod test;
 
-impl<N> PartialEq for NodeInfo<N> {
+impl<N: PointXY> PartialEq for NodeInfo<N> {
   fn eq(
     &self,
     other: &Self,
@@ -33,7 +34,7 @@ impl<N> PartialEq for NodeInfo<N> {
   }
 }
 
-impl<N> PartialOrd for NodeInfo<N> {
+impl<N: PointXY> PartialOrd for NodeInfo<N> {
   fn lt(
     &self,
     other: &Self,

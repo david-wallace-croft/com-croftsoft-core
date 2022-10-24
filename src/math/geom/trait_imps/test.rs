@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-23
+//! - Version: 2022-10-24
 //! - Since: 2022-10-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -66,7 +66,7 @@ fn test_get_y() {
       x: 1.0,
       y: 2.0
     }
-    .get_x(),
+    .get_y(),
     2.0
   );
 }
