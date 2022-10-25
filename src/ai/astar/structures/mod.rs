@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-24
+//! - Rust version: 2022-10-25
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -24,10 +24,9 @@ use crate::math::geom::traits::PointXY;
 
 /// Grid cartographer for continuous space.
 /// The nodes are spaced equally apart in the eight cardinal directions.
-pub struct GridCartographer<'a, 'b, 'c, N: PointXY> {
-  pub adjacent_list: &'a Vec<&'a N>,
-  pub goal_point_xy: &'b dyn PointXY,
-  pub space_tester: &'c dyn SpaceTester<N>,
+pub struct GridCartographer<'a, 'b, N: PointXY> {
+  pub goal_point_xy: &'a N,
+  pub space_tester: &'b dyn SpaceTester,
   pub step_size: f64,
 }
 

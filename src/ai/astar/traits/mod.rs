@@ -19,6 +19,8 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+use crate::math::geom::traits::PointXY;
+
 /// An A* algorithm map maker
 pub trait Cartographer<N> {
   fn estimate_cost_to_goal(
@@ -29,7 +31,7 @@ pub trait Cartographer<N> {
   fn get_adjacent_nodes(
     &self,
     node: &N,
-  ) -> &[N];
+  ) -> Vec<N>;
 
   fn get_cost_to_adjacent_node(
     &self,
@@ -44,9 +46,9 @@ pub trait Cartographer<N> {
 }
 
 /// Tests whether a point in space is available as an adjacent node
-pub trait SpaceTester<P> {
+pub trait SpaceTester {
   fn is_space_available(
     &self,
-    point_xy: &P,
+    point_xy: &dyn PointXY,
   ) -> bool;
 }
