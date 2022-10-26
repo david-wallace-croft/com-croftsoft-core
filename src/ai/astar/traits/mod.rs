@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-25
+//! - Rust version: 2022-10-26
 //! - Rust since: 2022-10-21
 //! - Java version: 2003-04-29
 //! - Java since: 2002-04-21
@@ -45,10 +45,18 @@ pub trait Cartographer<N> {
   ) -> bool;
 }
 
+pub trait NodeFactory<N: PointXY> {
+  fn make_node(
+    &self,
+    x: f64,
+    y: f64,
+  ) -> N;
+}
+
 /// Tests whether a point in space is available as an adjacent node
-pub trait SpaceTester {
+pub trait SpaceTester<N: PointXY> {
   fn is_space_available(
     &self,
-    point_xy: &dyn PointXY,
+    point_xy: &N,
   ) -> bool;
 }

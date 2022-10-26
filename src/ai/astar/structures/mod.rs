@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-25
+//! - Rust version: 2022-10-26
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -19,14 +19,22 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use super::traits::SpaceTester;
+use super::traits::{NodeFactory, SpaceTester};
 use crate::math::geom::traits::PointXY;
 
 /// Grid cartographer for continuous space.
 /// The nodes are spaced equally apart in the eight cardinal directions.
-pub struct GridCartographer<'a, 'b, N: PointXY> {
-  pub goal_point_xy: &'a N,
-  pub space_tester: &'b dyn SpaceTester,
+pub struct GridCartographer<
+  'f,
+  'n,
+  's,
+  F: NodeFactory<N>,
+  N: PointXY,
+  S: SpaceTester<N>,
+> {
+  pub goal_node: &'n N,
+  pub node_factory: &'f F,
+  pub space_tester: &'s S,
   pub step_size: f64,
 }
 
