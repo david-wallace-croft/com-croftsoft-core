@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-26
+//! - Rust version: 2022-10-27
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -21,6 +21,25 @@
 
 use super::traits::{NodeFactory, SpaceTester};
 use crate::math::geom::traits::PointXY;
+
+/// Gradient cartographer for continuous space.
+/// The adjacent nodes are spaced farther apart as you move away from the
+/// starting point.
+pub struct GradientCartographer<
+  'f,
+  'n,
+  's,
+  F: NodeFactory<N>,
+  N: PointXY,
+  S: SpaceTester<N>,
+> {
+  pub directions: u64,
+  pub goal_node: &'n N,
+  pub init_step_size: f64,
+  pub node_factory: &'f F,
+  pub space_tester: &'s S,
+  pub start_node: &'n N,
+}
 
 /// Grid cartographer for continuous space.
 /// The nodes are spaced equally apart in the eight cardinal directions.
