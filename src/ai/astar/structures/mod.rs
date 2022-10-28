@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-27
+//! - Rust version: 2022-10-28
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -19,8 +19,19 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use super::traits::{NodeFactory, SpaceTester};
+use super::traits::{Cartographer, NodeFactory, SpaceTester};
 use crate::math::geom::traits::PointXY;
+use core::hash::Hash;
+use std::collections::HashMap;
+
+pub struct AStar<'c, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY> {
+  pub best_total_cost: f64,
+  pub cartographer: &'c C,
+  pub goal_node_info_option: Option<NodeInfo<'n, N>>,
+  pub list_empty: bool,
+  pub node_to_node_info_map: HashMap<&'n N, NodeInfo<'n, N>>,
+  pub open_node_info_sorted_list: Vec<&'n N>,
+}
 
 /// Gradient cartographer for continuous space.
 /// The adjacent nodes are spaced farther apart as you move away from the
@@ -58,9 +69,9 @@ pub struct GridCartographer<
 }
 
 /// A* algorithm node information
-pub struct NodeInfo<N: PointXY> {
+pub struct NodeInfo<'n, N: PointXY> {
   pub cost_from_start: f64,
-  pub node: N,
+  pub node: &'n N,
   // pub parent_node_info: Option<NodeInfo<N>>,
   pub total_cost: f64,
 }
