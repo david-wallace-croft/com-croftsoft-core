@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-28
+//! - Rust version: 2022-10-29
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -28,7 +28,24 @@ use super::{
 };
 use crate::math::geom::traits::PointXY;
 
-impl<'c, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<'c, 'n, C, N> {
+impl<'c, 'i, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY>
+  AStar<'c, 'i, 'n, C, N>
+{
+  pub fn get_first_step(&self) -> Option<N> {
+    let mut node_info_option: Option<&NodeInfo<N>> = None;
+    if self.goal_node_info_option.is_none() {
+      node_info_option = Some(self.best_node_info);
+    }
+    let node_option: Option<N> = None;
+    while node_info_option.is_some() {
+      let node_info: &NodeInfo<N> = node_info_option.unwrap();
+      let parent_node_info_option: Option<&NodeInfo<N>> =
+        node_info.parent_node_info_option;
+    }
+    // TODO: left off here
+    node_option
+  }
+
   pub fn is_goal_found(&self) -> bool {
     self.goal_node_info_option.is_some()
   }

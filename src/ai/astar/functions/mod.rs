@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-28
+//! - Rust version: 2022-10-29
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -26,6 +26,7 @@ impl<'n, N: PointXY> NodeInfo<'n, N> {
     NodeInfo {
       cost_from_start: 0.0,
       node,
+      parent_node_info_option: None,
       total_cost: 0.0,
     }
   }

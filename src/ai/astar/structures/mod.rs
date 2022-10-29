@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-28
+//! - Rust version: 2022-10-29
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -24,7 +24,8 @@ use crate::math::geom::traits::PointXY;
 use core::hash::Hash;
 use std::collections::HashMap;
 
-pub struct AStar<'c, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY> {
+pub struct AStar<'c, 'i, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY> {
+  pub best_node_info: &'i NodeInfo<'n, N>,
   pub best_total_cost: f64,
   pub cartographer: &'c C,
   pub goal_node_info_option: Option<NodeInfo<'n, N>>,
@@ -72,6 +73,6 @@ pub struct GridCartographer<
 pub struct NodeInfo<'n, N: PointXY> {
   pub cost_from_start: f64,
   pub node: &'n N,
-  // pub parent_node_info: Option<NodeInfo<N>>,
+  pub parent_node_info_option: Option<&'n NodeInfo<'n, N>>,
   pub total_cost: f64,
 }
