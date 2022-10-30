@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-29
+//! - Rust version: 2022-10-30
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -31,7 +31,7 @@ pub struct AStar<'c, 'i, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY> {
   pub goal_node_info_option: Option<NodeInfo<'n, N>>,
   pub list_empty: bool,
   pub node_to_node_info_map: HashMap<&'n N, NodeInfo<'n, N>>,
-  pub open_node_info_sorted_list: Vec<&'n N>,
+  pub open_node_info_sorted_list: Vec<NodeInfo<'n, N>>,
 }
 
 /// Gradient cartographer for continuous space.
@@ -69,8 +69,9 @@ pub struct GridCartographer<
   pub step_size: f64,
 }
 
+#[derive(Clone, Copy)]
 /// A* algorithm node information
-pub struct NodeInfo<'n, N: PointXY> {
+pub struct NodeInfo<'n, N: Copy + PointXY> {
   pub cost_from_start: f64,
   pub node: &'n N,
   pub parent_node_info_option: Option<&'n NodeInfo<'n, N>>,
