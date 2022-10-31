@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-30
+//! - Rust version: 2022-10-31
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -24,14 +24,15 @@ use crate::math::geom::traits::PointXY;
 use core::hash::Hash;
 use std::collections::HashMap;
 
-pub struct AStar<'c, 'i, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY> {
-  pub best_node_info: &'i NodeInfo<'n, N>,
+pub struct AStar<'c, C: Cartographer<N>, N: Eq + Hash + PointXY> {
+  pub best_node_info: NodeInfo<N>,
   pub best_total_cost: f64,
   pub cartographer: &'c C,
-  pub goal_node_info_option: Option<NodeInfo<'n, N>>,
+  pub goal_node_info_option: Option<NodeInfo<N>>,
   pub list_empty: bool,
-  pub node_to_node_info_map: HashMap<&'n N, NodeInfo<'n, N>>,
-  pub open_node_info_sorted_list: Vec<NodeInfo<'n, N>>,
+  pub node_to_node_info_map: HashMap<N, NodeInfo<N>>,
+  pub node_to_parent_node_info_map: HashMap<N, NodeInfo<N>>,
+  pub open_node_info_sorted_list: Vec<NodeInfo<N>>,
 }
 
 /// Gradient cartographer for continuous space.
@@ -71,9 +72,9 @@ pub struct GridCartographer<
 
 #[derive(Clone, Copy)]
 /// A* algorithm node information
-pub struct NodeInfo<'n, N: Copy + PointXY> {
+pub struct NodeInfo<N: PointXY> {
   pub cost_from_start: f64,
-  pub node: &'n N,
-  pub parent_node_info_option: Option<&'n NodeInfo<'n, N>>,
+  pub node: N,
+  // pub parent_node_info_option: Option<&'i NodeInfo<'i, N>>,
   pub total_cost: f64,
 }

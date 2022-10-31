@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-29
+//! - Rust version: 2022-10-31
 //! - Rust since: 2022-10-22
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -18,22 +18,20 @@ use std::cmp::Ordering;
 #[cfg(test)]
 const NODE_INFO_0: NodeInfo<Point2DD> = NodeInfo {
   cost_from_start: 0.0,
-  node: &Point2DD {
+  node: Point2DD {
     x: 0.0,
     y: 0.0,
   },
-  parent_node_info_option: None,
   total_cost: 0.0,
 };
 
 #[cfg(test)]
 const NODE_INFO_1: NodeInfo<Point2DD> = NodeInfo {
   cost_from_start: 0.0,
-  node: &Point2DD {
+  node: Point2DD {
     x: 0.0,
     y: 0.0,
   },
-  parent_node_info_option: None,
   total_cost: 1.0,
 };
 

@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-30
+//! - Rust version: 2022-10-31
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -28,19 +28,17 @@ use super::{
 };
 use crate::math::geom::traits::PointXY;
 
-impl<'c, 'i, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY>
-  AStar<'c, 'i, 'n, C, N>
-{
+impl<'c, C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<'c, C, N> {
   pub fn get_first_step(&self) -> Option<N> {
     let mut node_info_option: Option<&NodeInfo<N>> = None;
     if self.goal_node_info_option.is_none() {
-      node_info_option = Some(self.best_node_info);
+      node_info_option = Some(&self.best_node_info);
     }
     let node_option: Option<N> = None;
     while node_info_option.is_some() {
       let node_info: &NodeInfo<N> = node_info_option.unwrap();
       let parent_node_info_option: Option<&NodeInfo<N>> =
-        node_info.parent_node_info_option;
+        self.node_to_parent_node_info_map.get(&node_info.node);
       if parent_node_info_option.is_some() {
         node_info_option = parent_node_info_option;
       }
@@ -52,14 +50,14 @@ impl<'c, 'i, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY>
     let mut path_list = Vec::new();
     let mut node_info_option: Option<&NodeInfo<N>> = None;
     if self.goal_node_info_option.is_none() {
-      node_info_option = Some(self.best_node_info);
+      node_info_option = Some(&self.best_node_info);
     }
     while node_info_option.is_some() {
       let node_info: &NodeInfo<N> = node_info_option.unwrap();
       let parent_node_info_option: Option<&NodeInfo<N>> =
-        node_info.parent_node_info_option;
+        self.node_to_parent_node_info_map.get(&node_info.node);
       if parent_node_info_option.is_some() {
-        path_list.insert(0, node_info.node);
+        path_list.insert(0, &node_info.node);
       }
       node_info_option = parent_node_info_option;
     }
@@ -76,7 +74,7 @@ impl<'c, 'i, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY>
       return false;
     }
     let node_info: NodeInfo<N> = self.open_node_info_sorted_list.remove(0);
-    let node: &N = node_info.node;
+    let node: &N = &node_info.node;
     if self.cartographer.is_goal_node(node) {
       if self.goal_node_info_option.is_none()
         || node_info.cost_from_start
@@ -86,13 +84,44 @@ impl<'c, 'i, 'n, C: Cartographer<N>, N: Eq + Hash + PointXY>
       }
       return false;
     }
-    // TODO: left off here
+    let adjacent_nodes: Vec<N> = self.cartographer.get_adjacent_nodes(node);
+    for adjacent_node in adjacent_nodes.iter() {
+      let new_cost_from_start: f64 = node_info.cost_from_start
+        + self.cartographer.get_cost_to_adjacent_node(node, adjacent_node);
+      let adjacent_node_info_option: Option<&NodeInfo<N>> =
+        self.node_to_node_info_map.get(adjacent_node);
+      let mut adjacent_node_info: NodeInfo<N> = match adjacent_node_info_option
+      {
+        None => {
+          let adjacent_node_info = NodeInfo::new(*adjacent_node);
+          self.node_to_node_info_map.insert(*adjacent_node, adjacent_node_info);
+          self.open_node_info_sorted_list.push(adjacent_node_info);
+          adjacent_node_info
+        },
+        Some(adjacent_node_info) => *adjacent_node_info,
+      };
+      if adjacent_node_info.cost_from_start <= new_cost_from_start {
+        continue;
+      }
+      self
+        .node_to_parent_node_info_map
+        .insert(adjacent_node_info.node, node_info);
+      adjacent_node_info.cost_from_start = new_cost_from_start;
+      let total_cost: f64 = new_cost_from_start
+        + self.cartographer.estimate_cost_to_goal(adjacent_node);
+      adjacent_node_info.total_cost = total_cost;
+      if total_cost < self.best_total_cost {
+        self.best_node_info = adjacent_node_info;
+        self.best_total_cost = total_cost;
+      }
+      self.open_node_info_sorted_list.sort();
+    }
     true
   }
 
   pub fn reset(
     &mut self,
-    start_node: &'n N,
+    start_node: N,
   ) {
     self.goal_node_info_option = None;
     self.list_empty = false;

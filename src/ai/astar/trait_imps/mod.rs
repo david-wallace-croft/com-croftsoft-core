@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-27
+//! - Rust version: 2022-10-31
 //! - Rust since: 2022-10-24
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -19,10 +19,11 @@
 // =============================================================================
 
 use super::{
-  structures::{GradientCartographer, GridCartographer},
+  structures::{GradientCartographer, GridCartographer, NodeInfo},
   traits::{Cartographer, NodeFactory, SpaceTester},
 };
 use crate::math::geom::traits::PointXY;
+use core::cmp::Ordering;
 use core::f64::consts::TAU;
 
 impl<'f, 'n, 's, F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>>
@@ -140,5 +141,21 @@ impl<'f, 'n, 's, F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>>
     node: &N,
   ) -> bool {
     self.goal_node.distance_xy(node) == 0.0
+  }
+}
+
+impl<N: PointXY> Eq for NodeInfo<N> {}
+
+impl<N: PointXY> Ord for NodeInfo<N> {
+  fn cmp(
+    &self,
+    other: &Self,
+  ) -> std::cmp::Ordering {
+    if self.total_cost < other.total_cost {
+      return Ordering::Less;
+    } else if self.total_cost > other.total_cost {
+      return Ordering::Greater;
+    }
+    Ordering::Equal
   }
 }
