@@ -127,6 +127,7 @@ impl<'c, C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<'c, C, N> {
     self.list_empty = false;
     self.open_node_info_sorted_list = Vec::new();
     self.node_to_node_info_map = HashMap::new();
+    self.node_to_parent_node_info_map = HashMap::new();
     let start_node_info = NodeInfo::new(start_node);
     self.node_to_node_info_map.insert(start_node, start_node_info);
     self.open_node_info_sorted_list.push(start_node_info);
