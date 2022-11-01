@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-31
+//! - Rust version: 2022-11-01
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -70,7 +70,7 @@ pub struct GridCartographer<
   pub step_size: f64,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 /// A* algorithm node information
 pub struct NodeInfo<N: PointXY> {
   pub cost_from_start: f64,
