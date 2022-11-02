@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-31
+//! - Rust version: 2022-11-02
 //! - Rust since: 2022-10-24
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -18,11 +18,13 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+mod test;
+
 use super::{
-  structures::{GradientCartographer, GridCartographer, NodeInfo},
+  structures::{GradientCartographer, GridCartographer, NodeInfo, Rectangle},
   traits::{Cartographer, NodeFactory, SpaceTester},
 };
-use crate::math::geom::traits::PointXY;
+use crate::math::geom::{structures::Point2DD, traits::PointXY};
 use core::cmp::Ordering;
 use core::f64::consts::TAU;
 
@@ -157,5 +159,34 @@ impl<N: PointXY> Ord for NodeInfo<N> {
       return Ordering::Greater;
     }
     Ordering::Equal
+  }
+}
+
+impl NodeFactory<Point2DD> for Point2DD {
+  fn make_node(
+    &self,
+    x: f64,
+    y: f64,
+  ) -> Point2DD {
+    Point2DD {
+      x,
+      y,
+    }
+  }
+}
+
+impl SpaceTester<Point2DD> for Rectangle {
+  fn is_space_available(
+    &self,
+    point_xy: &Point2DD,
+  ) -> bool {
+    let Point2DD {
+      x,
+      y,
+    } = *point_xy;
+    if self.x_min > x || self.x_max < x || self.y_min > y || self.y_max < y {
+      return false;
+    }
+    true
   }
 }

@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-01
+//! - Rust version: 2022-11-02
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -77,4 +77,12 @@ pub struct NodeInfo<N: PointXY> {
   pub node: N,
   // pub parent_node_info_option: Option<&'i NodeInfo<'i, N>>,
   pub total_cost: f64,
+}
+
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Rectangle {
+  pub x_max: f64,
+  pub x_min: f64,
+  pub y_max: f64,
+  pub y_min: f64,
 }

@@ -1,10 +1,10 @@
 // =============================================================================
-//! - Operation implementations for the A* algorithm trait implementations
+//! - Unit tests for the A* algorithm operations
 //!
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-31
+//! - Rust version: 2022-11-02
 //! - Rust since: 2022-10-22
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
