@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-23
+//! - Version: 2022-11-06
 //! - Since: 2022-10-23
 //!
 //! # History
@@ -16,6 +16,7 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+pub mod methods;
 pub mod structures;
 pub mod trait_imps;
 pub mod traits;

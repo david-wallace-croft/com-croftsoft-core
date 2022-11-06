@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-05
+//! - Rust version: 2022-11-06
 //! - Rust since: 2022-11-02
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -139,11 +139,7 @@ fn test_get_adjacent_nodes_for_gradient_cartographer() {
     for (index, actual_adjacent_node) in
       actual_adjacent_nodes.iter().enumerate()
     {
-      // TODO: implement a matches_closely() or is_near() method for Point2DD
-      if (actual_adjacent_node.x - expected_adjacent_node.x).abs() <= TOLERANCE
-        && (actual_adjacent_node.y - expected_adjacent_node.y).abs()
-          <= TOLERANCE
-      {
+      if expected_adjacent_node.is_near(actual_adjacent_node, TOLERANCE) {
         found = Some(index);
         break;
       }
