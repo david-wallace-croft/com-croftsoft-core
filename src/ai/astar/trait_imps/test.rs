@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-04
+//! - Rust version: 2022-11-05
 //! - Rust since: 2022-11-02
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -29,6 +29,11 @@ const GOAL_NODE: Point2DD = Point2DD {
 };
 #[cfg(test)]
 const NODE_FACTORY: Point2DD = Point2DD {
+  x: 0.0,
+  y: 0.0,
+};
+#[cfg(test)]
+const ORIGIN_NODE: Point2DD = Point2DD {
   x: 0.0,
   y: 0.0,
 };
@@ -72,7 +77,7 @@ const TEST_SUBJECT_GRID_CARTOGRAPHER: GridCartographer<
 };
 
 #[test]
-fn test_estimate_to_goal_for_gradient_cartographer() {
+fn test_estimate_cost_to_goal_for_gradient_cartographer() {
   assert_eq!(
     TEST_SUBJECT_GRADIENT_CARTOGRAPHER
       .estimate_cost_to_goal(&Point2DD::default()),
@@ -81,7 +86,7 @@ fn test_estimate_to_goal_for_gradient_cartographer() {
 }
 
 #[test]
-fn test_estimate_to_goal_for_grid_cartographer() {
+fn test_estimate_cost_to_goal_for_grid_cartographer() {
   assert_eq!(
     TEST_SUBJECT_GRID_CARTOGRAPHER.estimate_cost_to_goal(&Point2DD::default()),
     DISTANCE_TO_GOAL
@@ -99,4 +104,23 @@ fn test_get_cost_to_adjacent_node_for_gradient_cartographer() {
   );
 }
 
-// TODO: pass nodes to cartographers by copy instead of reference
+#[test]
+fn test_get_cost_to_adjacent_node_for_grid_cartographer() {
+  assert_eq!(
+    TEST_SUBJECT_GRID_CARTOGRAPHER
+      .get_cost_to_adjacent_node(&Point2DD::default(), &GOAL_NODE),
+    DISTANCE_TO_GOAL,
+  );
+}
+
+#[test]
+fn test_is_goal_node_for_gradient_cartographer() {
+  assert!(TEST_SUBJECT_GRADIENT_CARTOGRAPHER.is_goal_node(&GOAL_NODE));
+  assert!(!TEST_SUBJECT_GRADIENT_CARTOGRAPHER.is_goal_node(&ORIGIN_NODE));
+}
+
+#[test]
+fn test_is_goal_node_for_grid_cartographer() {
+  assert!(TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&GOAL_NODE));
+  assert!(!TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&ORIGIN_NODE));
+}
