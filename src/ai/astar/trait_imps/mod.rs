@@ -47,6 +47,7 @@ impl<'f, 'n, 's, F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>>
     let distance_from_start: f64 = node.distance_xy(self.start_node);
     let step_size =
       (distance_from_start / self.init_step_size).trunc() * self.init_step_size;
+    let step_size = step_size.max(self.init_step_size);
     if distance_to_goal <= step_size {
       let x: f64 = self.goal_node.get_x();
       let y: f64 = self.goal_node.get_y();
