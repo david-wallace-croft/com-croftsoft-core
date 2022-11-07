@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-02
+//! - Rust version: 2022-11-07
 //! - Rust since: 2022-10-24
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -185,9 +185,6 @@ impl SpaceTester<Point2DD> for Rectangle {
       x,
       y,
     } = *point_xy;
-    if self.x_min > x || self.x_max < x || self.y_min > y || self.y_max < y {
-      return false;
-    }
-    true
+    x >= self.x_min && x <= self.x_max && y >= self.y_min && y <= self.y_max
   }
 }

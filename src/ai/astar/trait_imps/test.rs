@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-06
+//! - Rust version: 2022-11-07
 //! - Rust since: 2022-11-02
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -14,12 +14,16 @@
 #[cfg(test)]
 use crate::{
   ai::astar::{
-    structures::{GradientCartographer, GridCartographer, Rectangle},
-    traits::Cartographer,
+    structures::{GradientCartographer, GridCartographer, NodeInfo, Rectangle},
+    traits::{Cartographer, NodeFactory, SpaceTester},
   },
   math::geom::structures::Point2DD,
 };
+#[cfg(test)]
+use core::cmp::Ordering;
 
+#[cfg(test)]
+const DISTANCE_TO_BORDER: f64 = 10.0;
 #[cfg(test)]
 const DISTANCE_TO_GOAL: f64 = 4.0;
 #[cfg(test)]
@@ -42,10 +46,10 @@ const ORIGIN_NODE: Point2DD = Point2DD {
 };
 #[cfg(test)]
 const SPACE_TESTER: Rectangle = Rectangle {
-  x_max: 10.0,
-  x_min: -10.0,
-  y_max: 10.0,
-  y_min: -10.0,
+  x_max: DISTANCE_TO_BORDER,
+  x_min: -DISTANCE_TO_BORDER,
+  y_max: DISTANCE_TO_BORDER,
+  y_min: -DISTANCE_TO_BORDER,
 };
 #[cfg(test)]
 const START_NODE: Point2DD = Point2DD {
@@ -78,6 +82,23 @@ const TEST_SUBJECT_GRID_CARTOGRAPHER: GridCartographer<
   space_tester: &SPACE_TESTER,
   step_size: STEP_SIZE,
 };
+
+#[test]
+fn test_cmp() {
+  let node_info_0 = NodeInfo {
+    cost_from_start: 0.0,
+    node: Point2DD::default(),
+    total_cost: 0.0,
+  };
+  let node_info_1 = NodeInfo {
+    cost_from_start: 0.0,
+    node: Point2DD::default(),
+    total_cost: 1.0,
+  };
+  assert_eq!(node_info_0.cmp(&node_info_0), Ordering::Equal);
+  assert_eq!(node_info_0.cmp(&node_info_1), Ordering::Less);
+  assert_eq!(node_info_1.cmp(&node_info_0), Ordering::Greater);
+}
 
 #[test]
 fn test_estimate_cost_to_goal_for_gradient_cartographer() {
@@ -221,4 +242,22 @@ fn test_is_goal_node_for_gradient_cartographer() {
 fn test_is_goal_node_for_grid_cartographer() {
   assert!(TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&GOAL_NODE));
   assert!(!TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&ORIGIN_NODE));
+}
+
+#[test]
+fn test_is_space_available() {
+  assert!(SPACE_TESTER.is_space_available(&GOAL_NODE));
+  assert!(SPACE_TESTER.is_space_available(&Point2DD {
+    x: DISTANCE_TO_BORDER,
+    y: DISTANCE_TO_BORDER,
+  }));
+  assert!(!SPACE_TESTER.is_space_available(&Point2DD {
+    x: DISTANCE_TO_BORDER + 1.0,
+    y: 0.0,
+  }));
+}
+
+#[test]
+fn test_make_node() {
+  assert_eq!(NODE_FACTORY.make_node(0.0, 0.0), Point2DD::default());
 }
