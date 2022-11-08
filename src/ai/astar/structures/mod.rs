@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-02
+//! - Rust version: 2022-11-08
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -24,10 +24,10 @@ use crate::math::geom::traits::PointXY;
 use core::hash::Hash;
 use std::collections::HashMap;
 
-pub struct AStar<'c, C: Cartographer<N>, N: Eq + Hash + PointXY> {
+pub struct AStar<C: Cartographer<N>, N: Eq + Hash + PointXY> {
   pub best_node_info: NodeInfo<N>,
   pub best_total_cost: f64,
-  pub cartographer: &'c C,
+  pub cartographer: C,
   pub goal_node_info_option: Option<NodeInfo<N>>,
   pub list_empty: bool,
   pub node_to_node_info_map: HashMap<N, NodeInfo<N>>,
@@ -39,34 +39,24 @@ pub struct AStar<'c, C: Cartographer<N>, N: Eq + Hash + PointXY> {
 /// The adjacent nodes are spaced farther apart as you move away from the
 /// starting point.
 pub struct GradientCartographer<
-  'f,
-  'n,
-  's,
   F: NodeFactory<N>,
   N: PointXY,
   S: SpaceTester<N>,
 > {
   pub directions: u64,
-  pub goal_node: &'n N,
+  pub goal_node: N,
   pub init_step_size: f64,
-  pub node_factory: &'f F,
-  pub space_tester: &'s S,
-  pub start_node: &'n N,
+  pub node_factory: F,
+  pub space_tester: S,
+  pub start_node: N,
 }
 
 /// Grid cartographer for continuous space.
 /// The nodes are spaced equally apart in the eight cardinal directions.
-pub struct GridCartographer<
-  'f,
-  'n,
-  's,
-  F: NodeFactory<N>,
-  N: PointXY,
-  S: SpaceTester<N>,
-> {
-  pub goal_node: &'n N,
-  pub node_factory: &'f F,
-  pub space_tester: &'s S,
+pub struct GridCartographer<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> {
+  pub goal_node: N,
+  pub node_factory: F,
+  pub space_tester: S,
   pub step_size: f64,
 }
 

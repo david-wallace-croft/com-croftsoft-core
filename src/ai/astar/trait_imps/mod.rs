@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-07
+//! - Rust version: 2022-11-08
 //! - Rust since: 2022-10-24
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -28,14 +28,14 @@ use crate::math::geom::{structures::Point2DD, traits::PointXY};
 use core::cmp::Ordering;
 use core::f64::consts::TAU;
 
-impl<'f, 'n, 's, F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>>
-  Cartographer<N> for GradientCartographer<'f, 'n, 's, F, N, S>
+impl<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> Cartographer<N>
+  for GradientCartographer<F, N, S>
 {
   fn estimate_cost_to_goal(
     &self,
     node: &N,
   ) -> f64 {
-    node.distance_xy(self.goal_node)
+    node.distance_xy(&self.goal_node)
   }
 
   fn get_adjacent_nodes(
@@ -43,8 +43,8 @@ impl<'f, 'n, 's, F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>>
     node: &N,
   ) -> Vec<N> {
     let mut adjacent_list = Vec::new();
-    let distance_to_goal: f64 = node.distance_xy(self.goal_node);
-    let distance_from_start: f64 = node.distance_xy(self.start_node);
+    let distance_to_goal: f64 = node.distance_xy(&self.goal_node);
+    let distance_from_start: f64 = node.distance_xy(&self.start_node);
     let step_size =
       (distance_from_start / self.init_step_size).trunc() * self.init_step_size;
     let step_size = step_size.max(self.init_step_size);
@@ -89,14 +89,14 @@ impl<'f, 'n, 's, F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>>
   }
 }
 
-impl<'f, 'n, 's, F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>>
-  Cartographer<N> for GridCartographer<'f, 'n, 's, F, N, S>
+impl<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> Cartographer<N>
+  for GridCartographer<F, N, S>
 {
   fn estimate_cost_to_goal(
     &self,
     node: &N,
   ) -> f64 {
-    node.distance_xy(self.goal_node)
+    node.distance_xy(&self.goal_node)
   }
 
   fn get_adjacent_nodes(
@@ -104,7 +104,7 @@ impl<'f, 'n, 's, F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>>
     node: &N,
   ) -> Vec<N> {
     let mut adjacent_list = Vec::new();
-    let distance_to_goal: f64 = node.distance_xy(self.goal_node);
+    let distance_to_goal: f64 = node.distance_xy(&self.goal_node);
     if distance_to_goal <= self.step_size {
       let x: f64 = self.goal_node.get_x();
       let y: f64 = self.goal_node.get_y();

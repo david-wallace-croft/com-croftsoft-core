@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-31
+//! - Rust version: 2022-11-08
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -18,6 +18,8 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+mod test;
+
 use core::f64::INFINITY;
 use core::hash::Hash;
 use std::collections::HashMap;
@@ -28,7 +30,7 @@ use super::{
 };
 use crate::math::geom::traits::PointXY;
 
-impl<'c, C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<'c, C, N> {
+impl<C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<C, N> {
   pub fn get_first_step(&self) -> Option<N> {
     let mut node_info_option: Option<&NodeInfo<N>> = None;
     if self.goal_node_info_option.is_none() {

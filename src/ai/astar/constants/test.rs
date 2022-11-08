@@ -65,11 +65,11 @@ pub const TEST_SUBJECT_GRADIENT_CARTOGRAPHER: GradientCartographer<
   Rectangle,
 > = GradientCartographer {
   directions: 8,
-  goal_node: &TEST_GOAL_NODE,
+  goal_node: TEST_GOAL_NODE,
   init_step_size: TEST_STEP_SIZE,
-  node_factory: &TEST_NODE_FACTORY,
-  space_tester: &TEST_SPACE_TESTER,
-  start_node: &TEST_START_NODE,
+  node_factory: TEST_NODE_FACTORY,
+  space_tester: TEST_SPACE_TESTER,
+  start_node: TEST_START_NODE,
 };
 
 #[cfg(test)]
@@ -78,9 +78,9 @@ pub const TEST_SUBJECT_GRID_CARTOGRAPHER: GridCartographer<
   Point2DD,
   Rectangle,
 > = GridCartographer {
-  goal_node: &TEST_GOAL_NODE,
-  node_factory: &TEST_NODE_FACTORY,
-  space_tester: &TEST_SPACE_TESTER,
+  goal_node: TEST_GOAL_NODE,
+  node_factory: TEST_NODE_FACTORY,
+  space_tester: TEST_SPACE_TESTER,
   step_size: TEST_STEP_SIZE,
 };
 
