@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-07
+//! - Rust version: 2022-11-08
 //! - Rust since: 2022-11-02
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -12,75 +12,21 @@
 // =============================================================================
 
 #[cfg(test)]
-use crate::{
-  ai::astar::{
-    structures::{GradientCartographer, GridCartographer, NodeInfo, Rectangle},
-    traits::{Cartographer, NodeFactory, SpaceTester},
-  },
-  math::geom::structures::Point2DD,
-};
-#[cfg(test)]
 use core::cmp::Ordering;
 
 #[cfg(test)]
-const DISTANCE_TO_BORDER: f64 = 10.0;
-#[cfg(test)]
-const DISTANCE_TO_GOAL: f64 = 4.0;
-#[cfg(test)]
-const TOLERANCE: f64 = 0.01;
-
-#[cfg(test)]
-const GOAL_NODE: Point2DD = Point2DD {
-  x: DISTANCE_TO_GOAL,
-  y: 0.0,
-};
-#[cfg(test)]
-const NODE_FACTORY: Point2DD = Point2DD {
-  x: 0.0,
-  y: 0.0,
-};
-#[cfg(test)]
-const ORIGIN_NODE: Point2DD = Point2DD {
-  x: 0.0,
-  y: 0.0,
-};
-#[cfg(test)]
-const SPACE_TESTER: Rectangle = Rectangle {
-  x_max: DISTANCE_TO_BORDER,
-  x_min: -DISTANCE_TO_BORDER,
-  y_max: DISTANCE_TO_BORDER,
-  y_min: -DISTANCE_TO_BORDER,
-};
-#[cfg(test)]
-const START_NODE: Point2DD = Point2DD {
-  x: 0.0,
-  y: 0.0,
-};
-#[cfg(test)]
-const STEP_SIZE: f64 = 1.0;
-#[cfg(test)]
-const TEST_SUBJECT_GRADIENT_CARTOGRAPHER: GradientCartographer<
-  Point2DD,
-  Point2DD,
-  Rectangle,
-> = GradientCartographer {
-  directions: 8,
-  goal_node: &GOAL_NODE,
-  init_step_size: STEP_SIZE,
-  node_factory: &NODE_FACTORY,
-  space_tester: &SPACE_TESTER,
-  start_node: &START_NODE,
-};
-#[cfg(test)]
-const TEST_SUBJECT_GRID_CARTOGRAPHER: GridCartographer<
-  Point2DD,
-  Point2DD,
-  Rectangle,
-> = GridCartographer {
-  goal_node: &GOAL_NODE,
-  node_factory: &NODE_FACTORY,
-  space_tester: &SPACE_TESTER,
-  step_size: STEP_SIZE,
+use crate::{
+  ai::astar::{
+    constants::test::{
+      TEST_DISTANCE_TO_BORDER, TEST_DISTANCE_TO_GOAL, TEST_GOAL_NODE,
+      TEST_NODE_FACTORY, TEST_ORIGIN_NODE, TEST_SPACE_TESTER,
+      TEST_SUBJECT_GRADIENT_CARTOGRAPHER, TEST_SUBJECT_GRID_CARTOGRAPHER,
+      TEST_TOLERANCE,
+    },
+    structures::NodeInfo,
+    traits::{Cartographer, NodeFactory, SpaceTester},
+  },
+  math::geom::structures::Point2DD,
 };
 
 #[test]
@@ -103,23 +49,23 @@ fn test_cmp() {
 #[test]
 fn test_estimate_cost_to_goal_for_gradient_cartographer() {
   assert_eq!(
-    TEST_SUBJECT_GRADIENT_CARTOGRAPHER.estimate_cost_to_goal(&ORIGIN_NODE),
-    DISTANCE_TO_GOAL
+    TEST_SUBJECT_GRADIENT_CARTOGRAPHER.estimate_cost_to_goal(&TEST_ORIGIN_NODE),
+    TEST_DISTANCE_TO_GOAL
   );
 }
 
 #[test]
 fn test_estimate_cost_to_goal_for_grid_cartographer() {
   assert_eq!(
-    TEST_SUBJECT_GRID_CARTOGRAPHER.estimate_cost_to_goal(&ORIGIN_NODE),
-    DISTANCE_TO_GOAL
+    TEST_SUBJECT_GRID_CARTOGRAPHER.estimate_cost_to_goal(&TEST_ORIGIN_NODE),
+    TEST_DISTANCE_TO_GOAL
   );
 }
 
 #[test]
 fn test_get_adjacent_nodes_for_gradient_cartographer() {
   let mut actual_adjacent_nodes =
-    TEST_SUBJECT_GRADIENT_CARTOGRAPHER.get_adjacent_nodes(&ORIGIN_NODE);
+    TEST_SUBJECT_GRADIENT_CARTOGRAPHER.get_adjacent_nodes(&TEST_ORIGIN_NODE);
   let expected_adjacent_nodes = [
     Point2DD {
       x: 1.0,
@@ -160,7 +106,7 @@ fn test_get_adjacent_nodes_for_gradient_cartographer() {
     for (index, actual_adjacent_node) in
       actual_adjacent_nodes.iter().enumerate()
     {
-      if expected_adjacent_node.is_near(actual_adjacent_node, TOLERANCE) {
+      if expected_adjacent_node.is_near(actual_adjacent_node, TEST_TOLERANCE) {
         found = Some(index);
         break;
       }
@@ -218,8 +164,8 @@ fn test_get_adjacent_nodes_for_grid_cartographer() {
 fn test_get_cost_to_adjacent_node_for_gradient_cartographer() {
   assert_eq!(
     TEST_SUBJECT_GRADIENT_CARTOGRAPHER
-      .get_cost_to_adjacent_node(&Point2DD::default(), &GOAL_NODE),
-    DISTANCE_TO_GOAL,
+      .get_cost_to_adjacent_node(&Point2DD::default(), &TEST_GOAL_NODE),
+    TEST_DISTANCE_TO_GOAL,
   );
 }
 
@@ -227,37 +173,37 @@ fn test_get_cost_to_adjacent_node_for_gradient_cartographer() {
 fn test_get_cost_to_adjacent_node_for_grid_cartographer() {
   assert_eq!(
     TEST_SUBJECT_GRID_CARTOGRAPHER
-      .get_cost_to_adjacent_node(&Point2DD::default(), &GOAL_NODE),
-    DISTANCE_TO_GOAL,
+      .get_cost_to_adjacent_node(&Point2DD::default(), &TEST_GOAL_NODE),
+    TEST_DISTANCE_TO_GOAL,
   );
 }
 
 #[test]
 fn test_is_goal_node_for_gradient_cartographer() {
-  assert!(TEST_SUBJECT_GRADIENT_CARTOGRAPHER.is_goal_node(&GOAL_NODE));
-  assert!(!TEST_SUBJECT_GRADIENT_CARTOGRAPHER.is_goal_node(&ORIGIN_NODE));
+  assert!(TEST_SUBJECT_GRADIENT_CARTOGRAPHER.is_goal_node(&TEST_GOAL_NODE));
+  assert!(!TEST_SUBJECT_GRADIENT_CARTOGRAPHER.is_goal_node(&TEST_ORIGIN_NODE));
 }
 
 #[test]
 fn test_is_goal_node_for_grid_cartographer() {
-  assert!(TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&GOAL_NODE));
-  assert!(!TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&ORIGIN_NODE));
+  assert!(TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&TEST_GOAL_NODE));
+  assert!(!TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&TEST_ORIGIN_NODE));
 }
 
 #[test]
 fn test_is_space_available() {
-  assert!(SPACE_TESTER.is_space_available(&GOAL_NODE));
-  assert!(SPACE_TESTER.is_space_available(&Point2DD {
-    x: DISTANCE_TO_BORDER,
-    y: DISTANCE_TO_BORDER,
+  assert!(TEST_SPACE_TESTER.is_space_available(&TEST_GOAL_NODE));
+  assert!(TEST_SPACE_TESTER.is_space_available(&Point2DD {
+    x: TEST_DISTANCE_TO_BORDER,
+    y: TEST_DISTANCE_TO_BORDER,
   }));
-  assert!(!SPACE_TESTER.is_space_available(&Point2DD {
-    x: DISTANCE_TO_BORDER + 1.0,
+  assert!(!TEST_SPACE_TESTER.is_space_available(&Point2DD {
+    x: TEST_DISTANCE_TO_BORDER + 1.0,
     y: 0.0,
   }));
 }
 
 #[test]
 fn test_make_node() {
-  assert_eq!(NODE_FACTORY.make_node(0.0, 0.0), Point2DD::default());
+  assert_eq!(TEST_NODE_FACTORY.make_node(0.0, 0.0), Point2DD::default());
 }

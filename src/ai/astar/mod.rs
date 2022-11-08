@@ -5,7 +5,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-28
+//! - Rust version: 2022-11-08
 //! - Rust since: 2022-10-21
 //!
 //! # History
@@ -18,6 +18,7 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+pub mod constants;
 pub mod functions;
 pub mod methods;
 pub mod operations;
