@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-08
+//! - Rust version: 2022-11-09
 //! - Rust since: 2022-11-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -65,7 +65,7 @@ const TEST_GOAL_NODE_INFO: NodeInfo<Point2DD> = NodeInfo {
 #[test]
 fn test_reset() {
   let mut test_subject_astar: AStar<
-    GridCartographer<Point2DD, Point2DD, Rectangle>,
+    GridCartographer<Point2DD, Rectangle>,
     Point2DD,
   > = AStar {
     best_node_info: TEST_BEST_NODE_INFO,

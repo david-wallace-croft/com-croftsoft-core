@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-08
+//! - Rust version: 2022-11-09
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -19,7 +19,10 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use super::traits::{Cartographer, NodeFactory, SpaceTester};
+use super::{
+  traits::{Cartographer, SpaceTester},
+  types::MakeNodeFunction,
+};
 use crate::math::geom::traits::PointXY;
 use core::hash::Hash;
 use std::collections::HashMap;
@@ -38,24 +41,20 @@ pub struct AStar<C: Cartographer<N>, N: Eq + Hash + PointXY> {
 /// Gradient cartographer for continuous space.
 /// The adjacent nodes are spaced farther apart as you move away from the
 /// starting point.
-pub struct GradientCartographer<
-  F: NodeFactory<N>,
-  N: PointXY,
-  S: SpaceTester<N>,
-> {
+pub struct GradientCartographer<N: PointXY, S: SpaceTester<N>> {
   pub directions: u64,
   pub goal_node: N,
   pub init_step_size: f64,
-  pub node_factory: F,
+  pub make_node_fn: MakeNodeFunction<N>,
   pub space_tester: S,
   pub start_node: N,
 }
 
 /// Grid cartographer for continuous space.
 /// The nodes are spaced equally apart in the eight cardinal directions.
-pub struct GridCartographer<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> {
+pub struct GridCartographer<N: PointXY, S: SpaceTester<N>> {
   pub goal_node: N,
-  pub node_factory: F,
+  pub make_node_fn: MakeNodeFunction<N>,
   pub space_tester: S,
   pub step_size: f64,
 }
@@ -65,7 +64,6 @@ pub struct GridCartographer<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> {
 pub struct NodeInfo<N: PointXY> {
   pub cost_from_start: f64,
   pub node: N,
-  // pub parent_node_info_option: Option<&'i NodeInfo<'i, N>>,
   pub total_cost: f64,
 }
 

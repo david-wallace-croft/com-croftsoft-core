@@ -45,14 +45,6 @@ pub trait Cartographer<N> {
   ) -> bool;
 }
 
-pub trait NodeFactory<N: PointXY> {
-  fn make_node(
-    &self,
-    x: f64,
-    y: f64,
-  ) -> N;
-}
-
 /// Tests whether a point in space is available as an adjacent node
 pub trait SpaceTester<N: PointXY> {
   fn is_space_available(

@@ -1,23 +1,26 @@
 // =============================================================================
-//! - Geometry
+//! - Associated functions for the geometry module
 //!
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-11-09
-//! - Since: 2022-10-23
+//! - Rust version: 2022-11-09
+//! - Rust since: 2022-11-09
 //!
-//! # History
-//! - Adapted from the Java package com.croftsoft.core.math.geom
-//!   - In the Java-based [`CroftSoft Core Library`]
-//!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-pub mod functions;
-pub mod methods;
-pub mod structures;
-pub mod trait_imps;
-pub mod traits;
+use super::structures::Point2DD;
+
+impl Point2DD {
+  pub fn new(
+    x: f64,
+    y: f64,
+  ) -> Point2DD {
+    Point2DD {
+      x,
+      y,
+    }
+  }
+}

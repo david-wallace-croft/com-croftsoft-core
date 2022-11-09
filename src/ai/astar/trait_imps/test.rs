@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-08
+//! - Rust version: 2022-11-09
 //! - Rust since: 2022-11-02
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -19,12 +19,11 @@ use crate::{
   ai::astar::{
     constants::test::{
       TEST_DISTANCE_TO_BORDER, TEST_DISTANCE_TO_GOAL, TEST_GOAL_NODE,
-      TEST_NODE_FACTORY, TEST_ORIGIN_NODE, TEST_SPACE_TESTER,
-      TEST_SUBJECT_GRADIENT_CARTOGRAPHER, TEST_SUBJECT_GRID_CARTOGRAPHER,
-      TEST_TOLERANCE,
+      TEST_ORIGIN_NODE, TEST_SPACE_TESTER, TEST_SUBJECT_GRADIENT_CARTOGRAPHER,
+      TEST_SUBJECT_GRID_CARTOGRAPHER, TEST_TOLERANCE,
     },
     structures::NodeInfo,
-    traits::{Cartographer, NodeFactory, SpaceTester},
+    traits::{Cartographer, SpaceTester},
   },
   math::geom::structures::Point2DD,
 };
@@ -201,9 +200,4 @@ fn test_is_space_available() {
     x: TEST_DISTANCE_TO_BORDER + 1.0,
     y: 0.0,
   }));
-}
-
-#[test]
-fn test_make_node() {
-  assert_eq!(TEST_NODE_FACTORY.make_node(0.0, 0.0), Point2DD::default());
 }

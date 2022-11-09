@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-08
+//! - Rust version: 2022-11-09
 //! - Rust since: 2022-10-24
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -22,14 +22,14 @@ mod test;
 
 use super::{
   structures::{GradientCartographer, GridCartographer, NodeInfo, Rectangle},
-  traits::{Cartographer, NodeFactory, SpaceTester},
+  traits::{Cartographer, SpaceTester},
 };
 use crate::math::geom::{structures::Point2DD, traits::PointXY};
 use core::cmp::Ordering;
 use core::f64::consts::TAU;
 
-impl<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> Cartographer<N>
-  for GradientCartographer<F, N, S>
+impl<N: PointXY, S: SpaceTester<N>> Cartographer<N>
+  for GradientCartographer<N, S>
 {
   fn estimate_cost_to_goal(
     &self,
@@ -51,7 +51,7 @@ impl<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> Cartographer<N>
     if distance_to_goal <= step_size {
       let x: f64 = self.goal_node.get_x();
       let y: f64 = self.goal_node.get_y();
-      let goal_node_copy: N = self.node_factory.make_node(x, y);
+      let goal_node_copy: N = (self.make_node_fn)(x, y);
       adjacent_list.push(goal_node_copy);
       return adjacent_list;
     }
@@ -62,7 +62,7 @@ impl<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> Cartographer<N>
     let directions_f64 = self.directions as f64;
     for i in 0..self.directions {
       let heading = heading_to_goal + (i as f64) * TAU / directions_f64;
-      let step: N = self.node_factory.make_node(
+      let step: N = (self.make_node_fn)(
         x + step_size * heading.cos(),
         y + step_size * heading.sin(),
       );
@@ -89,9 +89,7 @@ impl<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> Cartographer<N>
   }
 }
 
-impl<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> Cartographer<N>
-  for GridCartographer<F, N, S>
-{
+impl<N: PointXY, S: SpaceTester<N>> Cartographer<N> for GridCartographer<N, S> {
   fn estimate_cost_to_goal(
     &self,
     node: &N,
@@ -108,7 +106,7 @@ impl<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> Cartographer<N>
     if distance_to_goal <= self.step_size {
       let x: f64 = self.goal_node.get_x();
       let y: f64 = self.goal_node.get_y();
-      let goal_node_copy: N = self.node_factory.make_node(x, y);
+      let goal_node_copy: N = (self.make_node_fn)(x, y);
       adjacent_list.push(goal_node_copy);
       return adjacent_list;
     }
@@ -119,7 +117,7 @@ impl<F: NodeFactory<N>, N: PointXY, S: SpaceTester<N>> Cartographer<N>
         if ix == 0 && iy == 0 {
           continue;
         }
-        let step: N = self.node_factory.make_node(
+        let step: N = (self.make_node_fn)(
           ((x / self.step_size).trunc() + ix as f64) * self.step_size,
           ((y / self.step_size).trunc() + iy as f64) * self.step_size,
         );
@@ -160,19 +158,6 @@ impl<N: PointXY> Ord for NodeInfo<N> {
       return Ordering::Greater;
     }
     Ordering::Equal
-  }
-}
-
-impl NodeFactory<Point2DD> for Point2DD {
-  fn make_node(
-    &self,
-    x: f64,
-    y: f64,
-  ) -> Point2DD {
-    Point2DD {
-      x,
-      y,
-    }
   }
 }
 

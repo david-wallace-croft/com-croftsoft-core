@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-08
+//! - Rust version: 2022-11-09
 //! - Rust since: 2022-11-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -61,13 +61,12 @@ pub const TEST_STEP_SIZE: f64 = 1.0;
 #[cfg(test)]
 pub const TEST_SUBJECT_GRADIENT_CARTOGRAPHER: GradientCartographer<
   Point2DD,
-  Point2DD,
   Rectangle,
 > = GradientCartographer {
   directions: 8,
   goal_node: TEST_GOAL_NODE,
   init_step_size: TEST_STEP_SIZE,
-  node_factory: TEST_NODE_FACTORY,
+  make_node_fn: Point2DD::new,
   space_tester: TEST_SPACE_TESTER,
   start_node: TEST_START_NODE,
 };
@@ -75,11 +74,10 @@ pub const TEST_SUBJECT_GRADIENT_CARTOGRAPHER: GradientCartographer<
 #[cfg(test)]
 pub const TEST_SUBJECT_GRID_CARTOGRAPHER: GridCartographer<
   Point2DD,
-  Point2DD,
   Rectangle,
 > = GridCartographer {
   goal_node: TEST_GOAL_NODE,
-  node_factory: TEST_NODE_FACTORY,
+  make_node_fn: Point2DD::new,
   space_tester: TEST_SPACE_TESTER,
   step_size: TEST_STEP_SIZE,
 };
