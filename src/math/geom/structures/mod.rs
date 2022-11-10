@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2003 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-30
+//! - Rust version: 2022-11-10
 //! - Rust since: 2022-10-23
 //! - Java version: 2003-04-13
 //! - Java since: 2003-03-20
@@ -22,4 +22,12 @@
 pub struct Point2DD {
   pub x: f64,
   pub y: f64,
+}
+
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Rectangle {
+  pub x_max: f64,
+  pub x_min: f64,
+  pub y_max: f64,
+  pub y_min: f64,
 }

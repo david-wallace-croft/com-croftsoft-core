@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-09
+//! - Rust version: 2022-11-10
 //! - Rust since: 2022-11-02
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -18,12 +18,12 @@ use core::cmp::Ordering;
 use crate::{
   ai::astar::{
     constants::test::{
-      TEST_DISTANCE_TO_BORDER, TEST_DISTANCE_TO_GOAL, TEST_GOAL_NODE,
-      TEST_ORIGIN_NODE, TEST_SPACE_TESTER, TEST_SUBJECT_GRADIENT_CARTOGRAPHER,
-      TEST_SUBJECT_GRID_CARTOGRAPHER, TEST_TOLERANCE,
+      TEST_DISTANCE_TO_GOAL, TEST_GOAL_NODE, TEST_ORIGIN_NODE,
+      TEST_SUBJECT_GRADIENT_CARTOGRAPHER, TEST_SUBJECT_GRID_CARTOGRAPHER,
+      TEST_TOLERANCE,
     },
     structures::NodeInfo,
-    traits::{Cartographer, SpaceTester},
+    traits::Cartographer,
   },
   math::geom::structures::Point2DD,
 };
@@ -187,17 +187,4 @@ fn test_is_goal_node_for_gradient_cartographer() {
 fn test_is_goal_node_for_grid_cartographer() {
   assert!(TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&TEST_GOAL_NODE));
   assert!(!TEST_SUBJECT_GRID_CARTOGRAPHER.is_goal_node(&TEST_ORIGIN_NODE));
-}
-
-#[test]
-fn test_is_space_available() {
-  assert!(TEST_SPACE_TESTER.is_space_available(&TEST_GOAL_NODE));
-  assert!(TEST_SPACE_TESTER.is_space_available(&Point2DD {
-    x: TEST_DISTANCE_TO_BORDER,
-    y: TEST_DISTANCE_TO_BORDER,
-  }));
-  assert!(!TEST_SPACE_TESTER.is_space_available(&Point2DD {
-    x: TEST_DISTANCE_TO_BORDER + 1.0,
-    y: 0.0,
-  }));
 }

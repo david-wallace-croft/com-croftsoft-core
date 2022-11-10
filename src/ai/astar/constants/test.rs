@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-09
+//! - Rust version: 2022-11-10
 //! - Rust since: 2022-11-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -13,8 +13,8 @@
 
 #[cfg(test)]
 use crate::{
-  ai::astar::structures::{GradientCartographer, GridCartographer, Rectangle},
-  math::geom::structures::Point2DD,
+  ai::astar::structures::{GradientCartographer, GridCartographer},
+  math::geom::structures::{Point2DD, Rectangle},
 };
 
 #[cfg(test)]
@@ -59,28 +59,24 @@ pub const TEST_START_NODE: Point2DD = Point2DD {
 pub const TEST_STEP_SIZE: f64 = 1.0;
 
 #[cfg(test)]
-pub const TEST_SUBJECT_GRADIENT_CARTOGRAPHER: GradientCartographer<
-  Point2DD,
-  Rectangle,
-> = GradientCartographer {
-  directions: 8,
-  goal_node: TEST_GOAL_NODE,
-  init_step_size: TEST_STEP_SIZE,
-  make_node_fn: Point2DD::new,
-  space_tester: TEST_SPACE_TESTER,
-  start_node: TEST_START_NODE,
-};
+pub const TEST_SUBJECT_GRADIENT_CARTOGRAPHER: GradientCartographer<Point2DD> =
+  GradientCartographer {
+    directions: 8,
+    goal_node: TEST_GOAL_NODE,
+    init_step_size: TEST_STEP_SIZE,
+    make_node_fn: Point2DD::new,
+    is_space_available_fn: |p| TEST_SPACE_TESTER.contains(p),
+    start_node: TEST_START_NODE,
+  };
 
 #[cfg(test)]
-pub const TEST_SUBJECT_GRID_CARTOGRAPHER: GridCartographer<
-  Point2DD,
-  Rectangle,
-> = GridCartographer {
-  goal_node: TEST_GOAL_NODE,
-  make_node_fn: Point2DD::new,
-  space_tester: TEST_SPACE_TESTER,
-  step_size: TEST_STEP_SIZE,
-};
+pub const TEST_SUBJECT_GRID_CARTOGRAPHER: GridCartographer<Point2DD> =
+  GridCartographer {
+    goal_node: TEST_GOAL_NODE,
+    make_node_fn: Point2DD::new,
+    is_space_available_fn: |p| TEST_SPACE_TESTER.contains(p),
+    step_size: TEST_STEP_SIZE,
+  };
 
 #[cfg(test)]
 pub const TEST_TOLERANCE: f64 = 0.01;

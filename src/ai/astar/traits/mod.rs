@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-26
+//! - Rust version: 2022-11-10
 //! - Rust since: 2022-10-21
 //! - Java version: 2003-04-29
 //! - Java since: 2002-04-21
@@ -18,8 +18,6 @@
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
-
-use crate::math::geom::traits::PointXY;
 
 /// An A* algorithm map maker
 pub trait Cartographer<N> {
@@ -42,13 +40,5 @@ pub trait Cartographer<N> {
   fn is_goal_node(
     &self,
     node: &N,
-  ) -> bool;
-}
-
-/// Tests whether a point in space is available as an adjacent node
-pub trait SpaceTester<N: PointXY> {
-  fn is_space_available(
-    &self,
-    point_xy: &N,
   ) -> bool;
 }

@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-09
+//! - Rust version: 2022-11-10
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -20,8 +20,8 @@
 // =============================================================================
 
 use super::{
-  traits::{Cartographer, SpaceTester},
-  types::MakeNodeFunction,
+  traits::Cartographer,
+  types::{IsSpaceAvailableFunction, MakeNodeFunction},
 };
 use crate::math::geom::traits::PointXY;
 use core::hash::Hash;
@@ -41,21 +41,21 @@ pub struct AStar<C: Cartographer<N>, N: Eq + Hash + PointXY> {
 /// Gradient cartographer for continuous space.
 /// The adjacent nodes are spaced farther apart as you move away from the
 /// starting point.
-pub struct GradientCartographer<N: PointXY, S: SpaceTester<N>> {
+pub struct GradientCartographer<N: PointXY> {
   pub directions: u64,
   pub goal_node: N,
   pub init_step_size: f64,
+  pub is_space_available_fn: IsSpaceAvailableFunction<N>,
   pub make_node_fn: MakeNodeFunction<N>,
-  pub space_tester: S,
   pub start_node: N,
 }
 
 /// Grid cartographer for continuous space.
 /// The nodes are spaced equally apart in the eight cardinal directions.
-pub struct GridCartographer<N: PointXY, S: SpaceTester<N>> {
+pub struct GridCartographer<N: PointXY> {
   pub goal_node: N,
+  pub is_space_available_fn: IsSpaceAvailableFunction<N>,
   pub make_node_fn: MakeNodeFunction<N>,
-  pub space_tester: S,
   pub step_size: f64,
 }
 
@@ -65,12 +65,4 @@ pub struct NodeInfo<N: PointXY> {
   pub cost_from_start: f64,
   pub node: N,
   pub total_cost: f64,
-}
-
-#[derive(Clone, Copy, Debug, Default)]
-pub struct Rectangle {
-  pub x_max: f64,
-  pub x_min: f64,
-  pub y_max: f64,
-  pub y_min: f64,
 }

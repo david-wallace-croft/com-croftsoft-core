@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-09
+//! - Rust version: 2022-11-10
 //! - Rust since: 2022-10-24
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -21,16 +21,14 @@
 mod test;
 
 use super::{
-  structures::{GradientCartographer, GridCartographer, NodeInfo, Rectangle},
-  traits::{Cartographer, SpaceTester},
+  structures::{GradientCartographer, GridCartographer, NodeInfo},
+  traits::Cartographer,
 };
-use crate::math::geom::{structures::Point2DD, traits::PointXY};
+use crate::math::geom::traits::PointXY;
 use core::cmp::Ordering;
 use core::f64::consts::TAU;
 
-impl<N: PointXY, S: SpaceTester<N>> Cartographer<N>
-  for GradientCartographer<N, S>
-{
+impl<N: PointXY> Cartographer<N> for GradientCartographer<N> {
   fn estimate_cost_to_goal(
     &self,
     node: &N,
@@ -66,7 +64,7 @@ impl<N: PointXY, S: SpaceTester<N>> Cartographer<N>
         x + step_size * heading.cos(),
         y + step_size * heading.sin(),
       );
-      if self.space_tester.is_space_available(&step) {
+      if (self.is_space_available_fn)(&step) {
         adjacent_list.push(step);
       }
     }
@@ -89,7 +87,7 @@ impl<N: PointXY, S: SpaceTester<N>> Cartographer<N>
   }
 }
 
-impl<N: PointXY, S: SpaceTester<N>> Cartographer<N> for GridCartographer<N, S> {
+impl<N: PointXY> Cartographer<N> for GridCartographer<N> {
   fn estimate_cost_to_goal(
     &self,
     node: &N,
@@ -121,7 +119,7 @@ impl<N: PointXY, S: SpaceTester<N>> Cartographer<N> for GridCartographer<N, S> {
           ((x / self.step_size).trunc() + ix as f64) * self.step_size,
           ((y / self.step_size).trunc() + iy as f64) * self.step_size,
         );
-        if self.space_tester.is_space_available(&step) {
+        if (self.is_space_available_fn)(&step) {
           adjacent_list.push(step);
         }
       }
@@ -158,18 +156,5 @@ impl<N: PointXY> Ord for NodeInfo<N> {
       return Ordering::Greater;
     }
     Ordering::Equal
-  }
-}
-
-impl SpaceTester<Point2DD> for Rectangle {
-  fn is_space_available(
-    &self,
-    point_xy: &Point2DD,
-  ) -> bool {
-    let Point2DD {
-      x,
-      y,
-    } = *point_xy;
-    x >= self.x_min && x <= self.x_max && y >= self.y_min && y <= self.y_max
   }
 }

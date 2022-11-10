@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-09
+//! - Rust version: 2022-11-10
 //! - Rust since: 2022-11-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -22,7 +22,7 @@ use crate::{
     constants::test::{
       TEST_GOAL_NODE, TEST_ORIGIN_NODE, TEST_SUBJECT_GRID_CARTOGRAPHER,
     },
-    structures::{AStar, GridCartographer, NodeInfo, Rectangle},
+    structures::{AStar, GridCartographer, NodeInfo},
   },
   math::geom::structures::Point2DD,
 };
@@ -64,19 +64,17 @@ const TEST_GOAL_NODE_INFO: NodeInfo<Point2DD> = NodeInfo {
 
 #[test]
 fn test_reset() {
-  let mut test_subject_astar: AStar<
-    GridCartographer<Point2DD, Rectangle>,
-    Point2DD,
-  > = AStar {
-    best_node_info: TEST_BEST_NODE_INFO,
-    best_total_cost: 0.0,
-    cartographer: TEST_SUBJECT_GRID_CARTOGRAPHER,
-    goal_node_info_option: Some(TEST_GOAL_NODE_INFO),
-    list_empty: true,
-    node_to_node_info_map: HashMap::new(),
-    node_to_parent_node_info_map: HashMap::new(),
-    open_node_info_sorted_list: vec![],
-  };
+  let mut test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
+    AStar {
+      best_node_info: TEST_BEST_NODE_INFO,
+      best_total_cost: 0.0,
+      cartographer: TEST_SUBJECT_GRID_CARTOGRAPHER,
+      goal_node_info_option: Some(TEST_GOAL_NODE_INFO),
+      list_empty: true,
+      node_to_node_info_map: HashMap::new(),
+      node_to_parent_node_info_map: HashMap::new(),
+      open_node_info_sorted_list: vec![],
+    };
   test_subject_astar.reset(TEST_ORIGIN_NODE);
   let AStar {
     best_node_info: _,
