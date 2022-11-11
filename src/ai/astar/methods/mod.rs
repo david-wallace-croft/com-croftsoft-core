@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-08
+//! - Rust version: 2022-11-11
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -36,14 +36,15 @@ impl<C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<C, N> {
     if self.goal_node_info_option.is_none() {
       node_info_option = Some(&self.best_node_info);
     }
-    let node_option: Option<N> = None;
+    let mut node_option: Option<N> = None;
     while node_info_option.is_some() {
       let node_info: &NodeInfo<N> = node_info_option.unwrap();
       let parent_node_info_option: Option<&NodeInfo<N>> =
         self.node_to_parent_node_info_map.get(&node_info.node);
       if parent_node_info_option.is_some() {
-        node_info_option = parent_node_info_option;
+        node_option = Some(node_info.node);
       }
+      node_info_option = parent_node_info_option;
     }
     node_option
   }

@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-01
+//! - Rust version: 2022-11-11
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -20,8 +20,31 @@
 
 mod test;
 
-use super::structures::NodeInfo;
+use super::{
+  structures::{AStar, NodeInfo},
+  traits::Cartographer,
+};
 use crate::math::geom::traits::PointXY;
+use core::{f64::INFINITY, hash::Hash};
+use std::collections::HashMap;
+
+impl<C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<C, N> {
+  pub fn new(
+    best_node_info: NodeInfo<N>,
+    cartographer: C,
+  ) -> Self {
+    AStar {
+      best_node_info,
+      best_total_cost: INFINITY,
+      cartographer,
+      goal_node_info_option: None,
+      list_empty: false,
+      node_to_node_info_map: HashMap::new(),
+      node_to_parent_node_info_map: HashMap::new(),
+      open_node_info_sorted_list: Vec::new(),
+    }
+  }
+}
 
 impl<N: PointXY> NodeInfo<N> {
   pub fn new(node: N) -> Self {
