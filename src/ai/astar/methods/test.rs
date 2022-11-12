@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-11
+//! - Rust version: 2022-11-12
 //! - Rust since: 2022-11-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -30,7 +30,7 @@ use std::collections::HashMap;
 #[test]
 fn test_get_first_step() {
   let test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(TEST_BEST_NODE_INFO, TEST_SUBJECT_GRID_CARTOGRAPHER);
+    AStar::new(TEST_SUBJECT_GRID_CARTOGRAPHER);
   let first_step_option = test_subject_astar.get_first_step();
   assert_eq!(first_step_option, None);
 }
@@ -38,22 +38,22 @@ fn test_get_first_step() {
 #[test]
 fn test_get_path() {
   let test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(TEST_BEST_NODE_INFO, TEST_SUBJECT_GRID_CARTOGRAPHER);
+    AStar::new(TEST_SUBJECT_GRID_CARTOGRAPHER);
   let path = test_subject_astar.get_path();
-  assert_eq!(path, Vec::<&Point2DD>::default());
+  assert_eq!(path, Vec::<Point2DD>::default());
 }
 
 #[test]
 fn test_is_goal_found() {
   let test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(TEST_BEST_NODE_INFO, TEST_SUBJECT_GRID_CARTOGRAPHER);
+    AStar::new(TEST_SUBJECT_GRID_CARTOGRAPHER);
   assert!(!test_subject_astar.is_goal_found());
 }
 
 #[test]
 fn test_loop_once() {
   let mut test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(TEST_BEST_NODE_INFO, TEST_SUBJECT_GRID_CARTOGRAPHER);
+    AStar::new(TEST_SUBJECT_GRID_CARTOGRAPHER);
   assert!(!test_subject_astar.loop_once());
 }
 
@@ -61,7 +61,7 @@ fn test_loop_once() {
 fn test_reset() {
   let mut test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
     AStar {
-      best_node_info: TEST_BEST_NODE_INFO,
+      best_node_info: Some(TEST_BEST_NODE_INFO),
       best_total_cost: 0.0,
       cartographer: TEST_SUBJECT_GRID_CARTOGRAPHER,
       goal_node_info_option: Some(TEST_GOAL_NODE_INFO),

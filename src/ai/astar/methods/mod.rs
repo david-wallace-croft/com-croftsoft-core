@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-11
+//! - Rust version: 2022-11-12
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -32,15 +32,15 @@ use crate::math::geom::traits::PointXY;
 
 impl<C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<C, N> {
   pub fn get_first_step(&self) -> Option<N> {
-    let mut node_info_option: Option<&NodeInfo<N>> = None;
+    let mut node_info_option: Option<NodeInfo<N>> = None;
     if self.goal_node_info_option.is_none() {
-      node_info_option = Some(&self.best_node_info);
+      node_info_option = self.best_node_info;
     }
     let mut node_option: Option<N> = None;
     while node_info_option.is_some() {
-      let node_info: &NodeInfo<N> = node_info_option.unwrap();
-      let parent_node_info_option: Option<&NodeInfo<N>> =
-        self.node_to_parent_node_info_map.get(&node_info.node);
+      let node_info: NodeInfo<N> = node_info_option.unwrap();
+      let parent_node_info_option: Option<NodeInfo<N>> =
+        self.node_to_parent_node_info_map.get(&node_info.node).copied();
       if parent_node_info_option.is_some() {
         node_option = Some(node_info.node);
       }
@@ -49,18 +49,18 @@ impl<C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<C, N> {
     node_option
   }
 
-  pub fn get_path(&self) -> Vec<&N> {
+  pub fn get_path(&self) -> Vec<N> {
     let mut path_list = Vec::new();
-    let mut node_info_option: Option<&NodeInfo<N>> = None;
+    let mut node_info_option: Option<NodeInfo<N>> = None;
     if self.goal_node_info_option.is_none() {
-      node_info_option = Some(&self.best_node_info);
+      node_info_option = self.best_node_info;
     }
     while node_info_option.is_some() {
-      let node_info: &NodeInfo<N> = node_info_option.unwrap();
-      let parent_node_info_option: Option<&NodeInfo<N>> =
-        self.node_to_parent_node_info_map.get(&node_info.node);
+      let node_info: NodeInfo<N> = node_info_option.unwrap();
+      let parent_node_info_option: Option<NodeInfo<N>> =
+        self.node_to_parent_node_info_map.get(&node_info.node).copied();
       if parent_node_info_option.is_some() {
-        path_list.insert(0, &node_info.node);
+        path_list.insert(0, node_info.node);
       }
       node_info_option = parent_node_info_option;
     }
@@ -114,7 +114,7 @@ impl<C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<C, N> {
         + self.cartographer.estimate_cost_to_goal(adjacent_node);
       adjacent_node_info.total_cost = total_cost;
       if total_cost < self.best_total_cost {
-        self.best_node_info = adjacent_node_info;
+        self.best_node_info = Some(adjacent_node_info);
         self.best_total_cost = total_cost;
       }
       self.open_node_info_sorted_list.sort();
