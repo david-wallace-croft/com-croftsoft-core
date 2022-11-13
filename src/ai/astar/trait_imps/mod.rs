@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-10
+//! - Rust version: 2022-11-13
 //! - Rust since: 2022-10-24
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -143,9 +143,9 @@ impl<N: PointXY> Cartographer<N> for GridCartographer<N> {
   }
 }
 
-impl<N: PointXY> Eq for NodeInfo<N> {}
+impl<N> Eq for NodeInfo<N> {}
 
-impl<N: PointXY> Ord for NodeInfo<N> {
+impl<N> Ord for NodeInfo<N> {
   fn cmp(
     &self,
     other: &Self,

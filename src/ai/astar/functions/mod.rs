@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-12
+//! - Rust version: 2022-11-13
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -24,11 +24,10 @@ use super::{
   structures::{AStar, NodeInfo},
   traits::Cartographer,
 };
-use crate::math::geom::traits::PointXY;
 use core::{f64::INFINITY, hash::Hash};
 use std::collections::HashMap;
 
-impl<C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<C, N> {
+impl<C: Cartographer<N>, N: Eq + Hash> AStar<C, N> {
   pub fn new(cartographer: C) -> Self {
     AStar {
       best_node_info: None,
@@ -43,7 +42,7 @@ impl<C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<C, N> {
   }
 }
 
-impl<N: PointXY> NodeInfo<N> {
+impl<N> NodeInfo<N> {
   pub fn new(node: N) -> Self {
     NodeInfo {
       cost_from_start: 0.0,

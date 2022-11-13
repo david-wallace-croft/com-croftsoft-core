@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-12
+//! - Rust version: 2022-11-13
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -23,11 +23,10 @@ use super::{
   traits::Cartographer,
   types::{IsSpaceAvailableFunction, MakeNodeFunction},
 };
-use crate::math::geom::traits::PointXY;
 use core::hash::Hash;
 use std::collections::HashMap;
 
-pub struct AStar<C: Cartographer<N>, N: Eq + Hash + PointXY> {
+pub struct AStar<C: Cartographer<N>, N: Eq + Hash> {
   pub best_node_info: Option<NodeInfo<N>>,
   pub best_total_cost: f64,
   pub cartographer: C,
@@ -41,7 +40,7 @@ pub struct AStar<C: Cartographer<N>, N: Eq + Hash + PointXY> {
 /// Gradient cartographer for continuous space.
 /// The adjacent nodes are spaced farther apart as you move away from the
 /// starting point.
-pub struct GradientCartographer<N: PointXY> {
+pub struct GradientCartographer<N> {
   pub directions: u64,
   pub goal_node: N,
   pub init_step_size: f64,
@@ -52,7 +51,7 @@ pub struct GradientCartographer<N: PointXY> {
 
 /// Grid cartographer for continuous space.
 /// The nodes are spaced equally apart in the eight cardinal directions.
-pub struct GridCartographer<N: PointXY> {
+pub struct GridCartographer<N> {
   pub goal_node: N,
   pub is_space_available_fn: IsSpaceAvailableFunction<N>,
   pub make_node_fn: MakeNodeFunction<N>,
@@ -61,7 +60,7 @@ pub struct GridCartographer<N: PointXY> {
 
 #[derive(Clone, Copy, Debug)]
 /// A* algorithm node information
-pub struct NodeInfo<N: PointXY> {
+pub struct NodeInfo<N> {
   pub cost_from_start: f64,
   pub node: N,
   pub total_cost: f64,

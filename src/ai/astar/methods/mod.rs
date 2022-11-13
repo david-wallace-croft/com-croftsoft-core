@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-12
+//! - Rust version: 2022-11-13
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -28,9 +28,8 @@ use super::{
   structures::{AStar, NodeInfo},
   traits::Cartographer,
 };
-use crate::math::geom::traits::PointXY;
 
-impl<C: Cartographer<N>, N: Eq + Hash + PointXY> AStar<C, N> {
+impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
   pub fn get_first_step(&self) -> Option<N> {
     let mut node_info_option: Option<NodeInfo<N>> = None;
     if self.goal_node_info_option.is_none() {
