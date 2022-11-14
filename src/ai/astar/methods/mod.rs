@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-13
+//! - Rust version: 2022-11-14
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -31,9 +31,9 @@ use super::{
 
 impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
   pub fn get_first_step(&self) -> Option<N> {
-    let mut node_info_option: Option<NodeInfo<N>> = None;
-    if self.goal_node_info_option.is_none() {
-      node_info_option = self.best_node_info;
+    let mut node_info_option: Option<NodeInfo<N>> = self.goal_node_info_option;
+    if node_info_option.is_none() {
+      node_info_option = self.best_node_info_option;
     }
     let mut node_option: Option<N> = None;
     while node_info_option.is_some() {
@@ -50,9 +50,9 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
 
   pub fn get_path(&self) -> Vec<N> {
     let mut path_list = Vec::new();
-    let mut node_info_option: Option<NodeInfo<N>> = None;
-    if self.goal_node_info_option.is_none() {
-      node_info_option = self.best_node_info;
+    let mut node_info_option: Option<NodeInfo<N>> = self.goal_node_info_option;
+    if node_info_option.is_none() {
+      node_info_option = self.best_node_info_option;
     }
     while node_info_option.is_some() {
       let node_info: NodeInfo<N> = node_info_option.unwrap();
@@ -87,33 +87,35 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
       return false;
     }
     let adjacent_nodes: Vec<N> = self.cartographer.get_adjacent_nodes(node);
-    for adjacent_node in adjacent_nodes.iter() {
+    for adjacent_node in adjacent_nodes {
       let new_cost_from_start: f64 = node_info.cost_from_start
-        + self.cartographer.get_cost_to_adjacent_node(node, adjacent_node);
+        + self.cartographer.get_cost_to_adjacent_node(node, &adjacent_node);
       let adjacent_node_info_option: Option<&NodeInfo<N>> =
-        self.node_to_node_info_map.get(adjacent_node);
+        self.node_to_node_info_map.get(&adjacent_node);
       let mut adjacent_node_info: NodeInfo<N> = match adjacent_node_info_option
       {
         None => {
-          let adjacent_node_info = NodeInfo::new(*adjacent_node);
-          self.node_to_node_info_map.insert(*adjacent_node, adjacent_node_info);
+          let adjacent_node_info = NodeInfo::new(adjacent_node);
+          self.node_to_node_info_map.insert(adjacent_node, adjacent_node_info);
           self.open_node_info_sorted_list.push(adjacent_node_info);
           adjacent_node_info
         },
-        Some(adjacent_node_info) => *adjacent_node_info,
+        Some(adjacent_node_info) => {
+          if adjacent_node_info.cost_from_start <= new_cost_from_start {
+            continue;
+          }
+          *adjacent_node_info
+        },
       };
-      if adjacent_node_info.cost_from_start <= new_cost_from_start {
-        continue;
-      }
       self
         .node_to_parent_node_info_map
         .insert(adjacent_node_info.node, node_info);
       adjacent_node_info.cost_from_start = new_cost_from_start;
       let total_cost: f64 = new_cost_from_start
-        + self.cartographer.estimate_cost_to_goal(adjacent_node);
+        + self.cartographer.estimate_cost_to_goal(&adjacent_node);
       adjacent_node_info.total_cost = total_cost;
       if total_cost < self.best_total_cost {
-        self.best_node_info = Some(adjacent_node_info);
+        self.best_node_info_option = Some(adjacent_node_info);
         self.best_total_cost = total_cost;
       }
       self.open_node_info_sorted_list.sort();

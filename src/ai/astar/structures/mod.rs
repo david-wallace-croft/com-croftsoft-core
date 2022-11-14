@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-13
+//! - Rust version: 2022-11-14
 //! - Rust since: 2022-10-22
 //! - Java version: 2003-05-10
 //! - Java since: 2002-04-21
@@ -27,7 +27,7 @@ use core::hash::Hash;
 use std::collections::HashMap;
 
 pub struct AStar<C: Cartographer<N>, N: Eq + Hash> {
-  pub best_node_info: Option<NodeInfo<N>>,
+  pub best_node_info_option: Option<NodeInfo<N>>,
   pub best_total_cost: f64,
   pub cartographer: C,
   pub goal_node_info_option: Option<NodeInfo<N>>,

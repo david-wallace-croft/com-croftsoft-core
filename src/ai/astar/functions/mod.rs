@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-13
+//! - Rust version: 2022-11-14
 //! - Rust since: 2022-10-28
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -30,7 +30,7 @@ use std::collections::HashMap;
 impl<C: Cartographer<N>, N: Eq + Hash> AStar<C, N> {
   pub fn new(cartographer: C) -> Self {
     AStar {
-      best_node_info: None,
+      best_node_info_option: None,
       best_total_cost: INFINITY,
       cartographer,
       goal_node_info_option: None,

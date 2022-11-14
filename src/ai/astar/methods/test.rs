@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-12
+//! - Rust version: 2022-11-14
 //! - Rust since: 2022-11-08
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
@@ -61,7 +61,7 @@ fn test_loop_once() {
 fn test_reset() {
   let mut test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
     AStar {
-      best_node_info: Some(TEST_BEST_NODE_INFO),
+      best_node_info_option: Some(TEST_BEST_NODE_INFO),
       best_total_cost: 0.0,
       cartographer: TEST_SUBJECT_GRID_CARTOGRAPHER,
       goal_node_info_option: Some(TEST_GOAL_NODE_INFO),
@@ -72,7 +72,7 @@ fn test_reset() {
     };
   test_subject_astar.reset(TEST_ORIGIN_NODE);
   let AStar {
-    best_node_info: _,
+    best_node_info_option: _,
     best_total_cost,
     cartographer: _,
     goal_node_info_option,

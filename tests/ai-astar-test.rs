@@ -24,12 +24,12 @@ use std::hash::Hash;
 use com_croftsoft_core::ai::astar::structures::AStar;
 use com_croftsoft_core::ai::astar::traits::Cartographer;
 
-type Point = (i8, i8);
+type Point = (i64, i64);
 
-const X_MAX: i8 = 10;
-const X_MIN: i8 = -10;
-const Y_MAX: i8 = 10;
-const Y_MIN: i8 = -10;
+const X_MAX: i64 = 10;
+const X_MIN: i64 = -10;
+const Y_MAX: i64 = 10;
+const Y_MIN: i64 = -10;
 
 const GOAL_4: Point = (4, 0);
 // const GOAL_5: Point = (5, 0);
@@ -99,8 +99,8 @@ impl Cartographer<Point> for AStarTest<Point> {
     &self,
     node: &Point,
   ) -> Vec<Point> {
-    let x: i8 = node.0;
-    let y: i8 = node.1;
+    let x: i64 = node.0;
+    let y: i64 = node.1;
     let mut list = Vec::new();
     if self.jump_point_option.is_some()
       && self.jump_point_option.unwrap() == *node
@@ -137,9 +137,9 @@ impl Cartographer<Point> for AStarTest<Point> {
     {
       return 0.0;
     }
-    (((from_node.0 - to_node.0).pow(2) + (from_node.1 - to_node.1).pow(2))
-      as f64)
-      .sqrt()
+    let delta0 = from_node.0 - to_node.0;
+    let delta1 = from_node.1 - to_node.0;
+    ((delta0.pow(2) + delta1.pow(2)) as f64).sqrt()
   }
 
   fn is_goal_node(
@@ -172,8 +172,7 @@ impl AStarTest<Point> {
     let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
     astar.reset((0, 0));
     loop {
-      astar.loop_once();
-      if astar.list_empty {
+      if !astar.loop_once() {
         break;
       }
     }
