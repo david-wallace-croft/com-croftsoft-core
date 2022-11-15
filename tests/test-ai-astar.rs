@@ -26,6 +26,8 @@ use com_croftsoft_core::ai::astar::traits::Cartographer;
 
 type Point = (i64, i64);
 
+const LOOP_COUNT_MAX: usize = 1_000;
+
 const X_MAX: i64 = 10;
 const X_MIN: i64 = -10;
 const Y_MAX: i64 = 10;
@@ -169,14 +171,13 @@ impl AStarTest<Point> {
 }
 
 #[test]
-fn test_astar_wall() {
+fn test_ai_astar_wall() {
   let astar_test = AStarTest::<Point>::new(&BLOCKED_1, GOAL_4, None);
   let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
   astar.reset((0, 0));
-  loop {
-    if !astar.loop_once() {
-      break;
-    }
+  let mut loop_count = 0;
+  while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
+    loop_count += 1;
   }
   assert!(astar.is_goal_found());
   let path: Vec<Point> = astar.get_path();
