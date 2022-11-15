@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-13
+//! - Rust version: 2022-11-15
 //! - Rust since: 2022-11-13
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -166,25 +166,20 @@ impl AStarTest<Point> {
       jump_point_option,
     }
   }
-
-  fn test(astar_test: AStarTest<Point>) -> bool {
-    println!("Testing...");
-    let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
-    astar.reset((0, 0));
-    loop {
-      if !astar.loop_once() {
-        break;
-      }
-    }
-    println!("goal_found: {:?}", astar.is_goal_found());
-    let path = astar.get_path();
-    println!("path: {:?}", path);
-    true
-  }
 }
 
 #[test]
 fn test_astar_wall() {
   let astar_test = AStarTest::<Point>::new(&BLOCKED_1, GOAL_4, None);
-  assert!(AStarTest::test(astar_test));
+  let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
+  astar.reset((0, 0));
+  loop {
+    if !astar.loop_once() {
+      break;
+    }
+  }
+  assert!(astar.is_goal_found());
+  let path: Vec<Point> = astar.get_path();
+  assert_eq!(path.len(), 5);
+  assert_eq!(path[4], GOAL_4);
 }
