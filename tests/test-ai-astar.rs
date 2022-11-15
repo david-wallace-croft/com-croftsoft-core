@@ -34,7 +34,7 @@ const Y_MAX: i64 = 10;
 const Y_MIN: i64 = -10;
 
 const GOAL_4: Point = (4, 0);
-// const GOAL_5: Point = (5, 0);
+const GOAL_5: Point = (5, 0);
 // const GOAL_MIN: Point = (X_MIN, Y_MIN);
 
 // Finds its way around a wall
@@ -57,16 +57,16 @@ const BLOCKED_ENCLOSED_START: [Point; 8] = [
 ];
 
 // Goal enclosed by walls
-// const BLOCKED_3: [Point; 8] = [
-//   (4, -1),
-//   (4, 0),
-//   (4, 1),
-//   (5, -1),
-//   (5, 1),
-//   (6, -1),
-//   (6, 0),
-//   (6, 1),
-// ];
+const BLOCKED_ENCLOSED_GOAL: [Point; 8] = [
+  (4, -1),
+  (4, 0),
+  (4, 1),
+  (5, -1),
+  (5, 1),
+  (6, -1),
+  (6, 0),
+  (6, 1),
+];
 
 // Goal enclosed by walls but teleport jump available
 // const BLOCKED_4: [Point; 8] = [
@@ -171,6 +171,20 @@ impl AStarTest<Point> {
 }
 
 #[test]
+fn test_ai_astar_enclosed_goal() {
+  let astar_test =
+    AStarTest::<Point>::new(&BLOCKED_ENCLOSED_GOAL, GOAL_5, None);
+  let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
+  astar.reset((0, 0));
+  let mut loop_count = 0;
+  while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
+    loop_count += 1;
+  }
+  assert_ne!(loop_count, LOOP_COUNT_MAX);
+  assert!(!astar.is_goal_found());
+}
+
+#[test]
 fn test_ai_astar_enclosed_start() {
   let astar_test =
     AStarTest::<Point>::new(&BLOCKED_ENCLOSED_START, GOAL_4, None);
@@ -182,8 +196,6 @@ fn test_ai_astar_enclosed_start() {
   }
   assert_ne!(loop_count, LOOP_COUNT_MAX);
   assert!(!astar.is_goal_found());
-  let path: Vec<Point> = astar.get_path();
-  assert_eq!(path.len(), 0);
 }
 
 #[test]
