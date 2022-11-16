@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-15
+//! - Rust version: 2022-11-16
 //! - Rust since: 2022-11-13
 //! - Java version: 2003-05-09
 //! - Java since: 2002-04-21
@@ -34,9 +34,11 @@ const X_MIN: i64 = -(DISTANCE_FROM_ORIGIN as i64);
 const Y_MAX: i64 = DISTANCE_FROM_ORIGIN as i64;
 const Y_MIN: i64 = -(DISTANCE_FROM_ORIGIN as i64);
 
+const GOAL_3: Point = (-3, 0);
 const GOAL_4: Point = (4, 0);
 const GOAL_5: Point = (5, 0);
-const TELEPORT: Point = (X_MIN, Y_MIN);
+const TELEPORT_MAX: Point = (X_MAX, Y_MAX);
+const TELEPORT_MIN: Point = (X_MIN, Y_MIN);
 
 // Finds its way around a wall
 const BLOCKED_OBSTACLE: [Point; 3] = [
@@ -82,7 +84,7 @@ const BLOCKED_ENCLOSED_GOAL_TELEPORT: [Point; 8] = [
 ];
 
 // Goal clear on right but teleport jump on left closer
-// const BLOCKED_5: [Point; 0] = [];
+const BLOCKED_NO_OBSTACLES: [Point; 0] = [];
 
 pub struct AStarTest<N: Eq + Hash> {
   pub blocked_set: HashSet<N>,
@@ -190,7 +192,7 @@ fn test_ai_astar_enclosed_goal_teleport() {
   let astar_test = AStarTest::<Point>::new(
     &BLOCKED_ENCLOSED_GOAL_TELEPORT,
     GOAL_4,
-    Some(TELEPORT),
+    Some(TELEPORT_MIN),
   );
   let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
   astar.reset((0, 0));
@@ -233,4 +235,21 @@ fn test_ai_astar_obstacle() {
   let path: Vec<Point> = astar.get_path();
   assert_eq!(path.len(), 5);
   assert_eq!(path[4], GOAL_4);
+}
+
+#[test]
+fn test_ai_astar_teleport_nearby() {
+  let astar_test =
+    AStarTest::<Point>::new(&BLOCKED_NO_OBSTACLES, GOAL_3, Some(TELEPORT_MAX));
+  let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
+  astar.reset((0, 0));
+  let mut loop_count = 0;
+  while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
+    loop_count += 1;
+  }
+  assert_ne!(loop_count, LOOP_COUNT_MAX);
+  assert!(astar.is_goal_found());
+  let path: Vec<Point> = astar.get_path();
+  assert_eq!(path.len(), 3);
+  assert_eq!(path[2], GOAL_3);
 }
