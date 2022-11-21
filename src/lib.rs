@@ -4,7 +4,7 @@
 //! # Metadata
 //! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-22
+//! - Rust version: 2022-11-21
 //! - Rust since: 2022-07-30
 //!
 //! # Features
@@ -28,3 +28,4 @@
 pub mod ai;
 pub mod math;
 pub mod role;
+pub mod security;
