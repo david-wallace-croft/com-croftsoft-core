@@ -1,17 +1,16 @@
 // =============================================================================
-//! - Trait implementations for the geometry module
+//! - Point2DD for the geometry module
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Java created: 2003-03-20
 //! - Java updated: 2003-04-13
-//! - Rust created: 2022-10-23
-//! - Rust updated: 2023-03-12
+//! - Rust created: 2023-03-18
+//! - Rust updated: 2023-03-18
 //!
 //! # History
-//! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
-//!   - com.croftsoft.core.math.geom.CircleAccessor
+//! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
 //!   - com.croftsoft.core.math.geom.Point2DD
 //!
 //! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
@@ -22,21 +21,39 @@
 #[cfg(test)]
 mod test;
 
-use super::structures::*;
-use super::traits::*;
+use super::point_xy::PointXY;
 use core::hash::Hash;
 
-impl CircleAccessor for Circle {
-  fn get_center_x(&self) -> f64 {
-    self.center_x
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Point2DD {
+  pub x: f64,
+  pub y: f64,
+}
+
+impl Point2DD {
+  pub fn distance_to(
+    &self,
+    other: &Point2DD,
+  ) -> f64 {
+    ((other.x - self.x).powi(2) + (other.y - self.y).powi(2)).sqrt()
   }
 
-  fn get_center_y(&self) -> f64 {
-    self.center_y
+  pub fn is_near(
+    &self,
+    other: &Point2DD,
+    tolerance: f64,
+  ) -> bool {
+    self.distance_to(other) <= tolerance
   }
 
-  fn get_radius(&self) -> f64 {
-    self.radius
+  pub fn new(
+    x: f64,
+    y: f64,
+  ) -> Point2DD {
+    Point2DD {
+      x,
+      y,
+    }
   }
 }
 

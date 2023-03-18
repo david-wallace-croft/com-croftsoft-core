@@ -1,17 +1,16 @@
 // =============================================================================
-//! - Traits for the geometry module
+//! - PointXY for the geometry module
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Java created: 2003-03-20
 //! - Java updated: 2003-04-13
-//! - Rust created: 2022-10-23
-//! - Rust updated: 2023-03-12
+//! - Rust created: 2023-03-18
+//! - Rust updated: 2023-03-18
 //!
 //! # History
-//! - Adapted from the interfaces in the Java-based [`CroftSoft Core Library`]
-//!   - com.croftsoft.core.math.geom.CircleAccessor
+//! - Adapted from the interface in the Java-based [`CroftSoft Core Library`]
 //!   - com.croftsoft.core.math.geom.PointXY
 //!
 //! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
@@ -20,15 +19,6 @@
 // =============================================================================
 
 use core::hash::Hash;
-
-pub trait CircleAccessor {
-  fn get_center_x(&self) -> f64;
-  fn get_center_y(&self) -> f64;
-  fn get_radius(&self) -> f64;
-  // TODO
-  // fn intersects_circle(&self, other_circle: dyn CircleAccessor) -> bool;
-  // fn intersects_shape(&self, other_shape: dyn Shape) -> bool;
-}
 
 pub trait PointXY: Clone + Copy + Eq + Hash {
   /// The angle, in radians, from this point to the other point

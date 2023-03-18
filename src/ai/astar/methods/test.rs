@@ -2,10 +2,10 @@
 //! - Unit tests for the A* algorithm associated functions
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-14
-//! - Rust since: 2022-11-08
+//! - Created: 2022-11-08
+//! - Updated: 2023-03-18
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -20,7 +20,7 @@ use crate::{
     },
     structures::{AStar, GridCartographer, NodeInfo},
   },
-  math::geom::structures::Point2DD,
+  math::geom::point_2dd::Point2DD,
 };
 #[cfg(test)]
 use core::f64::INFINITY;

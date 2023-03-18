@@ -2,10 +2,10 @@
 //! - Unit tests for the A* algorithm trait implementations
 //!
 //! # Metadata
-//! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-10
-//! - Rust since: 2022-11-02
+//! - Created: 2022-11-02
+//! - Updated: 2023-03-18
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -25,7 +25,7 @@ use crate::{
     structures::NodeInfo,
     traits::Cartographer,
   },
-  math::geom::structures::Point2DD,
+  math::geom::point_2dd::Point2DD,
 };
 
 #[test]

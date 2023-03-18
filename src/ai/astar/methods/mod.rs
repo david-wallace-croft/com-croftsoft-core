@@ -2,12 +2,12 @@
 //! - Methods for the A* algorithm
 //!
 //! # Metadata
-//! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-14
-//! - Rust since: 2022-10-28
-//! - Java version: 2003-05-09
-//! - Java since: 2002-04-21
+//! - Java created: 2002-04-21
+//! - Java updated: 2003-05-09
+//! - Rust created: 2022-10-28
+//! - Rust updated: 2023-03-18
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -18,6 +18,7 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+#[cfg(test)]
 mod test;
 
 use core::f64::INFINITY;

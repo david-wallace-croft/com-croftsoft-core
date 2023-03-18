@@ -2,17 +2,17 @@
 //! - Unit tests for the A* algorithm operations
 //!
 //! # Metadata
-//! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-02
-//! - Rust since: 2022-10-22
+//! - Created: 2022-10-22
+//! - Updated: 2023-03-18
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
 use crate::ai::astar::structures::NodeInfo;
-use crate::math::geom::structures::Point2DD;
+use crate::math::geom::point_2dd::Point2DD;
 use std::cmp::Ordering;
 
 #[cfg(test)]

@@ -2,10 +2,10 @@
 //! - Geometry
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-11-09
-//! - Since: 2022-10-23
+//! - Created: 2022-10-23
+//! - Updated: 2023-03-18
 //!
 //! # History
 //! - Adapted from the Java package com.croftsoft.core.math.geom
@@ -16,8 +16,7 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-pub mod functions;
-pub mod methods;
-pub mod structures;
-pub mod trait_imps;
-pub mod traits;
+pub mod circle;
+pub mod point_2dd;
+pub mod point_xy;
+pub mod rectangle;

@@ -1,20 +1,20 @@
 // =============================================================================
-//! - Unit tests for the geometry module trait implementations
+//! - Unit tests for Point2DD
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-24
-//! - Since: 2022-10-23
+//! - Created: 2023-03-18
+//! - Updated: 2023-03-18
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
 #[cfg(test)]
-use super::super::structures::*;
+use crate::math::geom::point_2dd::Point2DD;
 #[cfg(test)]
-use crate::math::geom::traits::PointXY;
+use crate::math::geom::point_xy::PointXY;
 #[cfg(test)]
 use core::f64::consts::FRAC_PI_2;
 
@@ -32,6 +32,17 @@ fn test_angle_to() {
 #[test]
 fn test_distance() {
   assert!(Point2DD::default().distance(1.0, 1.0) - 1.414 < 0.001);
+}
+
+#[test]
+fn test_distance_to() {
+  assert!(
+    Point2DD::default().distance_to(&Point2DD {
+      x: 0.707,
+      y: 0.707
+    }) - 1.0
+      <= 0.001
+  );
 }
 
 #[test]
@@ -69,4 +80,22 @@ fn test_get_y() {
     .get_y(),
     2.0
   );
+}
+
+#[test]
+fn test_is_near() {
+  assert!(Point2DD::default().is_near(
+    &Point2DD {
+      x: 1.0,
+      y: 0.0
+    },
+    1.0
+  ));
+  assert!(!Point2DD::default().is_near(
+    &Point2DD {
+      x: 2.0,
+      y: 0.0
+    },
+    1.0
+  ));
 }

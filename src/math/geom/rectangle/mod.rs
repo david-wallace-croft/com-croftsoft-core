@@ -1,35 +1,27 @@
 // =============================================================================
-//! - Methods for the geometry module
+//! - Rectangle for the geometry module
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-10
-//! - Rust since: 2022-11-06
+//! - Created: 2023-03-18
+//! - Updated: 2023-03-18
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+use super::point_2dd::Point2DD;
+
+#[cfg(test)]
 mod test;
 
-use super::structures::{Point2DD, Rectangle};
-
-impl Point2DD {
-  pub fn distance_to(
-    &self,
-    other: &Point2DD,
-  ) -> f64 {
-    ((other.x - self.x).powi(2) + (other.y - self.y).powi(2)).sqrt()
-  }
-
-  pub fn is_near(
-    &self,
-    other: &Point2DD,
-    tolerance: f64,
-  ) -> bool {
-    self.distance_to(other) <= tolerance
-  }
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Rectangle {
+  pub x_max: f64,
+  pub x_min: f64,
+  pub y_max: f64,
+  pub y_min: f64,
 }
 
 impl Rectangle {
