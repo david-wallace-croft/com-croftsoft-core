@@ -2,12 +2,12 @@
 //! - A collection of math functions
 //!
 //! # Metadata
-//! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-06
-//! - Rust since: 2022-08-24
-//! - Java version: 2008-08-09
-//! - Java since: 1998-12-27
+//! - Java created: 1998-12-27
+//! - Java updated: 2008-08-09
+//! - Rust created: 2022-08-24
+//! - Rust updated: 2023-03-20
 //!
 //! # History
 //! - Adapted from the Java class com.croftsoft.core.math.MathLib
@@ -140,9 +140,9 @@ pub enum ClipError {
 
 impl Clip {
   pub fn calculate(&self) -> Result<f64, ClipError> {
-    let max = self.maximum;
-    let min = self.minimum;
-    let val = self.value;
+    let max: f64 = self.maximum;
+    let min: f64 = self.minimum;
+    let val: f64 = self.value;
     if max.is_infinite() {
       return Err(ClipError::MaximumIsInfinite(max));
     }
@@ -164,13 +164,7 @@ impl Clip {
     if min > max {
       return Err(ClipError::MinimumIsGreaterThanMaximum);
     }
-    Ok(if val < min {
-      min
-    } else if val > max {
-      max
-    } else {
-      val
-    })
+    Ok(val.clamp(min, max))
   }
 }
 
