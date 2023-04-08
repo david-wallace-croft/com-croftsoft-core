@@ -73,6 +73,10 @@ impl Point2DD {
   pub fn set_y(&mut self, y: f64) {
     self.y = y;
   }
+
+  pub fn to_string(&self) -> String {
+    format!("({}, {})", self.x, self.y)
+  }
 }
 
 impl Eq for Point2DD {}
