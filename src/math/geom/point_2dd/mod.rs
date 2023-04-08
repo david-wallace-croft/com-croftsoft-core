@@ -23,6 +23,7 @@ mod test;
 
 use super::point_xy::PointXY;
 use core::hash::Hash;
+use core::fmt::Display;
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Point2DD {
@@ -73,9 +74,11 @@ impl Point2DD {
   pub fn set_y(&mut self, y: f64) {
     self.y = y;
   }
+}
 
-  pub fn to_string(&self) -> String {
-    format!("({}, {})", self.x, self.y)
+impl Display for Point2DD {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    write!(f, "({}, {})", self.x, self.y)
   }
 }
 
