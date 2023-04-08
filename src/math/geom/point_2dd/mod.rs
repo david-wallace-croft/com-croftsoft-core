@@ -55,6 +55,24 @@ impl Point2DD {
       y,
     }
   }
+
+  pub fn set_x(&mut self, x: f64) {
+    self.x = x;
+  }
+
+  pub fn set_xy(&mut self, x: f64, y: f64) {
+    self.x = x;
+    self.y = y;
+  }
+
+  pub fn set_xy_point(&mut self, point_2dd: Self) {
+    self.x = point_2dd.x;
+    self.y = point_2dd.y;
+  }
+
+  pub fn set_y(&mut self, y: f64) {
+    self.y = y;
+  }
 }
 
 impl Eq for Point2DD {}
