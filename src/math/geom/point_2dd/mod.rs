@@ -7,7 +7,7 @@
 //! - Java created: 2003-03-20
 //! - Java updated: 2003-04-13
 //! - Rust created: 2023-03-18
-//! - Rust updated: 2023-03-18
+//! - Rust updated: 2023-04-11
 //!
 //! # History
 //! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
@@ -22,8 +22,8 @@
 mod test;
 
 use super::point_xy::PointXY;
-use core::hash::Hash;
 use core::fmt::Display;
+use core::hash::Hash;
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Point2DD {
@@ -57,27 +57,43 @@ impl Point2DD {
     }
   }
 
-  pub fn set_x(&mut self, x: f64) {
+  pub fn set_x(
+    &mut self,
+    x: f64,
+  ) {
     self.x = x;
   }
 
-  pub fn set_xy(&mut self, x: f64, y: f64) {
+  pub fn set_xy(
+    &mut self,
+    x: f64,
+    y: f64,
+  ) {
     self.x = x;
     self.y = y;
   }
 
-  pub fn set_xy_point(&mut self, point_2dd: Self) {
+  pub fn set_xy_point(
+    &mut self,
+    point_2dd: &Self,
+  ) {
     self.x = point_2dd.x;
     self.y = point_2dd.y;
   }
 
-  pub fn set_y(&mut self, y: f64) {
+  pub fn set_y(
+    &mut self,
+    y: f64,
+  ) {
     self.y = y;
   }
 }
 
 impl Display for Point2DD {
-  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+  fn fmt(
+    &self,
+    f: &mut std::fmt::Formatter<'_>,
+  ) -> std::fmt::Result {
     write!(f, "({}, {})", self.x, self.y)
   }
 }
