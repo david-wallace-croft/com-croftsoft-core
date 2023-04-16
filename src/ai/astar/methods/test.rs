@@ -5,7 +5,7 @@
 //! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2022-11-08
-//! - Updated: 2023-03-18
+//! - Updated: 2023-04-16
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
@@ -23,14 +23,18 @@ use crate::{
   math::geom::point_2dd::Point2DD,
 };
 #[cfg(test)]
+use core::cell::RefCell;
+#[cfg(test)]
 use core::f64::INFINITY;
 #[cfg(test)]
 use std::collections::HashMap;
+#[cfg(test)]
+use std::rc::Rc;
 
 #[test]
 fn test_get_first_step() {
   let test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(TEST_SUBJECT_GRID_CARTOGRAPHER);
+    AStar::new(Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)));
   let first_step_option = test_subject_astar.get_first_step();
   assert_eq!(first_step_option, None);
 }
@@ -38,7 +42,7 @@ fn test_get_first_step() {
 #[test]
 fn test_get_path() {
   let test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(TEST_SUBJECT_GRID_CARTOGRAPHER);
+    AStar::new(Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)));
   let path = test_subject_astar.get_path();
   assert_eq!(path, Vec::<Point2DD>::default());
 }
@@ -46,14 +50,14 @@ fn test_get_path() {
 #[test]
 fn test_is_goal_found() {
   let test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(TEST_SUBJECT_GRID_CARTOGRAPHER);
+    AStar::new(Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)));
   assert!(!test_subject_astar.is_goal_found());
 }
 
 #[test]
 fn test_loop_once() {
   let mut test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(TEST_SUBJECT_GRID_CARTOGRAPHER);
+    AStar::new(Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)));
   assert!(!test_subject_astar.loop_once());
 }
 
@@ -63,7 +67,7 @@ fn test_reset() {
     AStar {
       best_node_info_option: Some(TEST_BEST_NODE_INFO),
       best_total_cost: 0.0,
-      cartographer: TEST_SUBJECT_GRID_CARTOGRAPHER,
+      cartographer: Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)),
       goal_node_info_option: Some(TEST_GOAL_NODE_INFO),
       list_empty: true,
       node_to_node_info_map: HashMap::new(),

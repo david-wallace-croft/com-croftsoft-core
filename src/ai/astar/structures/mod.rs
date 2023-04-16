@@ -2,12 +2,12 @@
 //! - Structures for the A* algorithm
 //!
 //! # Metadata
-//! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-14
-//! - Rust since: 2022-10-22
-//! - Java version: 2003-05-10
-//! - Java since: 2002-04-21
+//! - Java created: 2002-04-21
+//! - Java updated: 2003-05-10
+//! - Rust created: 2022-10-22
+//! - Rust updated: 2023-04-16
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -23,13 +23,14 @@ use super::{
   traits::Cartographer,
   types::{IsSpaceAvailableFunction, MakeNodeFunction},
 };
-use core::hash::Hash;
+use core::{cell::RefCell, hash::Hash};
 use std::collections::HashMap;
+use std::rc::Rc;
 
 pub struct AStar<C: Cartographer<N>, N: Eq + Hash> {
   pub best_node_info_option: Option<NodeInfo<N>>,
   pub best_total_cost: f64,
-  pub cartographer: C,
+  pub cartographer: Rc<RefCell<C>>,
   pub goal_node_info_option: Option<NodeInfo<N>>,
   pub list_empty: bool,
   pub node_to_node_info_map: HashMap<N, NodeInfo<N>>,

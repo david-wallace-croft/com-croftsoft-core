@@ -2,12 +2,12 @@
 //! - A* algorithm integration tests
 //!
 //! # Metadata
-//! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-16
-//! - Rust since: 2022-11-13
-//! - Java version: 2003-05-09
-//! - Java since: 2002-04-21
+//! - Java created: 2002-04-21
+//! - Java updated: 2003-05-09
+//! - Rust created: 2022-11-13
+//! - Rust updated: 2023-04-16
 //!
 //! # History
 //! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
@@ -18,11 +18,12 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use std::collections::HashSet;
-use std::hash::Hash;
-
 use com_croftsoft_core::ai::astar::structures::AStar;
 use com_croftsoft_core::ai::astar::traits::Cartographer;
+use core::cell::RefCell;
+use std::collections::HashSet;
+use std::hash::Hash;
+use std::rc::Rc;
 
 type Point = (i64, i64);
 
@@ -177,7 +178,8 @@ impl AStarTest<Point> {
 fn test_ai_astar_enclosed_goal() {
   let astar_test =
     AStarTest::<Point>::new(&BLOCKED_ENCLOSED_GOAL, GOAL_5, None);
-  let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
+  let mut astar =
+    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
   astar.reset((0, 0));
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
@@ -194,7 +196,8 @@ fn test_ai_astar_enclosed_goal_teleport() {
     GOAL_4,
     Some(TELEPORT_MIN),
   );
-  let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
+  let mut astar =
+    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
   astar.reset((0, 0));
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
@@ -211,7 +214,8 @@ fn test_ai_astar_enclosed_goal_teleport() {
 fn test_ai_astar_enclosed_start() {
   let astar_test =
     AStarTest::<Point>::new(&BLOCKED_ENCLOSED_START, GOAL_4, None);
-  let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
+  let mut astar =
+    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
   astar.reset((0, 0));
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
@@ -224,7 +228,8 @@ fn test_ai_astar_enclosed_start() {
 #[test]
 fn test_ai_astar_obstacle() {
   let astar_test = AStarTest::<Point>::new(&BLOCKED_OBSTACLE, GOAL_4, None);
-  let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
+  let mut astar =
+    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
   astar.reset((0, 0));
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
@@ -241,7 +246,8 @@ fn test_ai_astar_obstacle() {
 fn test_ai_astar_teleport_nearby() {
   let astar_test =
     AStarTest::<Point>::new(&BLOCKED_NO_OBSTACLES, GOAL_3, Some(TELEPORT_MAX));
-  let mut astar = AStar::<AStarTest<Point>, Point>::new(astar_test);
+  let mut astar =
+    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
   astar.reset((0, 0));
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {

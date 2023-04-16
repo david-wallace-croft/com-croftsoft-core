@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-10-28
-//! - Rust updated: 2023-03-18
+//! - Rust updated: 2023-04-16
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -78,7 +78,7 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
     }
     let node_info: NodeInfo<N> = self.open_node_info_sorted_list.remove(0);
     let node: &N = &node_info.node;
-    if self.cartographer.is_goal_node(node) {
+    if self.cartographer.borrow().is_goal_node(node) {
       if self.goal_node_info_option.is_none()
         || node_info.cost_from_start
           < self.goal_node_info_option.as_mut().unwrap().cost_from_start
@@ -87,10 +87,14 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
       }
       return false;
     }
-    let adjacent_nodes: Vec<N> = self.cartographer.get_adjacent_nodes(node);
+    let adjacent_nodes: Vec<N> =
+      self.cartographer.borrow().get_adjacent_nodes(node);
     for adjacent_node in adjacent_nodes {
       let new_cost_from_start: f64 = node_info.cost_from_start
-        + self.cartographer.get_cost_to_adjacent_node(node, &adjacent_node);
+        + self
+          .cartographer
+          .borrow()
+          .get_cost_to_adjacent_node(node, &adjacent_node);
       let adjacent_node_info_option: Option<&NodeInfo<N>> =
         self.node_to_node_info_map.get(&adjacent_node);
       let mut adjacent_node_info: NodeInfo<N> = match adjacent_node_info_option
@@ -113,7 +117,7 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
         .insert(adjacent_node_info.node, node_info);
       adjacent_node_info.cost_from_start = new_cost_from_start;
       let total_cost: f64 = new_cost_from_start
-        + self.cartographer.estimate_cost_to_goal(&adjacent_node);
+        + self.cartographer.borrow().estimate_cost_to_goal(&adjacent_node);
       adjacent_node_info.total_cost = total_cost;
       if total_cost < self.best_total_cost {
         self.best_node_info_option = Some(adjacent_node_info);

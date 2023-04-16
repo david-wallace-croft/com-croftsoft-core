@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-10-28
-//! - Rust updated: 2023-03-18
+//! - Rust updated: 2023-04-16
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -25,11 +25,12 @@ use super::{
   structures::{AStar, NodeInfo},
   traits::Cartographer,
 };
-use core::{f64::INFINITY, hash::Hash};
+use core::{cell::RefCell, f64::INFINITY, hash::Hash};
 use std::collections::HashMap;
+use std::rc::Rc;
 
 impl<C: Cartographer<N>, N: Eq + Hash> AStar<C, N> {
-  pub fn new(cartographer: C) -> Self {
+  pub fn new(cartographer: Rc<RefCell<C>>) -> Self {
     AStar {
       best_node_info_option: None,
       best_total_cost: INFINITY,
