@@ -54,6 +54,14 @@ impl Circle {
     }
   }
 
+  pub fn set_center_from_circle(
+    &mut self,
+    circle: &Circle,
+  ) {
+    self.center_x = circle.center_x;
+    self.center_y = circle.center_y;
+  }
+
   pub fn set_center_point_2dd(
     &mut self,
     center_point_2dd: &Point2DD,
