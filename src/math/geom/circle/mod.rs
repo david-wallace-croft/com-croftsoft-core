@@ -7,7 +7,7 @@
 //! - Java created: 2003-03-20
 //! - Java updated: 2003-04-13
 //! - Rust created: 2023-03-18
-//! - Rust updated: 2023-03-18
+//! - Rust updated: 2023-04-28
 //!
 //! # History
 //! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
@@ -44,6 +44,15 @@ impl Circle {
       center_y: other.get_center_y(),
       radius: other.get_radius(),
     }
+  }
+
+  pub fn set_center(
+    &mut self,
+    center_x: f64,
+    center_y: f64,
+  ) {
+    self.center_x = center_x;
+    self.center_y = center_y;
   }
 }
 
