@@ -54,7 +54,7 @@ impl Circle {
     }
   }
 
-  pub fn set_center_from_circle(
+  pub fn set_center_circle(
     &mut self,
     circle: &Circle,
   ) {
