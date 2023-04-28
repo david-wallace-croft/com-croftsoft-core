@@ -18,6 +18,8 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+use super::point_2dd::Point2DD;
+
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Circle {
   pub center_x: f64,
@@ -26,13 +28,19 @@ pub struct Circle {
 }
 
 pub trait CircleAccessor {
+  fn get_center_point_2dd(&self) -> Point2DD;
+
   fn get_center_x(&self) -> f64;
+
   fn get_center_y(&self) -> f64;
+
   fn get_radius(&self) -> f64;
+
   fn intersects_circle(
     &self,
     other: &dyn CircleAccessor,
   ) -> bool;
+
   // TODO
   // fn intersects_shape(&self, other_shape: dyn Shape) -> bool;
 }
@@ -46,7 +54,15 @@ impl Circle {
     }
   }
 
-  pub fn set_center(
+  pub fn set_center_point_2dd(
+    &mut self,
+    center_point_2dd: &Point2DD,
+  ) {
+    self.center_x = center_point_2dd.x;
+    self.center_y = center_point_2dd.y;
+  }
+
+  pub fn set_center_xy(
     &mut self,
     center_x: f64,
     center_y: f64,
@@ -57,6 +73,13 @@ impl Circle {
 }
 
 impl CircleAccessor for Circle {
+  fn get_center_point_2dd(&self) -> Point2DD {
+    Point2DD {
+      x: self.center_x,
+      y: self.center_y,
+    }
+  }
+
   fn get_center_x(&self) -> f64 {
     self.center_x
   }
