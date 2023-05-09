@@ -46,6 +46,16 @@ pub trait CircleAccessor {
 }
 
 impl Circle {
+  pub fn contains(
+    &self,
+    x: f64,
+    y: f64,
+  ) -> bool {
+    let distance =
+      ((self.center_x - x).powi(2) + (self.center_y - y).powi(2)).sqrt();
+    distance <= self.radius
+  }
+
   pub fn new(other: &dyn CircleAccessor) -> Self {
     Self {
       center_x: other.get_center_x(),
