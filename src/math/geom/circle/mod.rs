@@ -7,7 +7,7 @@
 //! - Java created: 2003-03-20
 //! - Java updated: 2003-04-13
 //! - Rust created: 2023-03-18
-//! - Rust updated: 2023-04-28
+//! - Rust updated: 2023-06-01
 //!
 //! # History
 //! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
@@ -28,6 +28,12 @@ pub struct Circle {
 }
 
 pub trait CircleAccessor {
+  fn contains(
+    &self,
+    x: f64,
+    y: f64,
+  ) -> bool;
+
   fn get_center_point_2dd(&self) -> Point2DD;
 
   fn get_center_x(&self) -> f64;
@@ -46,16 +52,6 @@ pub trait CircleAccessor {
 }
 
 impl Circle {
-  pub fn contains(
-    &self,
-    x: f64,
-    y: f64,
-  ) -> bool {
-    let distance =
-      ((self.center_x - x).powi(2) + (self.center_y - y).powi(2)).sqrt();
-    distance <= self.radius
-  }
-
   pub fn new(other: &dyn CircleAccessor) -> Self {
     Self {
       center_x: other.get_center_x(),
@@ -91,6 +87,16 @@ impl Circle {
 }
 
 impl CircleAccessor for Circle {
+  fn contains(
+    &self,
+    x: f64,
+    y: f64,
+  ) -> bool {
+    let distance =
+      ((self.center_x - x).powi(2) + (self.center_y - y).powi(2)).sqrt();
+    distance <= self.radius
+  }
+
   fn get_center_point_2dd(&self) -> Point2DD {
     Point2DD {
       x: self.center_x,
