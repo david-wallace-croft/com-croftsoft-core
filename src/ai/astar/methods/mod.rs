@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-10-28
-//! - Rust updated: 2023-04-16
+//! - Rust updated: 2023-06-24
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -97,33 +97,34 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
           .get_cost_to_adjacent_node(node, &adjacent_node);
       let adjacent_node_info_option: Option<&NodeInfo<N>> =
         self.node_to_node_info_map.get(&adjacent_node);
-      let mut adjacent_node_info: NodeInfo<N> = match adjacent_node_info_option
-      {
-        None => {
-          let adjacent_node_info = NodeInfo::new(adjacent_node);
-          self.node_to_node_info_map.insert(adjacent_node, adjacent_node_info);
-          self.open_node_info_sorted_list.push(adjacent_node_info);
-          adjacent_node_info
-        },
-        Some(adjacent_node_info) => {
-          if adjacent_node_info.cost_from_start <= new_cost_from_start {
-            continue;
-          }
-          *adjacent_node_info
-        },
-      };
-      self
-        .node_to_parent_node_info_map
-        .insert(adjacent_node_info.node, node_info);
+      if let Some(adjacent_node_info) = adjacent_node_info_option {
+        if adjacent_node_info.cost_from_start <= new_cost_from_start {
+          continue;
+        }
+        let position_option = self
+          .open_node_info_sorted_list
+          .iter()
+          .position(|&node_info| node_info.node == adjacent_node);
+        if let Some(position) = position_option {
+          // TODO: Do something better here
+          self.open_node_info_sorted_list.remove(position);
+        }
+      }
+      let mut adjacent_node_info = NodeInfo::new(adjacent_node);
       adjacent_node_info.cost_from_start = new_cost_from_start;
       let total_cost: f64 = new_cost_from_start
         + self.cartographer.borrow().estimate_cost_to_goal(&adjacent_node);
       adjacent_node_info.total_cost = total_cost;
+      self.node_to_node_info_map.insert(adjacent_node, adjacent_node_info);
+      self.open_node_info_sorted_list.push(adjacent_node_info);
+      self.open_node_info_sorted_list.sort();
+      self
+        .node_to_parent_node_info_map
+        .insert(adjacent_node_info.node, node_info);
       if total_cost < self.best_total_cost {
         self.best_node_info_option = Some(adjacent_node_info);
         self.best_total_cost = total_cost;
       }
-      self.open_node_info_sorted_list.sort();
     }
     true
   }

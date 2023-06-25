@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-11-13
-//! - Rust updated: 2023-04-16
+//! - Rust updated: 2023-06-24
 //!
 //! # History
 //! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
@@ -144,7 +144,7 @@ impl Cartographer<Point> for AStarTest<Point> {
       return 0.0;
     }
     let delta0 = from_node.0 - to_node.0;
-    let delta1 = from_node.1 - to_node.0;
+    let delta1 = from_node.1 - to_node.1;
     ((delta0.pow(2) + delta1.pow(2)) as f64).sqrt()
   }
 
