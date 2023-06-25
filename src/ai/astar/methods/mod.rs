@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-10-28
-//! - Rust updated: 2023-06-24
+//! - Rust updated: 2023-06-25
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
