@@ -32,12 +32,10 @@ use crate::{
 fn test_cmp() {
   let node_info_0 = NodeInfo {
     cost_from_start: 0.0,
-    node: Point2DD::default(),
     total_cost: 0.0,
   };
   let node_info_1 = NodeInfo {
     cost_from_start: 0.0,
-    node: Point2DD::default(),
     total_cost: 1.0,
   };
   assert_eq!(node_info_0.cmp(&node_info_0), Ordering::Equal);

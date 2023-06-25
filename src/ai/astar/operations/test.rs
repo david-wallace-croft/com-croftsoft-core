@@ -12,26 +12,17 @@
 // =============================================================================
 
 use crate::ai::astar::structures::NodeInfo;
-use crate::math::geom::point_2dd::Point2DD;
 use std::cmp::Ordering;
 
 #[cfg(test)]
-const NODE_INFO_0: NodeInfo<Point2DD> = NodeInfo {
+const NODE_INFO_0: NodeInfo = NodeInfo {
   cost_from_start: 0.0,
-  node: Point2DD {
-    x: 0.0,
-    y: 0.0,
-  },
   total_cost: 0.0,
 };
 
 #[cfg(test)]
-const NODE_INFO_1: NodeInfo<Point2DD> = NodeInfo {
+const NODE_INFO_1: NodeInfo = NodeInfo {
   cost_from_start: 0.0,
-  node: Point2DD {
-    x: 0.0,
-    y: 0.0,
-  },
   total_cost: 1.0,
 };
 

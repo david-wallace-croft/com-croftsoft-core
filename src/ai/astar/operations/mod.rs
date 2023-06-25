@@ -2,12 +2,12 @@
 //! - Operation implementations for the A* algorithm
 //!
 //! # Metadata
-//! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-13
-//! - Rust since: 2022-10-22
-//! - Java version: 2003-05-09
-//! - Java since: 2002-04-21
+//! - Java created: 2002-04-21
+//! - Java updated: 2003-05-09
+//! - Rust created: 2022-10-22
+//! - Rust updated: 2023-06-25
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -24,7 +24,7 @@ use std::cmp::Ordering;
 #[cfg(test)]
 mod test;
 
-impl<N> PartialEq for NodeInfo<N> {
+impl PartialEq for NodeInfo {
   fn eq(
     &self,
     other: &Self,
@@ -33,7 +33,7 @@ impl<N> PartialEq for NodeInfo<N> {
   }
 }
 
-impl<N> PartialOrd for NodeInfo<N> {
+impl PartialOrd for NodeInfo {
   fn lt(
     &self,
     other: &Self,

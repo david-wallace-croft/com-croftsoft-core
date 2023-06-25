@@ -23,12 +23,11 @@ const TEST_NODE_0: Point2DD = Point2DD {
 };
 
 #[test]
-fn test_new() {
+fn test_default() {
   assert_eq!(
-    NodeInfo::new(TEST_NODE_0),
+    NodeInfo::default(),
     NodeInfo {
       cost_from_start: 0.0,
-      node: TEST_NODE_0,
       total_cost: 0.0,
     }
   );

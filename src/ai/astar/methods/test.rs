@@ -11,13 +11,11 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+use crate::ai::astar::constants::test::{TEST_BEST_NODE, TEST_GOAL_NODE};
 #[cfg(test)]
 use crate::{
   ai::astar::{
-    constants::test::{
-      TEST_BEST_NODE_INFO, TEST_GOAL_NODE_INFO, TEST_ORIGIN_NODE,
-      TEST_SUBJECT_GRID_CARTOGRAPHER,
-    },
+    constants::test::{TEST_ORIGIN_NODE, TEST_SUBJECT_GRID_CARTOGRAPHER},
     structures::{AStar, GridCartographer, NodeInfo},
   },
   math::geom::point_2dd::Point2DD,
@@ -28,6 +26,7 @@ use core::cell::RefCell;
 use core::f64::INFINITY;
 #[cfg(test)]
 use std::collections::HashMap;
+use std::collections::VecDeque;
 #[cfg(test)]
 use std::rc::Rc;
 
@@ -65,36 +64,34 @@ fn test_loop_once() {
 fn test_reset() {
   let mut test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
     AStar {
-      best_node_info_option: Some(TEST_BEST_NODE_INFO),
+      best_node_option: Some(TEST_BEST_NODE),
       best_total_cost: 0.0,
       cartographer: Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)),
-      goal_node_info_option: Some(TEST_GOAL_NODE_INFO),
+      goal_node_option: Some(TEST_GOAL_NODE),
       list_empty: true,
       node_to_node_info_map: HashMap::new(),
-      node_to_parent_node_info_map: HashMap::new(),
-      open_node_info_sorted_list: vec![],
+      node_to_parent_node_map: HashMap::new(),
+      open_node_sorted_list: VecDeque::new(),
     };
   test_subject_astar.reset(TEST_ORIGIN_NODE);
   let AStar {
-    best_node_info_option: _,
+    best_node_option: _,
     best_total_cost,
     cartographer: _,
-    goal_node_info_option,
+    goal_node_option,
     list_empty,
     node_to_node_info_map,
-    node_to_parent_node_info_map,
-    open_node_info_sorted_list,
+    node_to_parent_node_map,
+    open_node_sorted_list,
   } = test_subject_astar;
   assert_eq!(best_total_cost, INFINITY);
-  assert_eq!(goal_node_info_option, None);
+  assert_eq!(goal_node_option, None);
   assert!(!list_empty);
-  assert_eq!(
-    open_node_info_sorted_list,
-    vec![NodeInfo::new(TEST_ORIGIN_NODE)],
-  );
+  let mut expected_open_node_sorted_list = VecDeque::new();
+  expected_open_node_sorted_list.push_front(TEST_ORIGIN_NODE);
+  assert_eq!(open_node_sorted_list, expected_open_node_sorted_list);
   let mut expected_node_to_node_info_map = HashMap::new();
-  expected_node_to_node_info_map
-    .insert(TEST_ORIGIN_NODE, NodeInfo::new(TEST_ORIGIN_NODE));
+  expected_node_to_node_info_map.insert(TEST_ORIGIN_NODE, NodeInfo::default());
   assert_eq!(node_to_node_info_map, expected_node_to_node_info_map);
-  assert!(node_to_parent_node_info_map.is_empty());
+  assert!(node_to_parent_node_map.is_empty());
 }

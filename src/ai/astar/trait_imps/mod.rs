@@ -144,9 +144,9 @@ impl<N: PointXY> Cartographer<N> for GridCartographer<N> {
   }
 }
 
-impl<N> Eq for NodeInfo<N> {}
+impl Eq for NodeInfo {}
 
-impl<N> Ord for NodeInfo<N> {
+impl Ord for NodeInfo {
   fn cmp(
     &self,
     other: &Self,

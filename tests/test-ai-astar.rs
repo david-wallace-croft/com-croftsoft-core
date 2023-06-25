@@ -22,6 +22,7 @@ use com_croftsoft_core::ai::astar::structures::AStar;
 use com_croftsoft_core::ai::astar::traits::Cartographer;
 use core::cell::RefCell;
 use std::collections::HashSet;
+use std::collections::VecDeque;
 use std::hash::Hash;
 use std::rc::Rc;
 
@@ -205,7 +206,7 @@ fn test_ai_astar_enclosed_goal_teleport() {
   }
   assert_ne!(loop_count, LOOP_COUNT_MAX);
   assert!(astar.is_goal_found());
-  let path: Vec<Point> = astar.get_path();
+  let path: VecDeque<Point> = astar.get_path();
   assert_eq!(path.len(), DISTANCE_FROM_ORIGIN + 1);
   assert_eq!(path[DISTANCE_FROM_ORIGIN], GOAL_4);
 }
@@ -237,7 +238,7 @@ fn test_ai_astar_obstacle() {
   }
   assert_ne!(loop_count, LOOP_COUNT_MAX);
   assert!(astar.is_goal_found());
-  let path: Vec<Point> = astar.get_path();
+  let path: VecDeque<Point> = astar.get_path();
   assert_eq!(path.len(), 5);
   assert_eq!(path[4], GOAL_4);
 }
@@ -255,7 +256,8 @@ fn test_ai_astar_teleport_nearby() {
   }
   assert_ne!(loop_count, LOOP_COUNT_MAX);
   assert!(astar.is_goal_found());
-  let path: Vec<Point> = astar.get_path();
+  let path: VecDeque<Point> = astar.get_path();
+  println!("{:?}", path);
   assert_eq!(path.len(), 3);
   assert_eq!(path[2], GOAL_3);
 }

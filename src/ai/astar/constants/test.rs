@@ -19,12 +19,14 @@ use crate::{
 };
 
 #[cfg(test)]
-pub const TEST_BEST_NODE_INFO: NodeInfo<Point2DD> = NodeInfo {
+pub const TEST_BEST_NODE: Point2DD = Point2DD {
+  x: 1.,
+  y: 0.,
+};
+
+#[cfg(test)]
+pub const TEST_BEST_NODE_INFO: NodeInfo = NodeInfo {
   cost_from_start: 1.0,
-  node: Point2DD {
-    x: 1.0,
-    y: 0.0,
-  },
   total_cost: 1.0,
 };
 
@@ -41,9 +43,8 @@ pub const TEST_GOAL_NODE: Point2DD = Point2DD {
 };
 
 #[cfg(test)]
-pub const TEST_GOAL_NODE_INFO: NodeInfo<Point2DD> = NodeInfo {
+pub const TEST_GOAL_NODE_INFO: NodeInfo = NodeInfo {
   cost_from_start: 0.0,
-  node: TEST_GOAL_NODE,
   total_cost: 0.0,
 };
 

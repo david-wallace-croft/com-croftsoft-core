@@ -25,17 +25,18 @@ use super::{
 };
 use core::{cell::RefCell, hash::Hash};
 use std::collections::HashMap;
+use std::collections::VecDeque;
 use std::rc::Rc;
 
 pub struct AStar<C: Cartographer<N>, N: Eq + Hash> {
-  pub best_node_info_option: Option<NodeInfo<N>>,
+  pub best_node_option: Option<N>,
   pub best_total_cost: f64,
   pub cartographer: Rc<RefCell<C>>,
-  pub goal_node_info_option: Option<NodeInfo<N>>,
+  pub goal_node_option: Option<N>,
   pub list_empty: bool,
-  pub node_to_node_info_map: HashMap<N, NodeInfo<N>>,
-  pub node_to_parent_node_info_map: HashMap<N, NodeInfo<N>>,
-  pub open_node_info_sorted_list: Vec<NodeInfo<N>>,
+  pub node_to_node_info_map: HashMap<N, NodeInfo>,
+  pub node_to_parent_node_map: HashMap<N, N>,
+  pub open_node_sorted_list: VecDeque<N>,
 }
 
 /// Gradient cartographer for continuous space.
@@ -59,10 +60,9 @@ pub struct GridCartographer<N> {
   pub step_size: f64,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Default)]
 /// A* algorithm node information
-pub struct NodeInfo<N> {
+pub struct NodeInfo {
   pub cost_from_start: f64,
-  pub node: N,
   pub total_cost: f64,
 }

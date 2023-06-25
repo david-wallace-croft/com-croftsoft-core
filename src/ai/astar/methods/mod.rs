@@ -21,108 +21,114 @@
 #[cfg(test)]
 mod test;
 
-use core::f64::INFINITY;
-use core::hash::Hash;
-use std::collections::HashMap;
-
 use super::{
   structures::{AStar, NodeInfo},
   traits::Cartographer,
 };
+use core::f64::INFINITY;
+use core::hash::Hash;
+use std::collections::HashMap;
+use std::collections::VecDeque;
 
 impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
   pub fn get_first_step(&self) -> Option<N> {
-    let mut node_info_option: Option<NodeInfo<N>> = self.goal_node_info_option;
-    if node_info_option.is_none() {
-      node_info_option = self.best_node_info_option;
+    let mut node_option: Option<N> = self.goal_node_option;
+    if node_option.is_none() {
+      node_option = self.best_node_option;
     }
-    let mut node_option: Option<N> = None;
-    while node_info_option.is_some() {
-      let node_info: NodeInfo<N> = node_info_option.unwrap();
-      let parent_node_info_option: Option<NodeInfo<N>> =
-        self.node_to_parent_node_info_map.get(&node_info.node).copied();
-      if parent_node_info_option.is_some() {
-        node_option = Some(node_info.node);
-      }
-      node_info_option = parent_node_info_option;
+    node_option?;
+    let mut child_node_option: Option<N> = None;
+    let mut node: N = node_option.unwrap();
+    let mut parent_node_option = self.node_to_parent_node_map.get(&node);
+    while parent_node_option.is_some() {
+      child_node_option = node_option;
+      node_option = parent_node_option.copied();
+      node = node_option.unwrap();
+      parent_node_option = self.node_to_parent_node_map.get(&node);
     }
-    node_option
+    child_node_option
   }
 
-  pub fn get_path(&self) -> Vec<N> {
-    let mut path_list = Vec::new();
-    let mut node_info_option: Option<NodeInfo<N>> = self.goal_node_info_option;
-    if node_info_option.is_none() {
-      node_info_option = self.best_node_info_option;
+  pub fn get_path(&self) -> VecDeque<N> {
+    let mut path_list = VecDeque::new();
+    let mut node_option: Option<N> = self.goal_node_option;
+    if node_option.is_none() {
+      node_option = self.best_node_option;
     }
-    while node_info_option.is_some() {
-      let node_info: NodeInfo<N> = node_info_option.unwrap();
-      let parent_node_info_option: Option<NodeInfo<N>> =
-        self.node_to_parent_node_info_map.get(&node_info.node).copied();
-      if parent_node_info_option.is_some() {
-        path_list.insert(0, node_info.node);
-      }
-      node_info_option = parent_node_info_option;
+    if node_option.is_none() {
+      return path_list;
+    }
+    let mut node: N = node_option.unwrap();
+    let mut parent_node_option = self.node_to_parent_node_map.get(&node);
+    while parent_node_option.is_some() {
+      path_list.push_front(node);
+      node_option = parent_node_option.copied();
+      node = node_option.unwrap();
+      parent_node_option = self.node_to_parent_node_map.get(&node);
     }
     path_list
   }
 
   pub fn is_goal_found(&self) -> bool {
-    self.goal_node_info_option.is_some()
+    self.goal_node_option.is_some()
   }
 
   pub fn loop_once(&mut self) -> bool {
-    if self.open_node_info_sorted_list.is_empty() {
+    let Some(node) = self.open_node_sorted_list.pop_front() else {
       self.list_empty = true;
       return false;
-    }
-    let node_info: NodeInfo<N> = self.open_node_info_sorted_list.remove(0);
-    let node: &N = &node_info.node;
-    if self.cartographer.borrow().is_goal_node(node) {
-      if self.goal_node_info_option.is_none()
-        || node_info.cost_from_start
-          < self.goal_node_info_option.as_mut().unwrap().cost_from_start
-      {
-        self.goal_node_info_option = Some(node_info);
+    };
+    let node_info: NodeInfo = *self.node_to_node_info_map.get(&node).unwrap();
+    if self.cartographer.borrow().is_goal_node(&node) {
+      if let Some(goal_node) = self.goal_node_option {
+        let goal_node_info =
+          self.node_to_node_info_map.get(&goal_node).unwrap();
+        if goal_node_info.cost_from_start <= node_info.cost_from_start {
+          return false;
+        }
       }
+      self.goal_node_option = Some(node);
       return false;
     }
     let adjacent_nodes: Vec<N> =
-      self.cartographer.borrow().get_adjacent_nodes(node);
+      self.cartographer.borrow().get_adjacent_nodes(&node);
     for adjacent_node in adjacent_nodes {
       let new_cost_from_start: f64 = node_info.cost_from_start
         + self
           .cartographer
           .borrow()
-          .get_cost_to_adjacent_node(node, &adjacent_node);
-      let adjacent_node_info_option: Option<&NodeInfo<N>> =
+          .get_cost_to_adjacent_node(&node, &adjacent_node);
+      let adjacent_node_info_option: Option<&NodeInfo> =
         self.node_to_node_info_map.get(&adjacent_node);
       if let Some(adjacent_node_info) = adjacent_node_info_option {
         if adjacent_node_info.cost_from_start <= new_cost_from_start {
           continue;
         }
+        // TODO: Do something better here, maybe a sorted set
         let position_option = self
-          .open_node_info_sorted_list
+          .open_node_sorted_list
           .iter()
-          .position(|&node_info| node_info.node == adjacent_node);
+          .position(|&node| node == adjacent_node);
         if let Some(position) = position_option {
-          // TODO: Do something better here
-          self.open_node_info_sorted_list.remove(position);
+          self.open_node_sorted_list.remove(position);
         }
       }
-      let mut adjacent_node_info = NodeInfo::new(adjacent_node);
-      adjacent_node_info.cost_from_start = new_cost_from_start;
       let total_cost: f64 = new_cost_from_start
         + self.cartographer.borrow().estimate_cost_to_goal(&adjacent_node);
-      adjacent_node_info.total_cost = total_cost;
+      let adjacent_node_info = NodeInfo {
+        cost_from_start: new_cost_from_start,
+        total_cost,
+      };
       self.node_to_node_info_map.insert(adjacent_node, adjacent_node_info);
-      self.open_node_info_sorted_list.push(adjacent_node_info);
-      self.open_node_info_sorted_list.sort();
-      self
-        .node_to_parent_node_info_map
-        .insert(adjacent_node_info.node, node_info);
+      self.open_node_sorted_list.push_back(adjacent_node);
+      self.open_node_sorted_list.make_contiguous().sort_by(|a, b| {
+        let node_info_a = self.node_to_node_info_map.get(a).unwrap();
+        let node_info_b = self.node_to_node_info_map.get(b).unwrap();
+        node_info_a.cmp(node_info_b)
+      });
+      self.node_to_parent_node_map.insert(adjacent_node, node);
       if total_cost < self.best_total_cost {
-        self.best_node_info_option = Some(adjacent_node_info);
+        self.best_node_option = Some(adjacent_node);
         self.best_total_cost = total_cost;
       }
     }
@@ -133,14 +139,14 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
     &mut self,
     start_node: N,
   ) {
-    self.goal_node_info_option = None;
+    self.goal_node_option = None;
     self.list_empty = false;
-    self.open_node_info_sorted_list = Vec::new();
+    self.open_node_sorted_list = VecDeque::new();
     self.node_to_node_info_map = HashMap::new();
-    self.node_to_parent_node_info_map = HashMap::new();
-    let start_node_info = NodeInfo::new(start_node);
+    self.node_to_parent_node_map = HashMap::new();
+    let start_node_info = NodeInfo::default();
     self.node_to_node_info_map.insert(start_node, start_node_info);
-    self.open_node_info_sorted_list.push(start_node_info);
+    self.open_node_sorted_list.push_front(start_node);
     self.best_total_cost = INFINITY;
   }
 }
