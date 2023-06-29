@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-11-13
-//! - Rust updated: 2023-06-25
+//! - Rust updated: 2023-06-29
 //!
 //! # History
 //! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
@@ -31,58 +31,60 @@ type Point = (i64, i64);
 const LOOP_COUNT_MAX: usize = 1_000;
 
 const DISTANCE_FROM_ORIGIN: usize = 10;
-const X_MAX: i64 = DISTANCE_FROM_ORIGIN as i64;
-const X_MIN: i64 = -(DISTANCE_FROM_ORIGIN as i64);
-const Y_MAX: i64 = DISTANCE_FROM_ORIGIN as i64;
-const Y_MIN: i64 = -(DISTANCE_FROM_ORIGIN as i64);
+const X_MAX: i64 = 100 + DISTANCE_FROM_ORIGIN as i64;
+const X_MIN: i64 = 100 - (DISTANCE_FROM_ORIGIN as i64);
+const Y_MAX: i64 = 100 + DISTANCE_FROM_ORIGIN as i64;
+const Y_MIN: i64 = 100 - (DISTANCE_FROM_ORIGIN as i64);
 
-const GOAL_3: Point = (-3, 0);
-const GOAL_4: Point = (4, 0);
-const GOAL_5: Point = (5, 0);
+const GOAL_3: Point = (97, 100);
+const GOAL_4: Point = (104, 100);
+const GOAL_5: Point = (105, 100);
+// Using an origin other than (0, 0) to detect bugs masked by the default value
+const ORIGIN: Point = (100, 100);
 const TELEPORT_MAX: Point = (X_MAX, Y_MAX);
 const TELEPORT_MIN: Point = (X_MIN, Y_MIN);
 
 // Finds its way around a wall
 const BLOCKED_OBSTACLE: [Point; 3] = [
-  (1, 1),
-  (1, 0),
-  (1, -1),
+  (101, 101),
+  (101, 100),
+  (101, 99),
 ];
 
 // Start enclosed by walls
 const BLOCKED_ENCLOSED_START: [Point; 8] = [
-  (-1, -1),
-  (-1, 0),
-  (-1, 1),
-  (0, -1),
-  (0, 1),
-  (1, -1),
-  (1, 0),
-  (1, 1),
+  (99, 99),
+  (99, 100),
+  (99, 101),
+  (100, 99),
+  (100, 101),
+  (101, 99),
+  (101, 100),
+  (101, 101),
 ];
 
 // Goal enclosed by walls
 const BLOCKED_ENCLOSED_GOAL: [Point; 8] = [
-  (4, -1),
-  (4, 0),
-  (4, 1),
-  (5, -1),
-  (5, 1),
-  (6, -1),
-  (6, 0),
-  (6, 1),
+  (104, 99),
+  (104, 100),
+  (104, 101),
+  (105, 99),
+  (105, 101),
+  (106, 99),
+  (106, 100),
+  (106, 101),
 ];
 
 // Goal enclosed by walls but teleport jump available
 const BLOCKED_ENCLOSED_GOAL_TELEPORT: [Point; 8] = [
-  (3, -1),
-  (3, 0),
-  (3, 1),
-  (4, -1),
-  (4, 1),
-  (5, -1),
-  (5, 0),
-  (5, 1),
+  (103, 99),
+  (103, 100),
+  (103, 101),
+  (104, 99),
+  (104, 101),
+  (105, 99),
+  (105, 100),
+  (105, 101),
 ];
 
 // Goal clear on right but teleport jump on left closer
@@ -181,7 +183,7 @@ fn test_ai_astar_enclosed_goal() {
     AStarTest::<Point>::new(&BLOCKED_ENCLOSED_GOAL, GOAL_5, None);
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset((0, 0));
+  astar.reset(ORIGIN);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
@@ -199,7 +201,7 @@ fn test_ai_astar_enclosed_goal_teleport() {
   );
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset((0, 0));
+  astar.reset(ORIGIN);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
@@ -217,7 +219,7 @@ fn test_ai_astar_enclosed_start() {
     AStarTest::<Point>::new(&BLOCKED_ENCLOSED_START, GOAL_4, None);
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset((0, 0));
+  astar.reset(ORIGIN);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
@@ -231,7 +233,7 @@ fn test_ai_astar_obstacle() {
   let astar_test = AStarTest::<Point>::new(&BLOCKED_OBSTACLE, GOAL_4, None);
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset((0, 0));
+  astar.reset(ORIGIN);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
@@ -249,7 +251,7 @@ fn test_ai_astar_teleport_nearby() {
     AStarTest::<Point>::new(&BLOCKED_NO_OBSTACLES, GOAL_3, Some(TELEPORT_MAX));
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset((0, 0));
+  astar.reset(ORIGIN);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
@@ -257,7 +259,6 @@ fn test_ai_astar_teleport_nearby() {
   assert_ne!(loop_count, LOOP_COUNT_MAX);
   assert!(astar.is_goal_found());
   let path: VecDeque<Point> = astar.get_path();
-  println!("{:?}", path);
   assert_eq!(path.len(), 3);
   assert_eq!(path[2], GOAL_3);
 }
