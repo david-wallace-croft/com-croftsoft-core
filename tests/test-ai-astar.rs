@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-11-13
-//! - Rust updated: 2023-06-29
+//! - Rust updated: 2023-06-30
 //!
 //! # History
 //! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
@@ -30,61 +30,63 @@ type Point = (i64, i64);
 
 const LOOP_COUNT_MAX: usize = 1_000;
 
-const DISTANCE_FROM_ORIGIN: usize = 10;
-const X_MAX: i64 = 100 + DISTANCE_FROM_ORIGIN as i64;
-const X_MIN: i64 = 100 - (DISTANCE_FROM_ORIGIN as i64);
-const Y_MAX: i64 = 100 + DISTANCE_FROM_ORIGIN as i64;
-const Y_MIN: i64 = 100 - (DISTANCE_FROM_ORIGIN as i64);
+const DISTANCE_FROM_START: usize = 10;
+const MAX_X: i64 = START_X + DISTANCE_FROM_START as i64;
+const MAX_Y: i64 = START_Y + DISTANCE_FROM_START as i64;
+const MIN_X: i64 = START_X - (DISTANCE_FROM_START as i64);
+const MIN_Y: i64 = START_Y - (DISTANCE_FROM_START as i64);
+// Using a start other than (0, 0) to detect bugs masked by the default value
+const START_X: i64 = 100;
+const START_Y: i64 = 100;
 
-const GOAL_3: Point = (97, 100);
-const GOAL_4: Point = (104, 100);
-const GOAL_5: Point = (105, 100);
-// Using an origin other than (0, 0) to detect bugs masked by the default value
-const ORIGIN: Point = (100, 100);
-const TELEPORT_MAX: Point = (X_MAX, Y_MAX);
-const TELEPORT_MIN: Point = (X_MIN, Y_MIN);
+const GOAL_3: Point = (START_X - 3, START_Y);
+const GOAL_4: Point = (START_X + 4, START_Y);
+const GOAL_5: Point = (START_X + 5, START_Y);
+const START: Point = (START_X, START_Y);
+const TELEPORT_MAX: Point = (MAX_X, MAX_Y);
+const TELEPORT_MIN: Point = (MIN_X, MIN_Y);
 
 // Finds its way around a wall
 const BLOCKED_OBSTACLE: [Point; 3] = [
-  (101, 101),
-  (101, 100),
-  (101, 99),
+  (START_X + 1, START_Y + 1),
+  (START_X + 1, START_Y),
+  (START_X + 1, START_Y - 1),
 ];
 
 // Start enclosed by walls
 const BLOCKED_ENCLOSED_START: [Point; 8] = [
-  (99, 99),
-  (99, 100),
-  (99, 101),
-  (100, 99),
-  (100, 101),
-  (101, 99),
-  (101, 100),
-  (101, 101),
+  (START_X - 1, START_Y - 1),
+  (START_X - 1, START_Y),
+  (START_X - 1, START_Y + 1),
+  (START_X, START_Y - 1),
+  (START_X, START_Y + 1),
+  (START_X + 1, START_Y - 1),
+  (START_X + 1, START_Y),
+  (START_X + 1, START_Y + 1),
 ];
 
 // Goal enclosed by walls
 const BLOCKED_ENCLOSED_GOAL: [Point; 8] = [
-  (104, 99),
-  (104, 100),
-  (104, 101),
-  (105, 99),
-  (105, 101),
-  (106, 99),
-  (106, 100),
-  (106, 101),
+  (START_X + 4, START_Y - 1),
+  (START_X + 4, START_Y),
+  (START_X + 4, START_Y + 1),
+  (START_X + 5, START_Y - 1),
+  (START_X + 5, START_Y + 1),
+  (START_X + 6, START_Y - 1),
+  (START_X + 6, START_Y),
+  (START_X + 6, START_Y + 1),
 ];
 
 // Goal enclosed by walls but teleport jump available
 const BLOCKED_ENCLOSED_GOAL_TELEPORT: [Point; 8] = [
-  (103, 99),
-  (103, 100),
-  (103, 101),
-  (104, 99),
-  (104, 101),
-  (105, 99),
-  (105, 100),
-  (105, 101),
+  (START_X + 3, START_Y - 1),
+  (START_X + 3, START_Y),
+  (START_X + 3, START_Y + 1),
+  (START_X + 4, START_Y - 1),
+  (START_X + 4, START_Y + 1),
+  (START_X + 5, START_Y - 1),
+  (START_X + 5, START_Y),
+  (START_X + 5, START_Y + 1),
 ];
 
 // Goal clear on right but teleport jump on left closer
@@ -124,7 +126,7 @@ impl Cartographer<Point> for AStarTest<Point> {
         }
         let new_x = x + offset_x;
         let new_y = y + offset_y;
-        if new_x < X_MIN || new_y < Y_MIN || new_x > X_MAX || new_y > Y_MAX {
+        if new_x < MIN_X || new_y < MIN_Y || new_x > MAX_X || new_y > MAX_Y {
           continue;
         }
         let new_point: Point = (new_x, new_y);
@@ -183,7 +185,7 @@ fn test_ai_astar_enclosed_goal() {
     AStarTest::<Point>::new(&BLOCKED_ENCLOSED_GOAL, GOAL_5, None);
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset(ORIGIN);
+  astar.reset(START);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
@@ -201,7 +203,7 @@ fn test_ai_astar_enclosed_goal_teleport() {
   );
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset(ORIGIN);
+  astar.reset(START);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
@@ -209,8 +211,8 @@ fn test_ai_astar_enclosed_goal_teleport() {
   assert_ne!(loop_count, LOOP_COUNT_MAX);
   assert!(astar.is_goal_found());
   let path: VecDeque<Point> = astar.get_path();
-  assert_eq!(path.len(), DISTANCE_FROM_ORIGIN + 1);
-  assert_eq!(path[DISTANCE_FROM_ORIGIN], GOAL_4);
+  assert_eq!(path.len(), DISTANCE_FROM_START + 1);
+  assert_eq!(path[DISTANCE_FROM_START], GOAL_4);
 }
 
 #[test]
@@ -219,7 +221,7 @@ fn test_ai_astar_enclosed_start() {
     AStarTest::<Point>::new(&BLOCKED_ENCLOSED_START, GOAL_4, None);
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset(ORIGIN);
+  astar.reset(START);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
@@ -233,7 +235,7 @@ fn test_ai_astar_obstacle() {
   let astar_test = AStarTest::<Point>::new(&BLOCKED_OBSTACLE, GOAL_4, None);
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset(ORIGIN);
+  astar.reset(START);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
@@ -251,7 +253,7 @@ fn test_ai_astar_teleport_nearby() {
     AStarTest::<Point>::new(&BLOCKED_NO_OBSTACLES, GOAL_3, Some(TELEPORT_MAX));
   let mut astar =
     AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
-  astar.reset(ORIGIN);
+  astar.reset(START);
   let mut loop_count = 0;
   while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
     loop_count += 1;
