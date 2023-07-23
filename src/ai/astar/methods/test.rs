@@ -5,79 +5,70 @@
 //! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2022-11-08
-//! - Updated: 2023-06-25
+//! - Updated: 2023-07-23
 //!
 //! [`CroftSoft Inc`]: https://www.croftsoft.com/
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
+#[cfg(test)]
 use crate::ai::astar::constants::test::{TEST_BEST_NODE, TEST_GOAL_NODE};
 #[cfg(test)]
 use crate::{
   ai::astar::{
     constants::test::{TEST_ORIGIN_NODE, TEST_SUBJECT_GRID_CARTOGRAPHER},
-    structures::{AStar, GridCartographer, NodeInfo},
+    structures::{AStar, NodeInfo},
   },
   math::geom::point_2dd::Point2DD,
 };
 #[cfg(test)]
-use core::cell::RefCell;
-#[cfg(test)]
 use core::f64::INFINITY;
 #[cfg(test)]
 use std::collections::HashMap;
-use std::collections::VecDeque;
 #[cfg(test)]
-use std::rc::Rc;
+use std::collections::VecDeque;
 
 #[test]
 fn test_get_first_step() {
-  let test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)));
+  let test_subject_astar = AStar::<Point2DD>::default();
   let first_step_option = test_subject_astar.get_first_step();
   assert_eq!(first_step_option, None);
 }
 
 #[test]
 fn test_get_path() {
-  let test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)));
+  let test_subject_astar = AStar::<Point2DD>::default();
   let path = test_subject_astar.get_path();
   assert_eq!(path, Vec::<Point2DD>::default());
 }
 
 #[test]
 fn test_is_goal_found() {
-  let test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)));
+  let test_subject_astar = AStar::<Point2DD>::default();
   assert!(!test_subject_astar.is_goal_found());
 }
 
 #[test]
 fn test_loop_once() {
-  let mut test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar::new(Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)));
-  assert!(!test_subject_astar.loop_once());
+  let mut test_subject_astar: AStar<Point2DD> = AStar::default();
+  assert!(!test_subject_astar.loop_once(&TEST_SUBJECT_GRID_CARTOGRAPHER));
 }
 
 #[test]
 fn test_reset() {
-  let mut test_subject_astar: AStar<GridCartographer<Point2DD>, Point2DD> =
-    AStar {
-      best_node_option: Some(TEST_BEST_NODE),
-      best_total_cost: 0.0,
-      cartographer: Rc::new(RefCell::new(TEST_SUBJECT_GRID_CARTOGRAPHER)),
-      goal_node_option: Some(TEST_GOAL_NODE),
-      list_empty: true,
-      node_to_node_info_map: HashMap::new(),
-      node_to_parent_node_map: HashMap::new(),
-      open_node_sorted_list: VecDeque::new(),
-    };
+  let mut test_subject_astar: AStar<Point2DD> = AStar {
+    best_node_option: Some(TEST_BEST_NODE),
+    best_total_cost: 0.0,
+    goal_node_option: Some(TEST_GOAL_NODE),
+    list_empty: true,
+    node_to_node_info_map: HashMap::new(),
+    node_to_parent_node_map: HashMap::new(),
+    open_node_sorted_list: VecDeque::new(),
+  };
   test_subject_astar.reset(TEST_ORIGIN_NODE);
   let AStar {
     best_node_option: _,
     best_total_cost,
-    cartographer: _,
     goal_node_option,
     list_empty,
     node_to_node_info_map,

@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-10
 //! - Rust created: 2022-10-22
-//! - Rust updated: 2023-06-25
+//! - Rust updated: 2023-07-23
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -19,19 +19,14 @@
 //! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
 // =============================================================================
 
-use super::{
-  traits::Cartographer,
-  types::{IsSpaceAvailableFunction, MakeNodeFunction},
-};
-use core::{cell::RefCell, hash::Hash};
+use super::types::{IsSpaceAvailableFunction, MakeNodeFunction};
+use core::hash::Hash;
 use std::collections::HashMap;
 use std::collections::VecDeque;
-use std::rc::Rc;
 
-pub struct AStar<C: Cartographer<N>, N: Eq + Hash> {
+pub struct AStar<N: Eq + Hash> {
   pub best_node_option: Option<N>,
   pub best_total_cost: f64,
-  pub cartographer: Rc<RefCell<C>>,
   pub goal_node_option: Option<N>,
   pub list_empty: bool,
   pub node_to_node_info_map: HashMap<N, NodeInfo>,

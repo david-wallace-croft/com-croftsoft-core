@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-11-13
-//! - Rust updated: 2023-06-30
+//! - Rust updated: 2023-07-23
 //!
 //! # History
 //! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
@@ -20,11 +20,9 @@
 
 use com_croftsoft_core::ai::astar::structures::AStar;
 use com_croftsoft_core::ai::astar::traits::Cartographer;
-use core::cell::RefCell;
 use std::collections::HashSet;
 use std::collections::VecDeque;
 use std::hash::Hash;
-use std::rc::Rc;
 
 type Point = (i64, i64);
 
@@ -183,11 +181,10 @@ impl AStarTest<Point> {
 fn test_ai_astar_enclosed_goal() {
   let astar_test =
     AStarTest::<Point>::new(&BLOCKED_ENCLOSED_GOAL, GOAL_5, None);
-  let mut astar =
-    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
+  let mut astar = AStar::<Point>::default();
   astar.reset(START);
   let mut loop_count = 0;
-  while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
+  while loop_count < LOOP_COUNT_MAX && astar.loop_once(&astar_test) {
     loop_count += 1;
   }
   assert_ne!(loop_count, LOOP_COUNT_MAX);
@@ -201,11 +198,10 @@ fn test_ai_astar_enclosed_goal_teleport() {
     GOAL_4,
     Some(TELEPORT_MIN),
   );
-  let mut astar =
-    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
+  let mut astar = AStar::<Point>::default();
   astar.reset(START);
   let mut loop_count = 0;
-  while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
+  while loop_count < LOOP_COUNT_MAX && astar.loop_once(&astar_test) {
     loop_count += 1;
   }
   assert_ne!(loop_count, LOOP_COUNT_MAX);
@@ -219,11 +215,10 @@ fn test_ai_astar_enclosed_goal_teleport() {
 fn test_ai_astar_enclosed_start() {
   let astar_test =
     AStarTest::<Point>::new(&BLOCKED_ENCLOSED_START, GOAL_4, None);
-  let mut astar =
-    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
+  let mut astar = AStar::<Point>::default();
   astar.reset(START);
   let mut loop_count = 0;
-  while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
+  while loop_count < LOOP_COUNT_MAX && astar.loop_once(&astar_test) {
     loop_count += 1;
   }
   assert_ne!(loop_count, LOOP_COUNT_MAX);
@@ -233,11 +228,10 @@ fn test_ai_astar_enclosed_start() {
 #[test]
 fn test_ai_astar_obstacle() {
   let astar_test = AStarTest::<Point>::new(&BLOCKED_OBSTACLE, GOAL_4, None);
-  let mut astar =
-    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
+  let mut astar = AStar::<Point>::default();
   astar.reset(START);
   let mut loop_count = 0;
-  while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
+  while loop_count < LOOP_COUNT_MAX && astar.loop_once(&astar_test) {
     loop_count += 1;
   }
   assert_ne!(loop_count, LOOP_COUNT_MAX);
@@ -251,11 +245,10 @@ fn test_ai_astar_obstacle() {
 fn test_ai_astar_teleport_nearby() {
   let astar_test =
     AStarTest::<Point>::new(&BLOCKED_NO_OBSTACLES, GOAL_3, Some(TELEPORT_MAX));
-  let mut astar =
-    AStar::<AStarTest<Point>, Point>::new(Rc::new(RefCell::new(astar_test)));
+  let mut astar = AStar::<Point>::default();
   astar.reset(START);
   let mut loop_count = 0;
-  while loop_count < LOOP_COUNT_MAX && astar.loop_once() {
+  while loop_count < LOOP_COUNT_MAX && astar.loop_once(&astar_test) {
     loop_count += 1;
   }
   assert_ne!(loop_count, LOOP_COUNT_MAX);

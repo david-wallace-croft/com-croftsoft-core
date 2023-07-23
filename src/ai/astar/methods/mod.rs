@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-10-28
-//! - Rust updated: 2023-06-25
+//! - Rust updated: 2023-07-23
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -21,16 +21,14 @@
 #[cfg(test)]
 mod test;
 
-use super::{
-  structures::{AStar, NodeInfo},
-  traits::Cartographer,
-};
+use super::structures::{AStar, NodeInfo};
+use super::traits::Cartographer;
 use core::f64::INFINITY;
 use core::hash::Hash;
 use std::collections::HashMap;
 use std::collections::VecDeque;
 
-impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
+impl<N: Copy + Eq + Hash> AStar<N> {
   pub fn get_first_step(&self) -> Option<N> {
     let mut node_option: Option<N> = self.goal_node_option;
     if node_option.is_none() {
@@ -73,13 +71,16 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
     self.goal_node_option.is_some()
   }
 
-  pub fn loop_once(&mut self) -> bool {
+  pub fn loop_once(
+    &mut self,
+    cartographer: &dyn Cartographer<N>,
+  ) -> bool {
     let Some(node) = self.open_node_sorted_list.pop_front() else {
       self.list_empty = true;
       return false;
     };
     let node_info: NodeInfo = *self.node_to_node_info_map.get(&node).unwrap();
-    if self.cartographer.borrow().is_goal_node(&node) {
+    if cartographer.is_goal_node(&node) {
       if let Some(goal_node) = self.goal_node_option {
         let goal_node_info =
           self.node_to_node_info_map.get(&goal_node).unwrap();
@@ -90,14 +91,10 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
       self.goal_node_option = Some(node);
       return false;
     }
-    let adjacent_nodes: Vec<N> =
-      self.cartographer.borrow().get_adjacent_nodes(&node);
+    let adjacent_nodes: Vec<N> = cartographer.get_adjacent_nodes(&node);
     for adjacent_node in adjacent_nodes {
       let new_cost_from_start: f64 = node_info.cost_from_start
-        + self
-          .cartographer
-          .borrow()
-          .get_cost_to_adjacent_node(&node, &adjacent_node);
+        + cartographer.get_cost_to_adjacent_node(&node, &adjacent_node);
       let adjacent_node_info_option: Option<&NodeInfo> =
         self.node_to_node_info_map.get(&adjacent_node);
       if let Some(adjacent_node_info) = adjacent_node_info_option {
@@ -114,7 +111,7 @@ impl<C: Cartographer<N>, N: Copy + Eq + Hash> AStar<C, N> {
         }
       }
       let total_cost: f64 = new_cost_from_start
-        + self.cartographer.borrow().estimate_cost_to_goal(&adjacent_node);
+        + cartographer.estimate_cost_to_goal(&adjacent_node);
       let adjacent_node_info = NodeInfo {
         cost_from_start: new_cost_from_start,
         total_cost,

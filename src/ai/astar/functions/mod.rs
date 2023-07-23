@@ -7,7 +7,7 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-10-28
-//! - Rust updated: 2023-06-25
+//! - Rust updated: 2023-07-23
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -21,18 +21,17 @@
 #[cfg(test)]
 mod test;
 
-use super::{structures::AStar, traits::Cartographer};
-use core::{cell::RefCell, f64::INFINITY, hash::Hash};
+use super::structures::AStar;
+use core::f64::INFINITY;
+use core::hash::Hash;
 use std::collections::HashMap;
 use std::collections::VecDeque;
-use std::rc::Rc;
 
-impl<C: Cartographer<N>, N: Eq + Hash> AStar<C, N> {
-  pub fn new(cartographer: Rc<RefCell<C>>) -> Self {
+impl<N: Eq + Hash> Default for AStar<N> {
+  fn default() -> Self {
     AStar {
       best_node_option: None,
       best_total_cost: INFINITY,
-      cartographer,
       goal_node_option: None,
       list_empty: false,
       node_to_node_info_map: HashMap::new(),
