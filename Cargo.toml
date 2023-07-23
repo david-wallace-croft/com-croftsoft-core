@@ -1,14 +1,14 @@
 [package]
 name = "com-croftsoft-core"
-version = "0.14.0"
-authors = ["David Wallace Croft <david@croftsoft.com>"]
+version = "0.15.0-SNAPSHOT"
+authors = ["David Wallace Croft <david@CroftSoft.com>"]
 categories = ["mathematics"]
 description = "A core library of highly reusable code"
 edition = "2021"
 homepage = "https://www.croftsoft.com/"
 keywords = ["math"]
 license = "MIT"
-publish = true
+publish = false
 readme = "README.md"
 repository = "https://github.com/david-wallace-croft/com-croftsoft-core"
 
