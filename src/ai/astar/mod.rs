@@ -3,10 +3,10 @@
 //! - This module is documented in the book [`Advanced Java Game Programming`]
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-10
-//! - Rust since: 2022-10-21
+//! - Created: 2022-10-21
+//! - Updated: 2023-07-24
 //!
 //! # History
 //! - Adapted from the Java package com.croftsoft.core.ai.astar
