@@ -7,15 +7,15 @@
 //! - Java created: 2003-03-20
 //! - Java updated: 2003-04-13
 //! - Rust created: 2023-03-18
-//! - Rust updated: 2023-03-18
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the interface in the Java-based [`CroftSoft Core Library`]
 //!   - com.croftsoft.core.math.geom.PointXY
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 use core::hash::Hash;

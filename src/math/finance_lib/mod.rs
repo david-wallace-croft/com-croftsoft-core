@@ -5,20 +5,20 @@
 //! - Since any time period can be used, "payment stream" equals "annuity"
 //!
 //! # Metadata
-//! - Copyright: &copy; 1999 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-08-23
-//! - Rust since: 2022-07-30
-//! - Java version: 2001-10-10
-//! - Java since: 1999-08-15
+//! - Java created: 1999-08-15
+//! - Java updated: 2001-10-10
+//! - Rust created: 2022-07-30
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
 //!   - In the Java-based [`CroftSoft Core Library`]
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 // -----------------------------------------------------------------------------
@@ -312,9 +312,13 @@ pub struct NetPresentValue<'a> {
 
 impl<'a> NetPresentValue<'a> {
   pub fn calculate(&self) -> f64 {
-    self.cash_flows.iter().enumerate().fold(0.0, |sum, (index, cash_flow)| {
-      sum + cash_flow / (1.0 + self.discount_rate).powf(index as f64)
-    })
+    self
+      .cash_flows
+      .iter()
+      .enumerate()
+      .fold(0.0, |sum, (index, cash_flow)| {
+        sum + cash_flow / (1.0 + self.discount_rate).powf(index as f64)
+      })
   }
 }
 
@@ -456,15 +460,19 @@ pub struct PresentValueCashFlows<'a> {
 
 impl<'a> PresentValueCashFlows<'a> {
   pub fn calculate(&self) -> f64 {
-    self.cash_flows.iter().enumerate().fold(0.0, |sum, (index, cash_flow)| {
-      sum
-        + PresentValue {
-          cash_flow: *cash_flow,
-          discount_rate: self.discount_rate,
-          time_periods: (index + 1) as f64,
-        }
-        .calculate()
-    })
+    self
+      .cash_flows
+      .iter()
+      .enumerate()
+      .fold(0.0, |sum, (index, cash_flow)| {
+        sum
+          + PresentValue {
+            cash_flow: *cash_flow,
+            discount_rate: self.discount_rate,
+            time_periods: (index + 1) as f64,
+          }
+          .calculate()
+      })
   }
 }
 

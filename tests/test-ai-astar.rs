@@ -7,15 +7,15 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-11-13
-//! - Rust updated: 2023-07-23
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the class in the Java-based [`CroftSoft Core Library`]
 //!   - com.croftsoft.core.ai.astar.AStarTest
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 use com_croftsoft_core::ai::astar::structures::AStar;

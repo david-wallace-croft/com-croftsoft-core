@@ -7,15 +7,15 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-10-28
-//! - Rust updated: 2023-07-23
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
 //!   - com.croftsoft.core.ai.astar.AStar
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 #[cfg(test)]
@@ -116,13 +116,18 @@ impl<N: Copy + Eq + Hash> AStar<N> {
         cost_from_start: new_cost_from_start,
         total_cost,
       };
-      self.node_to_node_info_map.insert(adjacent_node, adjacent_node_info);
+      self
+        .node_to_node_info_map
+        .insert(adjacent_node, adjacent_node_info);
       self.open_node_sorted_list.push_back(adjacent_node);
-      self.open_node_sorted_list.make_contiguous().sort_by(|a, b| {
-        let node_info_a = self.node_to_node_info_map.get(a).unwrap();
-        let node_info_b = self.node_to_node_info_map.get(b).unwrap();
-        node_info_a.cmp(node_info_b)
-      });
+      self
+        .open_node_sorted_list
+        .make_contiguous()
+        .sort_by(|a, b| {
+          let node_info_a = self.node_to_node_info_map.get(a).unwrap();
+          let node_info_b = self.node_to_node_info_map.get(b).unwrap();
+          node_info_a.cmp(node_info_b)
+        });
       self.node_to_parent_node_map.insert(adjacent_node, node);
       if total_cost < self.best_total_cost {
         self.best_node_option = Some(adjacent_node);
@@ -142,7 +147,9 @@ impl<N: Copy + Eq + Hash> AStar<N> {
     self.node_to_node_info_map = HashMap::new();
     self.node_to_parent_node_map = HashMap::new();
     let start_node_info = NodeInfo::default();
-    self.node_to_node_info_map.insert(start_node, start_node_info);
+    self
+      .node_to_node_info_map
+      .insert(start_node, start_node_info);
     self.open_node_sorted_list.push_front(start_node);
     self.best_total_cost = INFINITY;
   }

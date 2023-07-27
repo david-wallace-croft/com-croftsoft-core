@@ -2,13 +2,13 @@
 //! - Unit tests for the Matrix methods
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Version: 2022-10-03
-//! - Since: 2022-09-04
+//! - Created: 2022-09-04
+//! - Updated: 2023-07-26
 //!
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 #[cfg(test)]
@@ -70,7 +70,9 @@ fn test_get_entry() {
     column: 3,
   };
   assert_eq!(
-    Matrix::<2, 4>::default().set_entry(indices, 1.0).get_entry(indices),
+    Matrix::<2, 4>::default()
+      .set_entry(indices, 1.0)
+      .get_entry(indices),
     1.0
   );
 }

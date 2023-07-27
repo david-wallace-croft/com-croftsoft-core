@@ -2,13 +2,13 @@
 //! - Types for the A* algorithm
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-10
-//! - Rust since: 2022-11-09
+//! - Rust created: 2022-11-09
+//! - Rust updated: 2023-07-26
 //!
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 pub type IsSpaceAvailableFunction<N> = fn(&N) -> bool;

@@ -2,20 +2,20 @@
 //! - Quaternion
 //!
 //! # Metadata
-//! - Copyright: &copy; 2008 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-20
-//! - Rust since: 2022-10-10
-//! - Java version: 2008-05-09
-//! - Java since: 2008-05-02
+//! - Java created: 2008-05-02
+//! - Java updated: 2008-05-09
+//! - Rust created: 2022-10-10
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the Java package com.croftsoft.core.math.quat
 //!   - In the Java-based [`CroftSoft Core Library`]
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 use super::{

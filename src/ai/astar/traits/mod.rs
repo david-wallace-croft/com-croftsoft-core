@@ -2,21 +2,21 @@
 //! - Traits for the A* algorithm
 //!
 //! # Metadata
-//! - Copyright: &copy; 2002 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-11-10
-//! - Rust since: 2022-10-21
-//! - Java version: 2003-04-29
-//! - Java since: 2002-04-21
+//! - Java created: 2002-04-21
+//! - Java updated: 2003-04-29
+//! - Rust created: 2022-10-21
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the interfaces in the Java-based [`CroftSoft Core Library`]
 //!   - com.croftsoft.core.ai.astar.Cartographer
 //!   - com.croftsoft.core.ai.astar.SpaceTester
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 /// An A* algorithm map maker

@@ -5,10 +5,10 @@
 //! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2022-11-02
-//! - Updated: 2023-06-25
+//! - Updated: 2023-07-26
 //!
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 #[cfg(test)]
@@ -41,6 +41,17 @@ fn test_cmp() {
   assert_eq!(node_info_0.cmp(&node_info_0), Ordering::Equal);
   assert_eq!(node_info_0.cmp(&node_info_1), Ordering::Less);
   assert_eq!(node_info_1.cmp(&node_info_0), Ordering::Greater);
+}
+
+#[test]
+fn test_default() {
+  assert_eq!(
+    NodeInfo::default(),
+    NodeInfo {
+      cost_from_start: 0.0,
+      total_cost: 0.0,
+    }
+  );
 }
 
 #[test]

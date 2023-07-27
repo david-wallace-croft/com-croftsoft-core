@@ -7,27 +7,30 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-10
 //! - Rust created: 2022-10-24
-//! - Rust updated: 2023-06-25
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
 //!   - com.croftsoft.core.ai.astar.GridCartographer
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 #[cfg(test)]
 mod test;
 
-use super::{
-  structures::{GradientCartographer, GridCartographer, NodeInfo},
-  traits::Cartographer,
-};
+use super::structures::AStar;
+use super::structures::{GradientCartographer, GridCartographer, NodeInfo};
+use super::traits::Cartographer;
 use crate::math::geom::point_xy::PointXY;
 use core::cmp::Ordering;
 use core::f64::consts::TAU;
+use core::f64::INFINITY;
+use core::hash::Hash;
+use std::collections::HashMap;
+use std::collections::VecDeque;
 
 impl<N: PointXY> Cartographer<N> for GradientCartographer<N> {
   fn estimate_cost_to_goal(
@@ -141,6 +144,20 @@ impl<N: PointXY> Cartographer<N> for GridCartographer<N> {
     node: &N,
   ) -> bool {
     self.goal_node.distance_xy(node) == 0.0
+  }
+}
+
+impl<N: Eq + Hash> Default for AStar<N> {
+  fn default() -> Self {
+    AStar {
+      best_node_option: None,
+      best_total_cost: INFINITY,
+      goal_node_option: None,
+      list_empty: false,
+      node_to_node_info_map: HashMap::new(),
+      node_to_parent_node_map: HashMap::new(),
+      open_node_sorted_list: VecDeque::new(),
+    }
   }
 }
 

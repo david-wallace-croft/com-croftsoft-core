@@ -7,15 +7,15 @@
 //! - Java created: 1998-12-27
 //! - Java updated: 2008-08-09
 //! - Rust created: 2022-08-24
-//! - Rust updated: 2023-03-20
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the Java class com.croftsoft.core.math.MathLib
 //!   - In the Java-based [`CroftSoft Core Library`]
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 // -----------------------------------------------------------------------------

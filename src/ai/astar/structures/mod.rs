@@ -7,16 +7,16 @@
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-10
 //! - Rust created: 2022-10-22
-//! - Rust updated: 2023-07-23
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
 //!   - com.croftsoft.core.ai.astar.GridCartographer
 //!   - com.croftsoft.core.ai.astar.NodeInfo
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 use super::types::{IsSpaceAvailableFunction, MakeNodeFunction};

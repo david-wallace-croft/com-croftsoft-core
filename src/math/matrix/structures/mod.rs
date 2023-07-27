@@ -2,19 +2,19 @@
 //! - The Matrix and supporting structures
 //!
 //! # Metadata
-//! - Copyright: &copy; 1998 - 2022 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
-//! - Rust version: 2022-10-20
-//! - Rust since: 2022-09-04
-//! - Java version: 1998-12-27
+//! - Java updated: 1998-12-27
+//! - Rust created: 2022-09-04
+//! - Rust updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the Java class com.croftsoft.core.math.Matrix
 //!   - In the Java-based [`CroftSoft Core Library`]
 //!
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 // -----------------------------------------------------------------------------

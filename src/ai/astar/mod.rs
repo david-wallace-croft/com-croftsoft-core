@@ -6,20 +6,19 @@
 //! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Created: 2022-10-21
-//! - Updated: 2023-07-24
+//! - Updated: 2023-07-26
 //!
 //! # History
 //! - Adapted from the Java package com.croftsoft.core.ai.astar
 //!   - In the Java-based [`CroftSoft Core Library`]
 //!
 //! [`Advanced Java Game Programming`]: https://croftsoft.com/library/books/ajgp
-//! [`CroftSoft Core Library`]: https://www.croftsoft.com/library/code/
-//! [`CroftSoft Inc`]: https://www.croftsoft.com/
-//! [`David Wallace Croft`]: https://www.croftsoft.com/people/david/
+//! [`CroftSoft Core Library`]: https://www.CroftSoft.com/library/code/
+//! [`CroftSoft Inc`]: https://www.CroftSoft.com/
+//! [`David Wallace Croft`]: https://www.CroftSoft.com/people/david/
 // =============================================================================
 
 pub mod constants;
-pub mod functions;
 pub mod methods;
 pub mod operations;
 pub mod structures;
