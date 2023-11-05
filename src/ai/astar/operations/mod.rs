@@ -66,6 +66,6 @@ impl PartialOrd for NodeInfo {
     &self,
     other: &Self,
   ) -> Option<Ordering> {
-    self.total_cost.partial_cmp(&other.total_cost)
+    Some(self.cmp(other))
   }
 }
