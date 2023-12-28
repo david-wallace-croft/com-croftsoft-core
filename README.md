@@ -1,9 +1,13 @@
 # CroftSoft Core
 
+[![MIT licensed][mit-badge]][mit-url]
+
+[mit-badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[mit-url]: https://github.com/david-wallace-croft/com-croftsoft-core/blob/main/LICENSE.txt
+
 - An adaption to Rust of the Java-based CroftSoft Core Library
 - https://www.croftsoft.com/library/code/
 - First published to crates.io on 2022-07-30
-- README.md updated: 2022-11-26
 
 ## Features
 
