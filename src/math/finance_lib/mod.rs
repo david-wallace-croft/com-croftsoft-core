@@ -5,12 +5,12 @@
 //! - Since any time period can be used, "payment stream" equals "annuity"
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2024 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Java created: 1999-08-15
 //! - Java updated: 2001-10-10
 //! - Rust created: 2022-07-30
-//! - Rust updated: 2023-07-26
+//! - Rust updated: 2024-07-29
 //!
 //! # History
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
@@ -228,7 +228,7 @@ impl<'a> InternalRateOfReturn<'a> {
     if delta_irr == 0.0 {
       delta_irr = 0.001;
     }
-    let mut old_npv: f64 = core::f64::NAN;
+    let mut old_npv: f64 = f64::NAN;
     Ok(loop {
       let npv: f64 = NetPresentValue {
         cash_flows: self.cash_flows,

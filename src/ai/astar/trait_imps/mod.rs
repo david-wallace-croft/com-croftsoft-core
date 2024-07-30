@@ -2,12 +2,12 @@
 //! - Trait implementations for the A* algorithm
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2024 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-10
 //! - Rust created: 2022-10-24
-//! - Rust updated: 2023-07-26
+//! - Rust updated: 2024-07-29
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -27,7 +27,6 @@ use super::traits::Cartographer;
 use crate::math::geom::point_xy::PointXY;
 use core::cmp::Ordering;
 use core::f64::consts::TAU;
-use core::f64::INFINITY;
 use core::hash::Hash;
 use std::collections::HashMap;
 use std::collections::VecDeque;
@@ -151,7 +150,7 @@ impl<N: Eq + Hash> Default for AStar<N> {
   fn default() -> Self {
     AStar {
       best_node_option: None,
-      best_total_cost: INFINITY,
+      best_total_cost: f64::INFINITY,
       goal_node_option: None,
       list_empty: false,
       node_to_node_info_map: HashMap::new(),

@@ -2,12 +2,12 @@
 //! - Methods for the A* algorithm
 //!
 //! # Metadata
-//! - Copyright: &copy; 2022-2023 [`CroftSoft Inc`]
+//! - Copyright: &copy; 2022-2024 [`CroftSoft Inc`]
 //! - Author: [`David Wallace Croft`]
 //! - Java created: 2002-04-21
 //! - Java updated: 2003-05-09
 //! - Rust created: 2022-10-28
-//! - Rust updated: 2023-07-26
+//! - Rust updated: 2024-07-29
 //!
 //! # History
 //! - Adapted from the classes in the Java-based [`CroftSoft Core Library`]
@@ -23,7 +23,6 @@ mod test;
 
 use super::structures::{AStar, NodeInfo};
 use super::traits::Cartographer;
-use core::f64::INFINITY;
 use core::hash::Hash;
 use std::collections::HashMap;
 use std::collections::VecDeque;
@@ -151,6 +150,6 @@ impl<N: Copy + Eq + Hash> AStar<N> {
       .node_to_node_info_map
       .insert(start_node, start_node_info);
     self.open_node_sorted_list.push_front(start_node);
-    self.best_total_cost = INFINITY;
+    self.best_total_cost = f64::INFINITY;
   }
 }
