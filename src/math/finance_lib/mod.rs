@@ -10,7 +10,7 @@
 //! - Java created: 1999-08-15
 //! - Java updated: 2001-10-10
 //! - Rust created: 2022-07-30
-//! - Rust updated: 2024-07-29
+//! - Rust updated: 2025-01-08
 //!
 //! # History
 //! - Adapted from the Java class com.croftsoft.core.math.FinanceLib
@@ -194,7 +194,7 @@ pub enum InternalRateOfReturnError {
   CashFlowsLengthLessThanTwo,
 }
 
-impl<'a> InternalRateOfReturn<'a> {
+impl InternalRateOfReturn<'_> {
   pub fn calculate(&self) -> Result<f64, InternalRateOfReturnError> {
     if self.cash_flows.len() < 2 {
       return Err(InternalRateOfReturnError::CashFlowsLengthLessThanTwo);
@@ -310,7 +310,7 @@ pub struct NetPresentValue<'a> {
   pub discount_rate: f64,
 }
 
-impl<'a> NetPresentValue<'a> {
+impl NetPresentValue<'_> {
   pub fn calculate(&self) -> f64 {
     self
       .cash_flows
@@ -458,7 +458,7 @@ pub struct PresentValueCashFlows<'a> {
   pub discount_rate: f64,
 }
 
-impl<'a> PresentValueCashFlows<'a> {
+impl PresentValueCashFlows<'_> {
   pub fn calculate(&self) -> f64 {
     self
       .cash_flows

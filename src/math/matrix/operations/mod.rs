@@ -105,14 +105,14 @@ impl<const R: usize, const C: usize> Add<Matrix<R, C>> for &Matrix<R, C> {
   }
 }
 
-impl<'a, 'b, const R: usize, const C: usize> Add<&'b Matrix<R, C>>
-  for &'a Matrix<R, C>
+impl<'a, const R: usize, const C: usize> Add<&'a Matrix<R, C>>
+  for &Matrix<R, C>
 {
   type Output = Matrix<R, C>;
 
   fn add(
     self,
-    rhs: &'b Matrix<R, C>,
+    rhs: &'a Matrix<R, C>,
   ) -> Self::Output {
     Matrix::add_matrix_with_matrix(self, rhs)
   }
@@ -307,14 +307,14 @@ impl<const R: usize, const C: usize, const K: usize> Mul<Matrix<C, K>>
   }
 }
 
-impl<'a, 'b, const R: usize, const C: usize, const K: usize>
-  Mul<&'b Matrix<C, K>> for &'a Matrix<R, C>
+impl<'a, const R: usize, const C: usize, const K: usize> Mul<&'a Matrix<C, K>>
+  for &Matrix<R, C>
 {
   type Output = Matrix<R, K>;
 
   fn mul(
     self,
-    rhs: &'b Matrix<C, K>,
+    rhs: &'a Matrix<C, K>,
   ) -> Self::Output {
     Matrix::multiply_matrix_with_matrix(self, rhs)
   }
@@ -477,14 +477,14 @@ impl<const R: usize, const C: usize> Sub<Matrix<R, C>> for &Matrix<R, C> {
   }
 }
 
-impl<'a, 'b, const R: usize, const C: usize> Sub<&'b Matrix<R, C>>
-  for &'a Matrix<R, C>
+impl<'a, const R: usize, const C: usize> Sub<&'a Matrix<R, C>>
+  for &Matrix<R, C>
 {
   type Output = Matrix<R, C>;
 
   fn sub(
     self,
-    rhs: &'b Matrix<R, C>,
+    rhs: &'a Matrix<R, C>,
   ) -> Self::Output {
     Matrix::subtract_matrix_from_matrix(self, rhs)
   }
