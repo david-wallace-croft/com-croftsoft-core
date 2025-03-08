@@ -2,6 +2,7 @@
 authors = ["David Wallace Croft <david@CroftSoft.com>"]
 categories = ["mathematics"]
 description = "A core library of highly reusable code"
+documentation = "https://docs.rs/com-croftsoft-core/latest/com_croftsoft_core/"
 edition = "2024"
 homepage = "https://www.croftsoft.com/"
 keywords = ["math"]
