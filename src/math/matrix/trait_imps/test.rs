@@ -142,51 +142,75 @@ fn test_from_rotation_degrees_to_matrix() {
     }),
     Matrix::identity()
   );
-  assert!(Matrix::from(RotationDegrees {
-    x: 90.0,
-    y: 0.0,
-    z: 0.0,
-  })
-  .matches_closely(
-    &Matrix {
-      rows: [
-        [1.0, 0.0, 0.0],
-        [0.0, 0.0, -1.0],
-        [0.0, 1.0, 0.0],
-      ],
-    },
-    0.001
-  ));
-  assert!(Matrix::from(RotationDegrees {
-    x: 0.0,
-    y: 90.0,
-    z: 0.0,
-  })
-  .matches_closely(
-    &Matrix {
-      rows: [
-        [0.0, 0.0, 1.0],
-        [0.0, 1.0, 0.0],
-        [-1.0, 0.0, 0.0],
-      ],
-    },
-    0.001
-  ));
-  assert!(Matrix::from(RotationDegrees {
-    x: 0.0,
-    y: 0.0,
-    z: 90.0,
-  })
-  .matches_closely(
-    &Matrix {
-      rows: [
-        [0.0, -1.0, 0.0],
-        [1.0, 0.0, 0.0],
-        [0.0, 0.0, 1.0],
-      ],
-    },
-    0.001
-  ));
+  assert!(
+    Matrix::from(RotationDegrees {
+      x: 90.0,
+      y: 0.0,
+      z: 0.0,
+    })
+    .matches_closely(
+      &Matrix {
+        rows: [
+          [
+            1.0, 0.0, 0.0
+          ],
+          [
+            0.0, 0.0, -1.0
+          ],
+          [
+            0.0, 1.0, 0.0
+          ],
+        ],
+      },
+      0.001
+    )
+  );
+  assert!(
+    Matrix::from(RotationDegrees {
+      x: 0.0,
+      y: 90.0,
+      z: 0.0,
+    })
+    .matches_closely(
+      &Matrix {
+        rows: [
+          [
+            0.0, 0.0, 1.0
+          ],
+          [
+            0.0, 1.0, 0.0
+          ],
+          [
+            -1.0, 0.0, 0.0
+          ],
+        ],
+      },
+      0.001
+    )
+  );
+  assert!(
+    Matrix::from(RotationDegrees {
+      x: 0.0,
+      y: 0.0,
+      z: 90.0,
+    })
+    .matches_closely(
+      &Matrix {
+        rows: [
+          [
+            0.0, -1.0, 0.0
+          ],
+          [
+            1.0, 0.0, 0.0
+          ],
+          [
+            0.0, 0.0, 1.0
+          ],
+        ],
+      },
+      0.001
+    )
+  );
   assert_eq!(
     Matrix::identity(),
     RotationDegrees {

@@ -86,7 +86,9 @@ fn test_get_row() {
   };
   assert_eq!(
     Matrix::<2, 4>::default().set_entry(indices, 1.0).get_row(0),
-    &[0.0, 0.0, 0.0, 1.0]
+    &[
+      0.0, 0.0, 0.0, 1.0
+    ]
   );
 }
 
@@ -211,8 +213,12 @@ fn test_submatrix() {
   assert_eq!(
     Matrix {
       rows: [
-        [0.0, 1.0, 2.0],
-        [3.0, 4.0, 5.0]
+        [
+          0.0, 1.0, 2.0
+        ],
+        [
+          3.0, 4.0, 5.0
+        ]
       ]
     }
     .submatrix::<1, 2>(Indices {
@@ -220,7 +226,9 @@ fn test_submatrix() {
       column: 0
     }),
     Matrix {
-      rows: [[3.0, 4.0]]
+      rows: [[
+        3.0, 4.0
+      ]]
     }
   );
 }
@@ -273,16 +281,26 @@ fn test_transpose() {
   assert_eq!(
     &Matrix {
       rows: [
-        [0.0, 1.0, 2.0],
-        [3.0, 4.0, 5.0]
+        [
+          0.0, 1.0, 2.0
+        ],
+        [
+          3.0, 4.0, 5.0
+        ]
       ]
     }
     .transpose(),
     &Matrix {
       rows: [
-        [0.0, 3.0],
-        [1.0, 4.0],
-        [2.0, 5.0]
+        [
+          0.0, 3.0
+        ],
+        [
+          1.0, 4.0
+        ],
+        [
+          2.0, 5.0
+        ]
       ]
     }
   );

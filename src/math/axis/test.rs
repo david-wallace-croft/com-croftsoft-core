@@ -130,8 +130,10 @@ fn test_normalize() {
     y: 0.5773502691896258,
     z: 0.5773502691896258,
   };
-  assert!(axis_angle
-    .normalize()
-    .matches_closely(&expected_normalized_axis_angle, 0.001));
+  assert!(
+    axis_angle
+      .normalize()
+      .matches_closely(&expected_normalized_axis_angle, 0.001)
+  );
   assert!(axis_angle.matches_closely(&expected_normalized_axis_angle, 0.001));
 }

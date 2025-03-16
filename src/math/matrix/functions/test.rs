@@ -73,9 +73,15 @@ fn test_identity() {
     &Matrix::identity(),
     &Matrix {
       rows: [
-        [1.0, 0.0, 0.0],
-        [0.0, 1.0, 0.0],
-        [0.0, 0.0, 1.0]
+        [
+          1.0, 0.0, 0.0
+        ],
+        [
+          0.0, 1.0, 0.0
+        ],
+        [
+          0.0, 0.0, 1.0
+        ]
       ]
     }
   );
@@ -83,15 +89,23 @@ fn test_identity() {
   assert_eq!(
     Matrix {
       rows: [
-        [1.0, 2.0],
-        [3.0, 4.0]
+        [
+          1.0, 2.0
+        ],
+        [
+          3.0, 4.0
+        ]
       ]
     }
     .multiply_with_matrix(&Matrix::identity()),
     &Matrix {
       rows: [
-        [1.0, 2.0],
-        [3.0, 4.0]
+        [
+          1.0, 2.0
+        ],
+        [
+          3.0, 4.0
+        ]
       ]
     }
   );
@@ -191,17 +205,24 @@ fn test_to_rotation_matrix_x_from_degrees() {
     Matrix::to_rotation_matrix_x_from_degrees(Degrees(0.0)),
     Matrix::identity()
   );
-  assert!(Matrix::to_rotation_matrix_x_from_degrees(Degrees(90.0))
-    .matches_closely(
+  assert!(
+    Matrix::to_rotation_matrix_x_from_degrees(Degrees(90.0)).matches_closely(
       &Matrix {
         rows: [
-          [1.0, 0.0, 0.0],
-          [0.0, 0.0, -1.0],
-          [0.0, 1.0, 0.0],
+          [
+            1.0, 0.0, 0.0
+          ],
+          [
+            0.0, 0.0, -1.0
+          ],
+          [
+            0.0, 1.0, 0.0
+          ],
         ]
       },
       0.001
-    ));
+    )
+  );
 }
 
 #[test]
@@ -210,19 +231,27 @@ fn test_to_rotation_matrix_x_from_radians() {
     Matrix::to_rotation_matrix_x_from_radians(Radians(0.0)),
     Matrix::identity()
   );
-  assert!(Matrix::to_rotation_matrix_x_from_radians(Radians(
-    core::f64::consts::FRAC_PI_2
-  ))
-  .matches_closely(
-    &Matrix {
-      rows: [
-        [1.0, 0.0, 0.0],
-        [0.0, 0.0, -1.0],
-        [0.0, 1.0, 0.0],
-      ]
-    },
-    0.001
-  ));
+  assert!(
+    Matrix::to_rotation_matrix_x_from_radians(Radians(
+      core::f64::consts::FRAC_PI_2
+    ))
+    .matches_closely(
+      &Matrix {
+        rows: [
+          [
+            1.0, 0.0, 0.0
+          ],
+          [
+            0.0, 0.0, -1.0
+          ],
+          [
+            0.0, 1.0, 0.0
+          ],
+        ]
+      },
+      0.001
+    )
+  );
 }
 
 #[test]
@@ -231,17 +260,24 @@ fn test_to_rotation_matrix_y_from_degrees() {
     Matrix::to_rotation_matrix_y_from_degrees(Degrees(0.0)),
     Matrix::identity()
   );
-  assert!(Matrix::to_rotation_matrix_y_from_degrees(Degrees(90.0))
-    .matches_closely(
+  assert!(
+    Matrix::to_rotation_matrix_y_from_degrees(Degrees(90.0)).matches_closely(
       &Matrix {
         rows: [
-          [0.0, 0.0, 1.0],
-          [0.0, 1.0, 0.0],
-          [-1.0, 0.0, 0.0],
+          [
+            0.0, 0.0, 1.0
+          ],
+          [
+            0.0, 1.0, 0.0
+          ],
+          [
+            -1.0, 0.0, 0.0
+          ],
         ]
       },
       0.001
-    ));
+    )
+  );
 }
 
 #[test]
@@ -250,19 +286,27 @@ fn test_to_rotation_matrix_y_from_radians() {
     Matrix::to_rotation_matrix_y_from_radians(Radians(0.0)),
     Matrix::identity()
   );
-  assert!(Matrix::to_rotation_matrix_y_from_radians(Radians(
-    core::f64::consts::FRAC_PI_2
-  ))
-  .matches_closely(
-    &Matrix {
-      rows: [
-        [0.0, 0.0, 1.0],
-        [0.0, 1.0, 0.0],
-        [-1.0, 0.0, 0.0],
-      ]
-    },
-    0.001
-  ));
+  assert!(
+    Matrix::to_rotation_matrix_y_from_radians(Radians(
+      core::f64::consts::FRAC_PI_2
+    ))
+    .matches_closely(
+      &Matrix {
+        rows: [
+          [
+            0.0, 0.0, 1.0
+          ],
+          [
+            0.0, 1.0, 0.0
+          ],
+          [
+            -1.0, 0.0, 0.0
+          ],
+        ]
+      },
+      0.001
+    )
+  );
 }
 
 #[test]
@@ -271,17 +315,24 @@ fn test_to_rotation_matrix_z_from_degrees() {
     Matrix::to_rotation_matrix_z_from_degrees(Degrees(0.0)),
     Matrix::identity()
   );
-  assert!(Matrix::to_rotation_matrix_z_from_degrees(Degrees(90.0))
-    .matches_closely(
+  assert!(
+    Matrix::to_rotation_matrix_z_from_degrees(Degrees(90.0)).matches_closely(
       &Matrix {
         rows: [
-          [0.0, -1.0, 0.0],
-          [1.0, 0.0, 0.0],
-          [0.0, 0.0, 1.0],
+          [
+            0.0, -1.0, 0.0
+          ],
+          [
+            1.0, 0.0, 0.0
+          ],
+          [
+            0.0, 0.0, 1.0
+          ],
         ]
       },
       0.001
-    ));
+    )
+  );
 }
 
 #[test]
@@ -290,17 +341,25 @@ fn test_to_rotation_matrix_z_from_radians() {
     Matrix::to_rotation_matrix_z_from_radians(Radians(0.0)),
     Matrix::identity()
   );
-  assert!(Matrix::to_rotation_matrix_z_from_radians(Radians(
-    core::f64::consts::FRAC_PI_2
-  ))
-  .matches_closely(
-    &Matrix {
-      rows: [
-        [0.0, -1.0, 0.0],
-        [1.0, 0.0, 0.0],
-        [0.0, 0.0, 1.0],
-      ]
-    },
-    0.001
-  ));
+  assert!(
+    Matrix::to_rotation_matrix_z_from_radians(Radians(
+      core::f64::consts::FRAC_PI_2
+    ))
+    .matches_closely(
+      &Matrix {
+        rows: [
+          [
+            0.0, -1.0, 0.0
+          ],
+          [
+            1.0, 0.0, 0.0
+          ],
+          [
+            0.0, 0.0, 1.0
+          ],
+        ]
+      },
+      0.001
+    )
+  );
 }

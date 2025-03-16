@@ -59,48 +59,54 @@ fn test_from_quat_to_axis_angle() {
 fn test_from_rotation_degrees_to_quat() {
   assert_eq!(Quat::from(RotationDegrees::default()), Quat::default());
   let tolerance = 0.01;
-  assert!(Quat::from(RotationDegrees {
-    x: 0.0,
-    y: 0.0,
-    z: 90.0
-  })
-  .matches_closely(
-    &Quat {
+  assert!(
+    Quat::from(RotationDegrees {
       x: 0.0,
       y: 0.0,
-      z: 0.707,
-      w: 0.707,
-    },
-    tolerance
-  ));
-  assert!(Quat::from(RotationDegrees {
-    x: 0.0,
-    y: 90.0,
-    z: 0.0
-  })
-  .matches_closely(
-    &Quat {
+      z: 90.0
+    })
+    .matches_closely(
+      &Quat {
+        x: 0.0,
+        y: 0.0,
+        z: 0.707,
+        w: 0.707,
+      },
+      tolerance
+    )
+  );
+  assert!(
+    Quat::from(RotationDegrees {
       x: 0.0,
-      y: 0.707,
-      z: 0.0,
-      w: 0.707,
-    },
-    tolerance
-  ));
-  assert!(Quat::from(RotationDegrees {
-    x: 0.0,
-    y: 0.0,
-    z: 90.0
-  })
-  .matches_closely(
-    &Quat {
+      y: 90.0,
+      z: 0.0
+    })
+    .matches_closely(
+      &Quat {
+        x: 0.0,
+        y: 0.707,
+        z: 0.0,
+        w: 0.707,
+      },
+      tolerance
+    )
+  );
+  assert!(
+    Quat::from(RotationDegrees {
       x: 0.0,
       y: 0.0,
-      z: 0.707,
-      w: 0.707,
-    },
-    tolerance
-  ));
+      z: 90.0
+    })
+    .matches_closely(
+      &Quat {
+        x: 0.0,
+        y: 0.0,
+        z: 0.707,
+        w: 0.707,
+      },
+      tolerance
+    )
+  );
   // assert_eq!(
   //   Quat::from(RotationDegrees {
   //     x: 90.0,
